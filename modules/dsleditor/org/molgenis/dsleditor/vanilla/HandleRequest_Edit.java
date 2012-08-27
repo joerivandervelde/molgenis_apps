@@ -1,4 +1,4 @@
-package org.molgenis.dsleditor;
+package org.molgenis.dsleditor.vanilla;
 
 import org.molgenis.framework.ui.ScreenMessage;
 import org.molgenis.util.Tuple;

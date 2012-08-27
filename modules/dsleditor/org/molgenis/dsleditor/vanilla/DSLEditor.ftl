@@ -1,4 +1,4 @@
-<#macro org_molgenis_dsleditor_DSLEditor screen>
+<#macro org_molgenis_dsleditor_vanilla_DSLEditor screen>
 <#assign model = screen.VO>
 <!-- normally you make one big form for the whole plugin-->
 <form method="post" enctype="multipart/form-data" name="${screen.name}" action="">
@@ -255,30 +255,7 @@ Selected: '${model.selectType}' <b>${model.selectName}</b><#if model.selectType 
 </tr>
 
 </table>
-<br>
-
-<#-- This will show the table which contains the preview window and the buttons for showing the xml and loading xml into the model  -->
-
-<h2>Validate & make XML</h2>
-
-<div style="background: #DEDEDE; width: 600px; height: 400px;">
-<br>
-<table cellpadding="5"><tr>
-<td>
-<input type="submit" value="Validate model & show as XML" onclick="__action.value='toXml';return true;"/>
-<input type="submit" value="Parse XML & show as model" onclick="__action.value='fromXml';return true;"/>
-</td>
-</tr>
-<tr><td>
-<#-- The next line writes the model into the textarea -->
-<textarea rows="25" cols="88" name="xmlWindow"><#if model.xmlPreview?exists>${model.xmlPreview}</#if></textarea>
-</td>
-</tr>
-</table>
-</div>
-
-
-	
+<br>	
 			</div>
 		</div>
 	</div>

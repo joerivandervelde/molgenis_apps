@@ -1,5 +1,6 @@
-package org.molgenis.dsleditor;
+package org.molgenis.dsleditor.jaxb;
 
+import org.molgenis.dsleditor.jaxb.DSLEditorModel;
 import org.molgenis.framework.ui.ScreenMessage;
 import org.molgenis.model.jaxb.Entity;
 import org.molgenis.model.jaxb.Field;

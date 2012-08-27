@@ -1,20 +1,12 @@
-package org.molgenis.dsleditor;
+package org.molgenis.dsleditor.vanilla;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
-import org.molgenis.model.jaxb.Entity;
-import org.molgenis.model.jaxb.Field;
-import org.molgenis.model.jaxb.Model;
-import org.molgenis.model.jaxb.Module;
+import org.molgenis.model.elements.Entity;
+import org.molgenis.model.elements.Field;
+import org.molgenis.model.elements.Model;
+import org.molgenis.model.elements.Module;
 
 public class Helper
 {
@@ -147,37 +139,6 @@ public class Helper
 			fieldNames.add(f.getName());
 		}
 		return renameIfDuplicate(name, fieldNames);
-	}
-
-	public static Model xmlToModel(String molgenisModelXmlFile) throws JAXBException
-	{
-		// get string onto stream
-		InputStream is = new ByteArrayInputStream(molgenisModelXmlFile.getBytes());
-
-		JAXBContext jaxbContext = JAXBContext.newInstance("org.molgenis.model.jaxb");
-		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-		return (Model) unmarshaller.unmarshal(is);
-	}
-
-	/**
-	 * Convert the model to an xml string
-	 * 
-	 * @param model
-	 * @return xml string
-	 * @throws JAXBException
-	 */
-
-	public static String modelToXml(Model model) throws JAXBException
-	{
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		JAXBContext jaxbContext = JAXBContext.newInstance("org.molgenis.model.jaxb");
-		Marshaller marshaller = jaxbContext.createMarshaller();
-		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-		marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
-		marshaller.marshal(model, out);
-		String outString = out.toString().trim();
-		outString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + outString;
-		return outString;
 	}
 
 }

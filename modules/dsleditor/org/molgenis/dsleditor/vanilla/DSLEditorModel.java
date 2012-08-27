@@ -5,16 +5,16 @@
  * THIS FILE IS A TEMPLATE. PLEASE EDIT :-)
  */
 
-package org.molgenis.dsleditor;
+package org.molgenis.dsleditor.vanilla;
 
 import java.util.List;
 
-import org.molgenis.model.jaxb.Model;
+import org.molgenis.model.elements.DBSchema;
 
 public class DSLEditorModel
 {
 
-	Model molgenisModel;
+	DBSchema parent;
 
 	String selectType;
 	String selectName;
@@ -22,17 +22,16 @@ public class DSLEditorModel
 	String selectFieldEntity;
 	Integer selectFieldIndex;
 
-	String xmlPreview;
 	List<String> fieldTypes;
 
-	public Model getMolgenisModel()
+	public DBSchema getParent()
 	{
-		return molgenisModel;
+		return parent;
 	}
 
-	public void setMolgenisModel(Model molgenisModel)
+	public void setParent(DBSchema parent)
 	{
-		this.molgenisModel = molgenisModel;
+		this.parent = parent;
 	}
 
 	public String getSelectType()
@@ -73,16 +72,6 @@ public class DSLEditorModel
 	public void setSelectFieldIndex(Integer selectFieldIndex)
 	{
 		this.selectFieldIndex = selectFieldIndex;
-	}
-
-	public String getXmlPreview()
-	{
-		return xmlPreview;
-	}
-
-	public void setXmlPreview(String xmlPreview)
-	{
-		this.xmlPreview = xmlPreview;
 	}
 
 	public List<String> getFieldTypes()

@@ -1,8 +1,8 @@
-package org.molgenis.dsleditor;
+package org.molgenis.dsleditor.vanilla;
 
 import org.molgenis.framework.ui.ScreenMessage;
-import org.molgenis.model.jaxb.Entity;
-import org.molgenis.model.jaxb.Field;
+import org.molgenis.model.elements.Entity;
+import org.molgenis.model.elements.Field;
 import org.molgenis.util.Tuple;
 
 public class HandleRequest_Save
@@ -21,9 +21,9 @@ public class HandleRequest_Save
 				throw new Exception("Please provide a name");
 			}
 
-			model.getMolgenisModel().setName(molgenisName);
-			model.getMolgenisModel().setLabel(molgenisLabel);
-			model.getMolgenisModel().setVersion(molgenisVersion);
+			model.getParent().getModel().setName(molgenisName);
+			model.getParent().getModel().setLabel(molgenisLabel);
+			// model.getParent().getModel().setVersion(molgenisVersion);
 
 			model.setSelectType("molgenis");
 			model.setSelectName(molgenisName);
@@ -43,8 +43,8 @@ public class HandleRequest_Save
 				return new ScreenMessage("Please enter a different name", false);
 			}
 
-			String removeDuplicate = Helper.renameIfDuplicateModule(moduleName, model.getMolgenisModel());
-			model.getMolgenisModel().getModule(request.getString("__selectName")).setName(removeDuplicate);
+			String removeDuplicate = Helper.renameIfDuplicateModule(moduleName, model.getParent().getModel());
+			model.getParent().getModel().getModule(request.getString("__selectName")).setName(removeDuplicate);
 
 			model.setSelectType("module");
 			model.setSelectName(removeDuplicate);
@@ -67,10 +67,10 @@ public class HandleRequest_Save
 			}
 			else if (!request.getString("__selectName").equals(entityName))
 			{
-				entityName = Helper.renameIfDuplicateEntity(entityName, model.getMolgenisModel());
+				entityName = Helper.renameIfDuplicateEntity(entityName, model.getParent().getModel());
 			}
 
-			Entity changeMe = model.getMolgenisModel().findEntity(request.getString("__selectName"));
+			Entity changeMe = model.getParent().getModel().findEntity(request.getString("__selectName"));
 			changeMe.setName(entityName);
 			changeMe.setLabel(entityLabel);
 			changeMe.setExtends(entityExtends);
@@ -89,7 +89,7 @@ public class HandleRequest_Save
 
 			String nameOfEntity = request.getString("__selectFieldEntity");
 			int index = request.getInt("__selectFieldIndex");
-			Field f = model.getMolgenisModel().findEntity(nameOfEntity).getFields().get(index);
+			Field f = model.getParent().getModel().findEntity(nameOfEntity).getFields().get(index);
 
 			String fieldName = request.getString("fieldName");
 			String fieldLabel = request.getString("fieldLabel");
@@ -117,8 +117,8 @@ public class HandleRequest_Save
 			}
 			else if (!f.getName().equals(fieldName))
 			{
-				fieldName = Helper.renameIfDuplicateField(fieldName, model.getSelectFieldEntity(),
-						model.getMolgenisModel());
+				fieldName = Helper.renameIfDuplicateField(fieldName, model.getSelectFieldEntity(), model.getParent()
+						.getModel());
 				System.out.println(fieldName);
 			}
 

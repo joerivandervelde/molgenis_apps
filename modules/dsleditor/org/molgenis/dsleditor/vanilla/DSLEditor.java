@@ -5,20 +5,17 @@
  * THIS FILE IS A TEMPLATE. PLEASE EDIT :-)
  */
 
-package org.molgenis.dsleditor;
+package org.molgenis.dsleditor.vanilla;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.bind.JAXBException;
 
 import org.molgenis.framework.db.Database;
 import org.molgenis.framework.ui.PluginModel;
 import org.molgenis.framework.ui.ScreenController;
 import org.molgenis.framework.ui.ScreenMessage;
-import org.molgenis.model.jaxb.Field;
+import org.molgenis.model.elements.Model;
 import org.molgenis.model.jaxb.Field.Type;
-import org.molgenis.model.jaxb.Model;
 import org.molgenis.util.Entity;
 import org.molgenis.util.Tuple;
 
@@ -57,13 +54,13 @@ public class DSLEditor<E extends Entity> extends PluginModel<E>
 	@Override
 	public String getViewName()
 	{
-		return "org_molgenis_dsleditor_DSLEditor";
+		return "org_molgenis_dsleditor_vanilla_DSLEditor";
 	}
 
 	@Override
 	public String getViewTemplate()
 	{
-		return "org/molgenis/dsleditor/DSLEditor.ftl";
+		return "org/molgenis/dsleditor/vanilla/DSLEditor.ftl";
 	}
 
 	@Override
@@ -97,28 +94,9 @@ public class DSLEditor<E extends Entity> extends PluginModel<E>
 					this.setMessages(HandleRequest_Remove.handle(model, request));
 				}
 
-				if (action.equals("toXml"))
-				{
-					String xml = Helper.modelToXml(model.getMolgenisModel());
-					this.model.setXmlPreview(xml);
-				}
-
-				if (action.equals("fromXml"))
-				{
-					Model molgenisModel = Helper.xmlToModel(request.getString("xmlWindow"));
-
-					// MolgenisModelValidator.validate(this.model.getMolgenisModel());
-					// not yet possible!!! doesnt work for JAXB..
-
-					this.model.setMolgenisModel(molgenisModel);
-
-					this.model.setSelectType("molgenis");
-					this.model.setSelectName(molgenisModel.getName());
-				}
-
 				if (action.equals("resetModel"))
 				{
-					this.model.setMolgenisModel(null);
+					this.model.getParent().setModel(null);
 				}
 
 			}
@@ -134,16 +112,16 @@ public class DSLEditor<E extends Entity> extends PluginModel<E>
 	public void reload(Database db)
 	{
 		// if there is no molgenismodel, create one
-		if (this.getVO().getMolgenisModel() == null)
+		if (this.getVO().getParent().getModel() == null)
 		{
 
 			Model molgenisModel = new Model();
 
 			molgenisModel.setName("myMolgenis");
 			molgenisModel.setLabel("My Molgenis application");
-			molgenisModel.setVersion("0.0.1");
+			// molgenisModel.setVersion("0.0.1");
 
-			this.model.setMolgenisModel(molgenisModel);
+			this.model.getParent().setModel(molgenisModel);
 			this.model.setSelectType("molgenis");
 			this.model.setSelectName("myMolgenis");
 		}
@@ -151,24 +129,13 @@ public class DSLEditor<E extends Entity> extends PluginModel<E>
 		if (this.model.getFieldTypes() == null)
 		{
 			List<String> fieldTypes = new ArrayList<String>();
-			for (Type t : Field.Type.values())
+			for (Type t : org.molgenis.model.jaxb.Field.Type.values())
 			{
 				fieldTypes.add(t.toString());
 			}
 			this.model.setFieldTypes(fieldTypes);
 		}
 
-		String previewXml = null;
-		try
-		{
-			previewXml = Helper.modelToXml(model.getMolgenisModel());
-		}
-		catch (JAXBException e)
-		{
-
-			e.printStackTrace();
-		}
-		this.model.setXmlPreview(previewXml);
 	}
 
 	@Override
