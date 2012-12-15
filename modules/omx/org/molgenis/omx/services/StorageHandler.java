@@ -9,11 +9,11 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.List;
 
-import org.molgenis.core.RuntimeProperty;
 import org.molgenis.framework.db.Database;
 import org.molgenis.framework.db.DatabaseException;
 import org.molgenis.framework.db.QueryRule;
 import org.molgenis.framework.db.QueryRule.Operator;
+import org.molgenis.omx.system.RuntimeProperty;
 import org.molgenis.util.DetectOS;
 
 import app.servlet.UsedMolgenisOptions;

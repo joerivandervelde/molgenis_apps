@@ -12,8 +12,8 @@ import org.molgenis.framework.db.DatabaseException;
 import org.molgenis.framework.ui.PluginModel;
 import org.molgenis.framework.ui.ScreenController;
 import org.molgenis.framework.ui.ScreenMessage;
-import org.molgenis.observ.target.Panel;
-import org.molgenis.organization.Study;
+import org.molgenis.omx.core.Panel;
+import org.molgenis.omx.organization.Study;
 import org.molgenis.util.Entity;
 import org.molgenis.util.Tuple;
 

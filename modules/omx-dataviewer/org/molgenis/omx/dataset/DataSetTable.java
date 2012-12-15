@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
@@ -18,14 +16,11 @@ import org.molgenis.framework.db.QueryRule.Operator;
 import org.molgenis.framework.tupletable.AbstractFilterableTupleTable;
 import org.molgenis.framework.tupletable.DatabaseTupleTable;
 import org.molgenis.framework.tupletable.TableException;
-import org.molgenis.framework.tupletable.TupleTable;
 import org.molgenis.model.elements.Field;
-import org.molgenis.observ.Characteristic;
-import org.molgenis.observ.DataSet;
-import org.molgenis.observ.ObservableFeature;
-import org.molgenis.observ.ObservationSet;
-import org.molgenis.observ.ObservationTarget;
-import org.molgenis.observ.ObservedValue;
+import org.molgenis.omx.core.DataSet;
+import org.molgenis.omx.core.ObservationSet;
+import org.molgenis.omx.core.ObservedValue;
+import org.molgenis.omx.core.StringObservedValue;
 import org.molgenis.util.SimpleTuple;
 import org.molgenis.util.Tuple;
 
@@ -156,10 +151,12 @@ public class DataSetTable extends AbstractFilterableTupleTable implements Databa
 			{
 
 				Tuple t = new SimpleTuple();
-				Characteristic c = db.findById(Characteristic.class, os.getTarget_Id());
-				t.set("target", c.getName());
+				// FIXME: no more target! problem?
+				// Concept c = db.findById(Feature.class, os.getTarget_Id());
+				// t.set("target", c.getName());
 
-				Query<ObservedValue> queryObservedValue = getDb().query(ObservedValue.class);
+				// FIXME: typing! not String only!!!
+				Query<StringObservedValue> queryObservedValue = getDb().query(StringObservedValue.class);
 
 				List<Field> columns = getColumns();
 				if (isFirstColumnFixed())
@@ -177,10 +174,11 @@ public class DataSetTable extends AbstractFilterableTupleTable implements Databa
 					}
 				});
 
-				for (ObservedValue v : queryObservedValue.eq(ObservedValue.OBSERVATIONSET, os.getId())
-						.in(ObservedValue.FEATURE_IDENTIFIER, new ArrayList<String>(fieldNames)).find())
+				// TODO: String values only!?!?
+				for (StringObservedValue v : queryObservedValue.eq(StringObservedValue.OBSERVATIONSET, os.getId())
+						.in(StringObservedValue.METHOD_ID, new ArrayList<String>(fieldNames)).find())
 				{
-					t.set(v.getFeature_Identifier(), v.getValue());
+					t.set(v.getMethod_Id(), v.getValue());
 				}
 
 				result.add(t);
@@ -211,97 +209,6 @@ public class DataSetTable extends AbstractFilterableTupleTable implements Databa
 			throw new TableException(e);
 		}
 
-	}
-
-	public void add(TupleTable table) throws TableException
-	{
-		try
-		{
-			getDb().beginTx();
-
-			// verify columns to be feature identifiers
-			Map<String, Integer> featureMap = new TreeMap<String, Integer>();
-
-			List<Field> cols = table.getAllColumns();
-			for (Field f : cols)
-			{
-				// first is always target, rest should be feature identifiers
-				if (!f.equals(cols.get(0)))
-				{
-					// slow
-					try
-					{
-						List<ObservableFeature> feature = getDb().query(ObservableFeature.class)
-								.eq(ObservableFeature.IDENTIFIER, f.getName()).find();
-						if (feature.size() != 1)
-						{
-							throw new TableException("add failed: " + f.getName() + " not known ObservableFeature");
-						}
-						else
-						{
-							featureMap.put(f.getName(), feature.get(0).getId());
-						}
-					}
-					catch (DatabaseException e)
-					{
-						throw new TableException(e);
-					}
-				}
-			}
-
-			// load the rows
-			int count = 0;
-
-			for (Tuple t : table)
-			{
-				// slow, check if target exists
-				List<Characteristic> targets = getDb().query(Characteristic.class)
-						.eq(Characteristic.IDENTIFIER, t.getString(0)).find();
-				if (targets.size() == 1)
-				{
-					ObservationSet es = new ObservationSet();
-					es.setPartOfDataSet(dataSet.getId());
-					es.setTarget(targets.get(0).getId());
-					getDb().add(es);
-
-					List<ObservedValue> values = new ArrayList<ObservedValue>();
-					for (String name : t.getFieldNames())
-					{
-						if (!name.equals(t.getColName(0)))
-						{
-							ObservedValue v = new ObservedValue();
-							v.setObservationSet(es.getId());
-							v.setFeature(featureMap.get(name));
-							v.setValue(t.getString(name));
-
-							values.add(v);
-						}
-					}
-					getDb().add(values);
-				}
-				else
-				{
-					throw new DatabaseException("import of row " + count + " failed: target " + t.getString(0)
-							+ " unknown");
-				}
-			}
-			count++;
-
-			getDb().commitTx();
-
-		}
-		catch (Exception e)
-		{
-			try
-			{
-				getDb().rollbackTx();
-			}
-			catch (DatabaseException e1)
-			{
-				;
-			}
-			throw new TableException(e);
-		}
 	}
 
 	// Creates the query based on the provided filters
@@ -338,51 +245,9 @@ public class DataSetTable extends AbstractFilterableTupleTable implements Databa
 					filter.setValue(null);
 				}
 
-				if (filter.getField().equals("target"))
-				{
-
-					QueryRule rule = new QueryRule(ObservationTarget.NAME, filter.getOperator(), filter.getValue());
-					List<ObservationTarget> targets = getDb().find(ObservationTarget.class, rule);
-
-					// Create a collection of ObservationTarget ids
-					Collection<Integer> targetIds = Collections2.transform(targets,
-							new Function<ObservationTarget, Integer>()
-							{
-								@Override
-								public Integer apply(final ObservationTarget target)
-								{
-									return target.getId();
-								}
-							});
-
-					List<ObservationSet> observationSets = getDb().query(ObservationSet.class)
-							.in(ObservationSet.TARGET, new ArrayList<Integer>(targetIds)).find();
-
-					// No results
-					if (observationSets.isEmpty())
-					{
-						return null;
-					}
-
-					// Create a collection of ObservationSet ids
-					Collection<Integer> observationSetIds = Collections2.transform(observationSets,
-							new Function<ObservationSet, Integer>()
-							{
-								@Override
-								public Integer apply(final ObservationSet observationSet)
-								{
-									return observationSet.getId();
-								}
-							});
-
-					queryRules.add(new QueryRule(ObservedValue.OBSERVATIONSET_ID, Operator.IN, new ArrayList<Integer>(
-							observationSetIds)));
-				}
-				else
-				{
-					queryRules.add(new QueryRule(ObservedValue.FEATURE_IDENTIFIER, Operator.EQUALS, filter.getField()));
-					queryRules.add(new QueryRule(ObservedValue.VALUE, filter.getOperator(), filter.getValue()));
-				}
+				// FIXME: String only!!
+				queryRules.add(new QueryRule(StringObservedValue.METHOD_ID, Operator.EQUALS, filter.getField()));
+				queryRules.add(new QueryRule(StringObservedValue.VALUE, filter.getOperator(), filter.getValue()));
 
 			}
 

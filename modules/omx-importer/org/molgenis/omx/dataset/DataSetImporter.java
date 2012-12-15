@@ -17,11 +17,11 @@ import org.molgenis.framework.tupletable.TableException;
 import org.molgenis.framework.tupletable.TupleTable;
 import org.molgenis.framework.tupletable.impl.CsvTable;
 import org.molgenis.model.elements.Field;
-import org.molgenis.observ.DataSet;
-import org.molgenis.observ.ObservableFeature;
-import org.molgenis.observ.ObservationSet;
-import org.molgenis.observ.ObservationTarget;
-import org.molgenis.observ.ObservedValue;
+import org.molgenis.omx.core.DataSet;
+import org.molgenis.omx.core.Method;
+import org.molgenis.omx.core.ObservationSet;
+import org.molgenis.omx.core.StringObservedValue;
+import org.molgenis.omx.core.Target;
 import org.molgenis.util.ExcelUtils;
 import org.molgenis.util.Tuple;
 
@@ -99,32 +99,34 @@ public class DataSetImporter
 			{
 				// find current observation target
 				String observationTargetIdentifier = row.getString(0);
-				List<ObservationTarget> observationTargets = db.find(ObservationTarget.class, new QueryRule(
-						ObservationTarget.IDENTIFIER, Operator.EQUALS, observationTargetIdentifier));
+				List<Target> observationTargets = db.find(Target.class, new QueryRule(Target.IDENTIFIER,
+						Operator.EQUALS, observationTargetIdentifier));
 				if (observationTargets == null || observationTargets.isEmpty()) throw new DatabaseException(
 						"ObservationTarget " + observationTargetIdentifier + " does not exist in db");
-				ObservationTarget observationTarget = observationTargets.get(0);
+				Target observationTarget = observationTargets.get(0);
 
 				// create observation set
 				ObservationSet observationSet = new ObservationSet();
-				observationSet.setTarget(observationTarget);
+				// observationSet.setTarget(observationTarget);
 				observationSet.setPartOfDataSet(dataSet);
 				db.add(observationSet);
 
 				for (int col = 1; col < headerFields.size(); ++col)
 				{
 					// find current observation feature
-					String observableFeatureIdentifier = headerFields.get(col).getLabel();
-					List<ObservableFeature> observableFeatures = db.find(ObservableFeature.class, new QueryRule(
-							ObservableFeature.IDENTIFIER, Operator.EQUALS, observableFeatureIdentifier));
-					if (observableFeatures == null || observableFeatures.isEmpty()) throw new IOException(
-							"ObservableFeature " + observableFeatureIdentifier + " does not exist in db");
-					ObservableFeature observableFeature = observableFeatures.get(0);
+					String methodIdentifier = headerFields.get(col).getLabel();
+					List<Method> methods = db.find(Method.class, new QueryRule(Method.IDENTIFIER, Operator.EQUALS,
+							methodIdentifier));
+					if (methods == null || methods.isEmpty()) throw new IOException("Method " + methodIdentifier
+							+ " does not exist in db");
+					Method method = methods.get(0);
 
 					// create observed value
 					String value = row.getString(col);
-					ObservedValue observedValue = new ObservedValue();
-					observedValue.setFeature(observableFeature);
+
+					// FIXME: support other datatypes than String!
+					StringObservedValue observedValue = new StringObservedValue();
+					observedValue.setMethod(method);
 					observedValue.setValue(value);
 					observedValue.setObservationSet(observationSet);
 

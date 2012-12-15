@@ -20,7 +20,7 @@ import org.molgenis.framework.db.Database;
 import org.molgenis.framework.db.DatabaseException;
 import org.molgenis.framework.db.QueryRule;
 import org.molgenis.framework.db.QueryRule.Operator;
-import org.molgenis.observ.DataSet;
+import org.molgenis.omx.core.DataSet;
 import org.molgenis.util.Tuple;
 
 import app.ImportWizardExcelPrognosis;

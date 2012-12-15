@@ -1,5 +1,5 @@
-<molgenis name="Observ-OMX">
-	<module name="org.molgenis.omx.values" label="values">
+<molgenis name="org.molgenis.omx">
+	<module name="values" label="values">
 		<description>
 			Advanced value types for core
 		</description>

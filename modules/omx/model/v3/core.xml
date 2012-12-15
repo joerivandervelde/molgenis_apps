@@ -1,5 +1,5 @@
-<molgenis name="Observ-OMX">
-	<module name="org.molgenis.omx.core" label="core">
+<molgenis name="org.molgenis.omx">
+	<module name="core" label="Core">
 		<description>
 			Absolute minimal v3 model without decorators, labels,
 			hidden, or other (model-technically unneeded) modifiers for now.
@@ -11,7 +11,7 @@
 			<field name="Id" type="autoid" />
 		</entity>
 
-		<entity name="Identifiable" implements="Autoid" abstract="true">
+		<entity name="Identifiable" implements="Autoid" abstract="true" xref_label="Identifier">
 			<field name="Identifier" type="string" />
 			<field name="Name" type="string" />
 			<unique fields="Identifier" />
@@ -56,7 +56,7 @@
 				description="Rudimentary meta data about this concept. Use of ontology 
 					terms references to establish unambigious descriptions is recommended." />
 			<field name="AlternativeIdentifiers" type="mref"
-				xref_entity="AlternativeIdentifier" />
+				xref_entity="AlternativeIdentifier" nillable="true"/>
 		</entity>
 
 		<entity name="Target" extends="Concept">
@@ -152,7 +152,7 @@
 				therefore be thought of as an instance of the protocol it belongs
 				to, like rows in a database are instances of their table definition.
 			</description>
-			<field name="Protocol" type="xref" xref_entity="Protocol" />
+			<field name="Protocol" type="xref" xref_entity="Protocol" nillable="true" />
 			<field name="StartTime" type="datetime" nillable="true"
 				description="Time when the dataset was created." />
 			<field name="EndTime" type="datetime" nillable="true"

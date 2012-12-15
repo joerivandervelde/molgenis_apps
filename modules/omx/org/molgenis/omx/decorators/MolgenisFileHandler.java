@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.molgenis.core.MolgenisFile;
 import org.molgenis.framework.db.Database;
 import org.molgenis.framework.db.DatabaseException;
 import org.molgenis.framework.db.QueryRule;
 import org.molgenis.framework.db.QueryRule.Operator;
+import org.molgenis.omx.file.MolgenisFile;
 import org.molgenis.omx.services.StorageHandler;
 import org.molgenis.util.ValueLabel;
 

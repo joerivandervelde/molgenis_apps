@@ -8,12 +8,12 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.molgenis.framework.db.Database;
 import org.molgenis.framework.db.DatabaseException;
-import org.molgenis.observ.DataSet;
-import org.molgenis.observ.ObservableFeature;
-import org.molgenis.observ.ObservationSet;
-import org.molgenis.observ.ObservedValue;
-import org.molgenis.observ.Protocol;
-import org.molgenis.observ.target.Individual;
+import org.molgenis.omx.core.DataSet;
+import org.molgenis.omx.core.Feature;
+import org.molgenis.omx.core.Individual;
+import org.molgenis.omx.core.ObservationSet;
+import org.molgenis.omx.core.ObservedValue;
+import org.molgenis.omx.core.Protocol;
 
 import app.DatabaseFactory;
 
@@ -41,10 +41,10 @@ public class GenerateExampleData
 			db.add(p);
 
 			// create features
-			List<ObservableFeature> fList = new ArrayList<ObservableFeature>();
+			List<Feature> fList = new ArrayList<Feature>();
 			for (int i = 0; i < noColumns; i++)
 			{
-				ObservableFeature f = new ObservableFeature();
+				Feature f = new Feature();
 				f.setIdentifier("f" + i + "test");
 				f.setName("test feature " + i);
 				fList.add(f);
@@ -53,7 +53,7 @@ public class GenerateExampleData
 
 			// add features to protocol
 			List<Integer> fIds = new ArrayList<Integer>();
-			for (ObservableFeature f : fList)
+			for (Feature f : fList)
 			{
 				fIds.add(f.getId());
 			}
@@ -88,7 +88,7 @@ public class GenerateExampleData
 
 				db.add(os);
 
-				for (ObservableFeature of : fList)
+				for (Feature of : fList)
 				{
 					ObservedValue v = new ObservedValue();
 					v.setFeature(of);

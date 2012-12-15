@@ -5,12 +5,12 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.molgenis.core.MolgenisFile;
 import org.molgenis.framework.db.DatabaseException;
 import org.molgenis.framework.db.Mapper;
 import org.molgenis.framework.db.MapperDecorator;
 import org.molgenis.framework.db.QueryRule;
 import org.molgenis.framework.db.QueryRule.Operator;
+import org.molgenis.omx.file.MolgenisFile;
 
 /**
  * Generic decorator for MOLGENIS files. These files are coupled to entities and
