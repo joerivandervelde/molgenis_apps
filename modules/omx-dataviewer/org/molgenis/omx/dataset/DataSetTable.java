@@ -18,8 +18,10 @@ import org.molgenis.framework.tupletable.DatabaseTupleTable;
 import org.molgenis.framework.tupletable.TableException;
 import org.molgenis.model.elements.Field;
 import org.molgenis.omx.core.DataSet;
+import org.molgenis.omx.core.Method;
 import org.molgenis.omx.core.ObservationSet;
 import org.molgenis.omx.core.ObservedValue;
+import org.molgenis.omx.core.Protocol;
 import org.molgenis.omx.core.StringObservedValue;
 import org.molgenis.util.SimpleTuple;
 import org.molgenis.util.Tuple;
@@ -48,7 +50,7 @@ public class DataSetTable extends AbstractFilterableTupleTable implements Databa
 		this.dataSet = set;
 		if (db == null) throw new TableException("db cannot be null");
 		setDb(db);
-		setFirstColumnFixed(true);
+		setFirstColumnFixed(false);
 	}
 
 	@Override
@@ -86,22 +88,33 @@ public class DataSetTable extends AbstractFilterableTupleTable implements Databa
 		{
 			// instead ask for protocol.features?
 
-			String sql = "SELECT DISTINCT Characteristic.identifier as name, Characteristic.name as label FROM Characteristic, ObservedValue, ObservationSet WHERE ObservationSet.partOfDataSet="
-					+ dataSet.getId()
-					+ " AND ObservedValue.ObservationSet=ObservationSet.id AND Characteristic.id = ObservedValue.feature";
+			// String sql =
+			// "SELECT DISTINCT Concept.identifier as name, Concept.name as label FROM Concept, StringObservedValue, ObservationSet WHERE ObservationSet.partOfDataSet="
+			// + dataSet.getId() +
+			// " AND StringObservedValue.ObservationSet=ObservationSet.id";
 
 			columns = new ArrayList<Field>();
-			Field targetField = new Field("target");
-			targetField.setLabel("target");
-			columns.add(targetField);
 
-			for (Tuple t : getDb().sql(sql))
+			// for (Tuple t : getDb().sql(sql))
+			// {
+			// Field f = new Field(t.getString("name"));
+			// f.setLabel(t.getString("label"));
+			// columns.add(f);
+			// }
+
+			Protocol p = db.find(Protocol.class, new QueryRule(Protocol.ID, Operator.EQUALS, dataSet.getProtocol_Id()))
+					.get(0);
+			System.out.println("PROTOCOL: " + p.toString());
+			List<Method> methods = db.find(Method.class, new QueryRule(Method.ID, Operator.IN, p.getMethods_Id()));
+			for (Method m : methods)
 			{
-				Field f = new Field(t.getString("name"));
-				f.setLabel(t.getString("label"));
+				Field f = new Field(m.getIdentifier());
+				f.setLabel(m.getName());
 				columns.add(f);
 			}
+
 		}
+
 		catch (Exception e)
 		{
 			throw new TableException(e);
@@ -159,10 +172,14 @@ public class DataSetTable extends AbstractFilterableTupleTable implements Databa
 				Query<StringObservedValue> queryObservedValue = getDb().query(StringObservedValue.class);
 
 				List<Field> columns = getColumns();
-				if (isFirstColumnFixed())
-				{
-					columns.remove(0);
-				}
+				System.out.println("COUNT:" + columns.size());
+				// if (isFirstColumnFixed())
+				// {
+				// columns.remove(0);
+				// }
+
+				// System.out.println("COL NAMES, 0 : " +
+				// columns.get(0).getName());
 
 				// Only retrieve the visible columns
 				Collection<String> fieldNames = Collections2.transform(columns, new Function<Field, String>()
@@ -174,11 +191,21 @@ public class DataSetTable extends AbstractFilterableTupleTable implements Databa
 					}
 				});
 
+				// System.out.println("FIELD NAMES, 0 : " + new
+				// ArrayList<String>(fieldNames).get(0));
+
+				System.out.println("fieldNames:" + fieldNames);
+
+				List<StringObservedValue> sov = queryObservedValue
+						.eq(StringObservedValue.OBSERVATIONSET_ID, os.getId())
+						.in(StringObservedValue.METHOD_IDENTIFIER, new ArrayList<String>(fieldNames)).find();
+
+				System.out.println("SOV: " + sov.size());
+
 				// TODO: String values only!?!?
-				for (StringObservedValue v : queryObservedValue.eq(StringObservedValue.OBSERVATIONSET, os.getId())
-						.in(StringObservedValue.METHOD_ID, new ArrayList<String>(fieldNames)).find())
+				for (StringObservedValue v : sov)
 				{
-					t.set(v.getMethod_Id(), v.getValue());
+					t.set(v.getMethod_Identifier(), v.getValue());
 				}
 
 				result.add(t);
@@ -246,7 +273,8 @@ public class DataSetTable extends AbstractFilterableTupleTable implements Databa
 				}
 
 				// FIXME: String only!!
-				queryRules.add(new QueryRule(StringObservedValue.METHOD_ID, Operator.EQUALS, filter.getField()));
+				queryRules
+						.add(new QueryRule(StringObservedValue.METHOD_IDENTIFIER, Operator.EQUALS, filter.getField()));
 				queryRules.add(new QueryRule(StringObservedValue.VALUE, filter.getOperator(), filter.getValue()));
 
 			}

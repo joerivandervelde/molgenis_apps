@@ -186,7 +186,7 @@
 		<entity name="StringObservedValue" implements="ObservedValue">
 			<description>An observation for which the value is a string of text.
 			</description>
-			<field name="Value" type="string" />
+			<field name="Value" type="string" nillable="true"/>
 		</entity>
 
 

@@ -21,7 +21,6 @@ import org.molgenis.omx.core.DataSet;
 import org.molgenis.omx.core.Method;
 import org.molgenis.omx.core.ObservationSet;
 import org.molgenis.omx.core.StringObservedValue;
-import org.molgenis.omx.core.Target;
 import org.molgenis.util.ExcelUtils;
 import org.molgenis.util.Tuple;
 
@@ -98,12 +97,6 @@ public class DataSetImporter
 			for (Tuple row : csvTable.getRows())
 			{
 				// find current observation target
-				String observationTargetIdentifier = row.getString(0);
-				List<Target> observationTargets = db.find(Target.class, new QueryRule(Target.IDENTIFIER,
-						Operator.EQUALS, observationTargetIdentifier));
-				if (observationTargets == null || observationTargets.isEmpty()) throw new DatabaseException(
-						"ObservationTarget " + observationTargetIdentifier + " does not exist in db");
-				Target observationTarget = observationTargets.get(0);
 
 				// create observation set
 				ObservationSet observationSet = new ObservationSet();
@@ -111,7 +104,7 @@ public class DataSetImporter
 				observationSet.setPartOfDataSet(dataSet);
 				db.add(observationSet);
 
-				for (int col = 1; col < headerFields.size(); ++col)
+				for (int col = 0; col < headerFields.size(); ++col)
 				{
 					// find current observation feature
 					String methodIdentifier = headerFields.get(col).getLabel();
