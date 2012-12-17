@@ -88,7 +88,7 @@
 				description="(Optional) Reference to the well-defined measurement unit used to observe this feature 
 					(if feature is that concrete). E.g. mmHg" />
 
-
+			<field name="Feature" type="xref" xref_entity="Concept" nillable="true" />
 
 		</entity>
 
