@@ -279,7 +279,8 @@ public class DataSetTable extends AbstractFilterableTupleTable implements Databa
 
 			}
 
-			List<ObservedValue> observedValues = getDb().find(ObservedValue.class,
+			// FIXME: string only!!
+			List<StringObservedValue> observedValues = getDb().find(StringObservedValue.class,
 					queryRules.toArray(new QueryRule[queryRules.size()]));
 
 			// No results
