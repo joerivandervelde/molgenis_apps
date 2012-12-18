@@ -11,7 +11,8 @@
 			<field name="Id" type="autoid" />
 		</entity>
 
-		<entity name="Identifiable" implements="Autoid" abstract="true" xref_label="Identifier">
+		<entity name="Identifiable" implements="Autoid" abstract="true"
+			xref_label="Identifier">
 			<field name="Identifier" type="string" />
 			<field name="Name" type="string" />
 			<unique fields="Identifier" />
@@ -56,7 +57,7 @@
 				description="Rudimentary meta data about this concept. Use of ontology 
 					terms references to establish unambigious descriptions is recommended." />
 			<field name="AlternativeIdentifiers" type="mref"
-				xref_entity="AlternativeIdentifier" nillable="true"/>
+				xref_entity="AlternativeIdentifier" nillable="true" />
 		</entity>
 
 		<entity name="Target" extends="Concept">
@@ -68,6 +69,10 @@
 		<entity name="Feature" extends="Concept">
 			<description>A characteristic or quality belonging to a feature or
 				target.
+				<field name="Temporal" type="boolean" nillable="true"
+					description="Whether this feature is time dependent and can have different values when measured 
+					on different times (e.g. weight, temporal=true) or generally only measured once (e.g. birth date, 
+					temporal=false) " />
 			</description>
 		</entity>
 
@@ -88,7 +93,8 @@
 				description="(Optional) Reference to the well-defined measurement unit used to observe this feature 
 					(if feature is that concrete). E.g. mmHg" />
 
-			<field name="Feature" type="xref" xref_entity="Concept" nillable="true" />
+			<field name="Feature" type="xref" xref_entity="Concept"
+				nillable="true" />
 
 		</entity>
 
@@ -115,14 +121,11 @@
 
 			<field name="Method" type="xref" xref_entity="Method"
 				description="The method these permitted values are part of." />
-			<field name="ValueCode" type="string"
-				description="The value used to store this category in ObservedValue. For example '1', '2'." />
-			<field name="IsMissing" type="bool" default="false"
-				description="whether this value should be treated as missing value." />
-			<field name="Temporal" type="boolean" default="false"
-				description="Whether this feature is time dependent and can have different values when measured 
-					on different times (e.g. weight, temporal=true) or generally only measured once (e.g. birth date, 
-					temporal=false) " />
+
+			<field name="ValueCode" type="string" nillable="false"
+				description="The constraint rule that is applied when entering a value for a method to which this permittedvalue belong. Eg: 'm' or 'f' for categorical codes, '0..10' for an integer range, 'Individual' for an XREF value class." />
+			<field name="ValueLabel" type="string" nillable="true"
+				description="The label for the contraint. Eg. in case of categorical values: 'Male' for code 'm' or 'Female' for code 'f'. For an integer range code like 0..100 it could be 'Percentage'. For an XREF class code such as 'Individual' it could provide extra information such as 'Participating persons'." />
 
 		</entity>
 
@@ -152,7 +155,8 @@
 				therefore be thought of as an instance of the protocol it belongs
 				to, like rows in a database are instances of their table definition.
 			</description>
-			<field name="Protocol" type="xref" xref_entity="Protocol" nillable="true" />
+			<field name="Protocol" type="xref" xref_entity="Protocol"
+				nillable="true" />
 			<field name="StartTime" type="datetime" nillable="true"
 				description="Time when the dataset was created." />
 			<field name="EndTime" type="datetime" nillable="true"
@@ -186,7 +190,7 @@
 		<entity name="StringObservedValue" implements="ObservedValue">
 			<description>An observation for which the value is a string of text.
 			</description>
-			<field name="Value" type="string" nillable="true"/>
+			<field name="Value" type="string" nillable="true" />
 		</entity>
 
 
@@ -208,7 +212,8 @@
 				"http://vega.sanger.ac.uk/Homo_sapiens/Gene/Summary?g={id};r=13:32889611-32973347"
 				where {id} is replaced with an instance of
 				AlternativeIdentifier.Identifier "OTTHUMG00000017411" to form a
-				valid URL.</description>
+				valid URL.
+			</description>
 			<field name="BaseURL" type="string" />
 		</entity>
 
@@ -246,7 +251,8 @@
 				nillable="true"
 				description="Indicate the type of Panel (example: Sample panel, AssayedPanel, Natural=wild type, Parental=parents of a cross, F1=First generation of cross, RCC=Recombinant congenic, CSS=chromosome substitution)" />
 			<field name="NumberOfIndividuals" type="int" nillable="true" />
-			<field name="Species" type="xref" nillable="true" xref_entity="AlternativeIdentifier"
+			<field name="Species" type="xref" nillable="true"
+				xref_entity="AlternativeIdentifier"
 				description="The species this panel is an instance of, part of or extracted from." />
 			<field name="Individuals" type="mref" xref_entity="Individual"
 				nillable="true" description="The list of individuals in this panel" />
