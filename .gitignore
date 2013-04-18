@@ -7,6 +7,11 @@ hsqldb/
 handwritten/
 generated/
 WebContent/WEB-INF/lib/
+WebContent/robots.txt
+WebContent/walkthrough.docx
+WebContent/wormqtl_about.html
+WebContent/wormqtl_contact.html
+
 
 ## Always ignore these
 *~

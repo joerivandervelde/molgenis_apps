@@ -33,7 +33,6 @@ import org.molgenis.pheno.ObservableFeature;
 import org.molgenis.pheno.ObservationElement;
 import org.molgenis.pheno.ObservationTarget;
 import org.molgenis.util.Entity;
-import org.molgenis.util.Tuple;
 import org.molgenis.xgap.Chromosome;
 import org.molgenis.xgap.Gene;
 import org.molgenis.xgap.Locus;
