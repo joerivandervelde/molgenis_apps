@@ -67,6 +67,9 @@ public class HomePage extends plugins.cluster.demo.ClusterDemo
 					// allow to see the QTL finder
 					"app.ui.QtlFinderPublic2Plugin",
 
+					// allow to see human to worm association
+					"app.ui.QtlFinderHDPlugin",
+
 					// allow to see genome browser
 					"app.ui.GenomeBrowserPlugin",
 

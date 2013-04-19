@@ -1,0 +1,192 @@
+/**
+ * 
+ */
+package plugins.qtlfinder3;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.molgenis.framework.db.Database;
+import org.molgenis.framework.db.QueryRule;
+import org.molgenis.framework.db.QueryRule.Operator;
+import org.molgenis.framework.server.MolgenisRequest;
+import org.molgenis.framework.ui.ScreenController;
+import org.molgenis.framework.ui.ScreenMessage;
+import org.molgenis.pheno.ObservationElement;
+import org.molgenis.util.Entity;
+import org.molgenis.wormqtl.etc.HumanToWorm;
+import org.molgenis.xgap.Gene;
+
+import plugins.qtlfinder2.QtlFinder2;
+import decorators.MolgenisFileHandler;
+
+/**
+ * @author mark
+ * 
+ */
+public class QtlFinderHD extends QtlFinder2
+{
+
+	private static final long serialVersionUID = 1L;
+
+	public QtlFinderHD(String name, ScreenController<?> parent)
+	{
+		super(name, parent);
+		// TODO Auto-generated constructor stub
+	}
+
+	private QtlFinderHDModel model = new QtlFinderHDModel();
+
+	public QtlFinderHDModel getMyModel()
+	{
+		return model;
+	}
+
+	@Override
+	public void handleRequest(Database db, MolgenisRequest request)
+	{
+
+		if (request.getString("__action") != null)
+		{
+			String action = request.getString("__action");
+
+			try
+			{
+				if (!action.startsWith(this.model.prefix))
+				{
+					super.handleRequest(db, request);
+				}
+
+				// Remove the prefix from the handle request
+				action = action.substring(this.model.prefix.length());
+
+				if (action.equals("shop"))
+				{
+					this.model.setDisease(request.getString("diseaseSelect"));
+
+					System.out.println(this.model.getDisease() + "\n");
+
+					// Call humanToWorm algorithm to convert disease into a list
+					// of one or more worm genes
+					List<String> wormGenes = this.model.getHumanToWorm().convert(this.model.getDisease());
+
+					// Call the database with the list of worm genes to get
+					// normal shopping cart view with probes to shop
+					List<? extends Entity> input = db.find(ObservationElement.class, new QueryRule(
+							ObservationElement.NAME, Operator.IN, wormGenes));
+
+					input = db.load((Class) ObservationElement.class, input);
+
+					for (Entity e : input)
+					{
+						this.model.getShoppingCart().put(e.get("name").toString(), e);
+					}
+
+					this.model.setCartView(true);
+
+					Class<? extends Entity> entityClass;
+					// Map<String, Entity> hits = query(entityClass, db, query,
+					// 100);
+					// System.out.println("initial number of hits: " +
+					// hits.size());
+					// // printResults(hits);
+					//
+
+					// System.out.println("after converting genes to probes, number of hits: "
+					// + hits.size());
+					// // printResults(hits);
+
+					Map<String, Entity> hits = new HashMap<String, Entity>();
+
+					this.model.setHits(hits);
+					this.model.setProbeToGene(new HashMap<String, Gene>());
+
+				}
+
+				if (action.equals("reset"))
+				{
+					this.model.setQuery(null);
+					this.model.setHits(null);
+					this.model.setShortenedQuery(null);
+					this.model.setShoppingCart(null);
+					this.model.setMultiplot(null);
+					this.model.setReport(null);
+					this.model.setQtls(null);
+					this.model.setCartView(false);
+					this.model.setProbeToGene(null);
+				}
+
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				this.setMessages(new ScreenMessage(e.getMessage() != null ? e.getMessage() : "null", false));
+			}
+		}
+	}
+
+	@Override
+	public String getViewName()
+	{
+		return "QtlFinderHD";
+	}
+
+	@Override
+	public String getViewTemplate()
+	{
+		return "plugins/qtlfinder3/QtlFinderHD.ftl";
+	}
+
+	@Override
+	public void reload(Database db)
+	{
+
+		if (model.getShoppingCart() == null)
+		{
+			Map<String, Entity> shoppingCart = new HashMap<String, Entity>();
+			this.model.setShoppingCart(shoppingCart);
+		}
+
+		if (this.model.getCartView() == null)
+		{
+			this.model.setCartView(false);
+		}
+
+		try
+		{
+			if (model.getHumanToWorm() == null)
+			{
+				MolgenisFileHandler filehandle = new MolgenisFileHandler(db);
+				File storage = filehandle.getFileStorage(true, db);
+
+				// Format: "disease","ENSP ID"
+				File omimMap = new File(storage, "omimTransTable.csv");
+				// Format: ENSP ID \t WBGene ID
+				File orthologs = new File(storage, "speciesTransTable.csv");
+
+				HumanToWorm h2w = new HumanToWorm(omimMap, orthologs);
+				this.model.setHumanToWorm(h2w);
+
+			}
+
+			if (this.model.getDisease() == null)
+			{
+				this.model.setDisease(this.model.getHumanToWorm().getDiseaseToHuman().keySet().iterator().next());
+			}
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			this.setMessages(new ScreenMessage(e.getMessage() != null ? e.getMessage() : "null", false));
+		}
+	}
+
+	public String getCustomHtmlHeaders()
+	{
+		return super.getCustomHtmlHeaders();
+	}
+
+}

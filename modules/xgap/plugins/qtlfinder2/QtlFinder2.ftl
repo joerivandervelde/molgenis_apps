@@ -34,9 +34,6 @@
 	<#assign modelExists = false>
 </#if>
 
-<#assign plotWidth = (1024+50)>
-<#assign plotHeight = (768+50)>
-
 <#if model.query??>
 	<#assign query = model.query>
 <#else>
@@ -55,7 +52,7 @@
 	</tr>
 	<tr>
 		<td width="290" align="right">
-			<select class=" ui-widget-content ui-corner-all" id="Phenotype_select" name="dataTypeSelect"  style="width:220px;" name="dataTypeSelect">
+			<select class=" ui-widget-content ui-corner-all" id="Phenotype_select" name="dataTypeSelect"  style="width:220px;">
 				<option value=${allDataTypes} <#if model.selectedAnnotationTypeAndNr?? && model.selectedAnnotationTypeAndNr == allDataTypes>selected="selected"</#if>>All data (${model.annotationTypeAndNr[allDataTypes]})</option>
 				<#list model.annotationTypeAndNr?keys as key>
 					<#if key != allDataTypes>
@@ -85,6 +82,19 @@
 </table>
 
 
+<@cartAndPlot model=model screen=screen/>
+
+<#--end of your plugin-->	
+			</div>
+		</div>
+	</div>
+</form>
+</#macro>
+
+<#macro cartAndPlot model screen>
+
+<#assign plotWidth = (1024+50)>
+<#assign plotHeight = (768+50)>
 
 <#if model.cartView>
 
@@ -503,16 +513,6 @@
 		</#if>
 	</table>
 
-
-
-
-
-
-
-
-
-
-
 <#else>
 
 	<#if model.multiplot??>
@@ -639,23 +639,17 @@
 	</td></tr></table>
 	
 	<#else>
-	
-	
-	
-	
-	
-	
-	
-	<#if model.hits??>
-	
-	<#--find out how many items have been 'shopped'-->
-	<#assign shopped = 0>
-	<#list model.hits?keys as name>
-		<#if model.shoppingCart?keys?seq_contains(name)>
-			<#assign shopped = shopped+1>
-		</#if>
-	</#list>
-	
+		
+		<#if model.hits??>
+		
+		<#--find out how many items have been 'shopped'-->
+		<#assign shopped = 0>
+		<#list model.hits?keys as name>
+			<#if model.shoppingCart?keys?seq_contains(name)>
+				<#assign shopped = shopped+1>
+			</#if>
+		</#list>
+		
 	
 	<div class="buttons"><button style="background: #ccc" type="submit" onclick="document.forms.${screen.name}.__action.value = 'gotoSearch'; document.forms.${screen.name}.submit();"><img src="generated-res/img/listview.png" alt=""/> View hits (${model.hits?size})</button></div>
 
@@ -759,9 +753,4 @@
 	</#if>
 </#if>
 
-<#--end of your plugin-->	
-			</div>
-		</div>
-	</div>
-</form>
 </#macro>
