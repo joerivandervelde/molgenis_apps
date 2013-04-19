@@ -56,68 +56,65 @@ public class QtlFinderHD extends QtlFinder2
 			{
 				if (!action.startsWith(this.model.prefix))
 				{
+					super.model = this.model;
 					super.handleRequest(db, request);
 				}
-
-				// Remove the prefix from the handle request
-				action = action.substring(this.model.prefix.length());
-
-				if (action.equals("shop"))
+				else
 				{
-					this.model.setDisease(request.getString("diseaseSelect"));
+					// Remove the prefix from the handle request
+					action = action.substring(this.model.prefix.length());
 
-					System.out.println(this.model.getDisease() + "\n");
-
-					// Call humanToWorm algorithm to convert disease into a list
-					// of one or more worm genes
-					List<String> wormGenes = this.model.getHumanToWorm().convert(this.model.getDisease());
-
-					// Call the database with the list of worm genes to get
-					// normal shopping cart view with probes to shop
-					List<? extends Entity> input = db.find(ObservationElement.class, new QueryRule(
-							ObservationElement.NAME, Operator.IN, wormGenes));
-
-					input = db.load((Class) ObservationElement.class, input);
-
-					for (Entity e : input)
+					if (action.equals("shop"))
 					{
-						this.model.getShoppingCart().put(e.get("name").toString(), e);
+						this.model.setDisease(request.getString("diseaseSelect"));
+
+						System.out.println(this.model.getDisease() + "\n");
+
+						// Call humanToWorm algorithm to convert disease into a
+						// list
+						// of one or more worm genes
+						List<String> wormGenes = this.model.getHumanToWorm().convert(this.model.getDisease());
+
+						// Call the database with the list of worm genes to get
+						// normal shopping cart view with probes to shop
+						List<? extends Entity> input = db.find(ObservationElement.class, new QueryRule(
+								ObservationElement.NAME, Operator.IN, wormGenes));
+
+						input = db.load((Class) ObservationElement.class, input);
+
+						for (Entity e : input)
+						{
+							this.model.getShoppingCart().put(e.get("name").toString(), e);
+						}
+
+						// Turn on the cart view
+						this.model.setCartView(true);
+
+						// Because the shoppingCart macro needs hits, return a
+						// null
+						// map. Hits are not relevant for the current search.
+						this.model.setHits(new HashMap<String, Entity>());
+
+						this.model.setShoppingCart(genesToProbes(db, 100, this.model.getShoppingCart()));
+
+						this.model.setProbeToGene(new HashMap<String, Gene>());
+
 					}
 
-					this.model.setCartView(true);
-
-					Class<? extends Entity> entityClass;
-					// Map<String, Entity> hits = query(entityClass, db, query,
-					// 100);
-					// System.out.println("initial number of hits: " +
-					// hits.size());
-					// // printResults(hits);
-					//
-
-					// System.out.println("after converting genes to probes, number of hits: "
-					// + hits.size());
-					// // printResults(hits);
-
-					Map<String, Entity> hits = new HashMap<String, Entity>();
-
-					this.model.setHits(hits);
-					this.model.setProbeToGene(new HashMap<String, Gene>());
+					if (action.equals("reset"))
+					{
+						this.model.setQuery(null);
+						this.model.setHits(null);
+						this.model.setShortenedQuery(null);
+						this.model.setShoppingCart(null);
+						this.model.setMultiplot(null);
+						this.model.setReport(null);
+						this.model.setQtls(null);
+						this.model.setCartView(false);
+						this.model.setProbeToGene(null);
+					}
 
 				}
-
-				if (action.equals("reset"))
-				{
-					this.model.setQuery(null);
-					this.model.setHits(null);
-					this.model.setShortenedQuery(null);
-					this.model.setShoppingCart(null);
-					this.model.setMultiplot(null);
-					this.model.setReport(null);
-					this.model.setQtls(null);
-					this.model.setCartView(false);
-					this.model.setProbeToGene(null);
-				}
-
 			}
 			catch (Exception e)
 			{

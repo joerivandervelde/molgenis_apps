@@ -42,6 +42,7 @@ import org.molgenis.xgap.Transcript;
 
 import plugins.qtlfinder.QTLInfo;
 import plugins.qtlfinder.QTLMultiPlotResult;
+import plugins.qtlfinder3.QtlFinderHDModel;
 import plugins.reportbuilder.Report;
 import plugins.reportbuilder.ReportBuilder;
 import plugins.reportbuilder.Statistics;
@@ -53,7 +54,7 @@ public class QtlFinder2 extends PluginModel<Entity>
 
 	private static final long serialVersionUID = 1L;
 
-	private QtlFinderModel2 model = new QtlFinderModel2();
+	protected QtlFinderHDModel model = new QtlFinderHDModel();
 
 	static String __ALL__DATATYPES__SEARCH__KEY = "__ALL__DATATYPES__SEARCH__KEY";
 
@@ -354,7 +355,7 @@ public class QtlFinder2 extends PluginModel<Entity>
 		return result;
 	}
 
-	private Map<String, Entity> genesToProbes(Database db, int limit, Map<String, Entity> hits)
+	protected Map<String, Entity> genesToProbes(Database db, int limit, Map<String, Entity> hits)
 			throws DatabaseException
 	{
 

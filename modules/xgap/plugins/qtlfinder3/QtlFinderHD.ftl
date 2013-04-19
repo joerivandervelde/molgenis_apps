@@ -44,7 +44,21 @@
 
 <table>
 	<tr>
-		<td style="padding-left:20px;padding-top:15px;">
+		<td style="padding-left:20px;padding-top:20px;">
+			<input type="radio" name="humanToWorm" value="wormToDisease" 
+			onclick="display('hide', 'diseaseToWorm');display('hide', 'humanToWorm');display('show', 'wormToDisease');"
+			>Search database for worm phenotypes</input>
+		</td>
+	</tr>
+	<tr>
+		<td style="padding-left:20px;padding-top:5px;">
+			<input type="radio" name="humanToWorm" value="wormToDisease" 
+			onclick="display('hide', 'diseaseToWorm');display('hide', 'humanToWorm');display('show', 'wormToDisease');"
+			>Search worm probes by genetic region</input>
+		</td>
+	</tr>
+	<tr>
+		<td style="padding-left:20px;padding-top:5px;">
 			<input type="radio" name="humanToWorm" value="diseaseToWorm" 
 			onclick="display('show', 'diseaseToWorm');display('hide', 'humanToWorm');display('hide', 'wormToDisease');" 
 			checked>Find worm genes by human disease</input>
@@ -72,36 +86,34 @@
 <#---------------DISEASE SELECTION DROPDOWN BAR-------------->
 
 <div class="diseaseToWorm" style="display:show;">
-	<table align="center">
+	<table>
 		<tr>
 			<td colspan="3" height="10" align="center">
 				&nbsp;
 			</td>
 		</tr>
-		<tr align="center">
-			<td width="500" align="center">
-				<select class=" ui-widget-content ui-corner-all" id="Phenotype_select" name="diseaseSelect"  style="width:850px;" align="center">
+		<tr>
+			<td width="200" style="padding-left:25px;">
+				<select class=" ui-widget-content ui-corner-all" id="Phenotype_select" name="diseaseSelect"  style="width:500px;">
 					<#list model.humanToWorm.diseaseToHuman?keys as disease>
-						<option value="${disease}" <#if model.disease == disease>selected="selected"</#if>>${disease}</option> 
-						<#--<option value="${disease}">${disease}</option> -->
+						<option value="${disease}" <#if model.disease == disease>selected="selected"</#if>
+						>${disease} ... ( ${model.humanToWorm.diseaseToHuman[disease]?size} Gene(s) )</option> 
 					</#list>
 				</select><script>$("#Phenotype_select").chosen();</script>
 			</td>
-		</tr>
-		<tr>	
-			<td width="290" style="padding-top:10px;">
-				
-				<div class="buttons" style="float:right;margin-right:-7px;padding-top:15px;">
-			 		<button type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__reset'; 
-			 		document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset</button>			 	
-	    		</div>
+		
+			<td width="290">
 			 	
-			 	<div class="buttons" style="float:right;padding-top:15px;">
+			 	<div class="buttons">
 					<button type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__shop'; 
 				 	document.forms.${screen.name}.submit();">
 				 	<img src="clusterdemo/icons/shoppingcart.png" alt=""/> Add to Cart</button>
 			 	</div>
 				
+				<div class="buttons">
+			 		<button type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__reset'; 
+			 		document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset</button>			 	
+	    		</div>
 			 	
 			</td>
 		</tr>
