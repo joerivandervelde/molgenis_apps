@@ -28,21 +28,15 @@ public class HumanToWorm
 		return humanToWorm;
 	}
 
-	public <diseaseToHuman> HumanToWorm() throws FileNotFoundException
+	public <diseaseToHuman> HumanToWorm(File omimMap, File orthologs) throws FileNotFoundException
 	{
 		System.out.println("> Building Hash maps....");
 
 		diseaseToHuman = new LinkedHashMap<String, List<String>>();
 		humanToWorm = new LinkedHashMap<String, String>();
 
-		// Format: "disease","ENSP ID"
-		File omim = new File("PATH/omimTransTable.csv");
-
-		// Format: ENSP ID \t WBGene ID
-		File hugo = new File("PATH/speciesTransTable.csv");
-
-		Scanner omimScan = new Scanner(omim);
-		Scanner h2w = new Scanner(hugo);
+		Scanner omimScan = new Scanner(omimMap);
+		Scanner h2w = new Scanner(orthologs);
 
 		// Loop through OMIM file, skip the first line (header)
 		omimScan.nextLine();
@@ -99,14 +93,5 @@ public class HumanToWorm
 		}
 
 		return wormGenes;
-	}
-
-	/**
-	 * @param args
-	 * @throws FileNotFoundException
-	 */
-	public static void main(String[] args) throws FileNotFoundException
-	{
-		new HumanToWorm();
 	}
 }

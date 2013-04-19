@@ -3,6 +3,7 @@
  */
 package org.molgenis.wormqtl.etc;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,8 @@ import org.molgenis.framework.db.QueryRule;
 import org.molgenis.framework.db.QueryRule.Operator;
 import org.molgenis.util.HandleRequestDelegationException;
 import org.molgenis.xgap.Probe;
+
+import decorators.MolgenisFileHandler;
 
 /**
  * @author mark
@@ -25,13 +28,22 @@ public class WormQtlPilotHD
 	 */
 	public WormQtlPilotHD() throws HandleRequestDelegationException, Exception
 	{
-		HumanToWorm h2w = new HumanToWorm();
-
-		// Call the two translation tables to translate disease into worm genes
-		List<String> wbGenes = h2w.convert("Adhalinopathy, primary (1)");
 
 		Database db = ExampleQueries.getDb("admin", "admin");
 		List<Probe> probes = new ArrayList<Probe>();
+
+		MolgenisFileHandler filehandle = new MolgenisFileHandler(db);
+		File storage = filehandle.getFileStorage(true, db);
+
+		// Format: "disease","ENSP ID"
+		File omimMap = new File(storage, "omimTransTable.csv");
+		// Format: ENSP ID \t WBGene ID
+		File orthologs = new File(storage, "speciesTransTable.csv");
+
+		HumanToWorm h2w = new HumanToWorm(omimMap, orthologs);
+
+		// Call the two translation tables to translate disease into worm genes
+		List<String> wbGenes = h2w.convert("Adhalinopathy, primary (1)");
 
 		// Convert genes to probes
 		for (String wbGene : wbGenes)
