@@ -15,6 +15,7 @@ import org.molgenis.auth.DatabaseLogin;
 import org.molgenis.cluster.DataValue;
 import org.molgenis.data.Data;
 import org.molgenis.framework.db.Database;
+import org.molgenis.framework.db.Query;
 import org.molgenis.framework.db.QueryRule;
 import org.molgenis.framework.db.QueryRule.Operator;
 import org.molgenis.framework.security.Login;
@@ -22,6 +23,7 @@ import org.molgenis.framework.server.TokenFactory;
 import org.molgenis.util.HandleRequestDelegationException;
 import org.molgenis.xgap.Chromosome;
 import org.molgenis.xgap.Gene;
+import org.molgenis.xgap.Marker;
 import org.molgenis.xgap.Probe;
 
 import app.DatabaseFactory;
@@ -33,7 +35,7 @@ public class ExampleQueries
 	{
 		Database db = getDb(usr, pwd);
 
-		regionSearch(db);
+		QTLsearch(db);
 	}
 
 	public void QTLsearch(Database db) throws HandleRequestDelegationException, Exception
@@ -47,13 +49,74 @@ public class ExampleQueries
 		{
 			dataNames.add(dv.getValue_Name());
 		}
+
+		// list with datasets to be shown in dropdown menu
 		List<Data> datasets = db.find(Data.class, new QueryRule(Data.NAME, Operator.IN, dataNames));
 
 		// simulate user input
 		String dataName = "rnai_FC_qtl";
-		double threshold = 5.0;
+		double threshold = 5;
+		int start = 10;
+		int end = 10000000;
+		int chromosome = 3;
+
+		// use regionSearch start end algorithm
 
 		DataMatrixHandler dmh = new DataMatrixHandler(db);
+		Data selectDataset = db.find(Data.class, new QueryRule(Data.NAME, Operator.EQUALS, dataName)).get(0);
+		DataMatrixInstance dataMatrix = dmh.createInstance(selectDataset, db);
+
+		List<String> markers = selectDataset.getFeatureType().equals(Marker.class.getSimpleName()) ? dataMatrix
+				.getColNames() : dataMatrix.getRowNames();
+
+		Query<Marker> q = db.query(Marker.class);
+		// Get markers used in dataset name
+		q.addRules(new QueryRule(Marker.NAME, Operator.IN, markers));
+		// Get markers in specific region
+		q.addRules(new QueryRule(Marker.BPSTART, Operator.GREATER_EQUAL, start));
+		q.addRules(new QueryRule(Marker.BPSTART, Operator.LESS_EQUAL, end));
+		// Save markers selected from region
+		List<Marker> regionMarkers = q.find();
+
+		// Get lowest and highest BP number
+		Marker lowest = regionMarkers.get(0);
+		Marker highest = regionMarkers.get(regionMarkers.size() - 1); // ???
+		for (Marker m : regionMarkers)
+		{
+			if (m.getBpStart().doubleValue() < lowest.getBpStart().doubleValue())
+			{
+				lowest = m;
+			}
+			else if (m.getBpStart().doubleValue() > highest.getBpStart().doubleValue())
+			{
+				highest = m;
+			}
+		}
+
+		// Slice selected region from datamatrix
+		if (selectDataset.getFeatureType().equals(Marker.class.getSimpleName()))
+		{
+			int colStart = dataMatrix.getColIndexForName(lowest.getName());
+			int colStop = dataMatrix.getColIndexForName(highest.getName());
+
+			// cut out slice with our flanking markers (start, stop)
+			DataMatrixInstance slice = dataMatrix.getSubMatrixByOffset(0, dataMatrix.getNumberOfRows(), colStart,
+					colStop - colStart);
+
+			// we want "1" value per row (trait) with a value GREATER than
+			// THRESHOLD
+			QueryRule findAboveThreshold = new QueryRule("1", Operator.GREATER, threshold);
+
+			// apply filter and get result: number of rows (traits) are now
+			// reduced
+			DataMatrixInstance traitsAboveThreshold = slice.getSubMatrix2DFilterByRow(findAboveThreshold);
+
+			System.out.println(traitsAboveThreshold.toString());
+		}
+		else
+		{
+
+		}
 
 	}
 
