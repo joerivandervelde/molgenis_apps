@@ -22,6 +22,49 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// The disease that is selected by the user
 	private String disease;
 
+	// User specified location to start on in region search
+	private int regionStartLocation;
+
+	// User specified location to end on in region search
+	private int regionEndLocation;
+
+	// User specified chromosome to look at in region search
+	private int regionChromosome;
+
+	// The selected search makes it possible to switch between different kinds
+	// of searching
+	private String selectedSearch;
+
+	public int getRegionStartLocation()
+	{
+		return regionStartLocation;
+	}
+
+	public void setRegionStartLocation(int regionStartLocation)
+	{
+		this.regionStartLocation = regionStartLocation;
+	}
+
+	public int getRegionEndLocation()
+	{
+		return regionEndLocation;
+	}
+
+	public void setRegionEndLocation(int regionEndLocation)
+	{
+		this.regionEndLocation = regionEndLocation;
+	}
+
+	public int getRegionChromosome()
+	{
+		return regionChromosome;
+	}
+
+	public void setRegionChromosome(int regionChromosome)
+	{
+		this.regionChromosome = regionChromosome;
+	}
+
 	public String getDisease()
 	{
 		return disease;
@@ -40,6 +83,16 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	public void setHumanToWorm(HumanToWorm humanToWorm)
 	{
 		this.humanToWorm = humanToWorm;
+	}
+
+	public String getSelectedSearch()
+	{
+		return selectedSearch;
+	}
+
+	public void setSelectedSearch(String selectedSearch)
+	{
+		this.selectedSearch = selectedSearch;
 	}
 
 }

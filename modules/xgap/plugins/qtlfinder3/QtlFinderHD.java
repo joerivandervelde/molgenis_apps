@@ -4,6 +4,7 @@
 package plugins.qtlfinder3;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,9 @@ import org.molgenis.framework.ui.ScreenMessage;
 import org.molgenis.pheno.ObservationElement;
 import org.molgenis.util.Entity;
 import org.molgenis.wormqtl.etc.HumanToWorm;
+import org.molgenis.xgap.Chromosome;
 import org.molgenis.xgap.Gene;
+import org.molgenis.xgap.Probe;
 
 import plugins.qtlfinder2.QtlFinder2;
 import decorators.MolgenisFileHandler;
@@ -64,58 +67,97 @@ public class QtlFinderHD extends QtlFinder2
 					// Remove the prefix from the handle request
 					action = action.substring(this.model.prefix.length());
 
-					if (action.equals("shop"))
+					if (action.equals("regionSearch"))
 					{
-						this.model.setDisease(request.getString("diseaseSelect"));
+						List<Probe> probesInRegion = new ArrayList<Probe>();
 
-						System.out.println(this.model.getDisease() + "\n");
-
-						// Call humanToWorm algorithm to convert disease into a
-						// list
-						// of one or more worm genes
-						List<String> wormGenes = this.model.getHumanToWorm().convert(this.model.getDisease());
-
-						// Call the database with the list of worm genes to get
-						// normal shopping cart view with probes to shop
-						List<? extends Entity> input = db.find(ObservationElement.class, new QueryRule(
-								ObservationElement.NAME, Operator.IN, wormGenes));
-
-						input = db.load((Class) ObservationElement.class, input);
-
-						for (Entity e : input)
+						if (request.getString("regionStart") == null || request.getString("regionEnd") == null)
 						{
-							this.model.getShoppingCart().put(e.get("name").toString(), e);
+							this.setMessages(new ScreenMessage("Please fill in a starting and ending point "
+									+ "for your region search. An entire chromosome selection will result in to "
+									+ "many hits, overloading your browser", false));
+						}
+						else
+						{
+							this.model.setRegionStartLocation(Integer.valueOf(request.getString("regionStart")));
+							this.model.setRegionEndLocation(Integer.valueOf(request.getString("regionEnd")));
+							this.model.setRegionChromosome(Integer.valueOf(request.getString("regionChr")));
+
+							Integer start = this.model.getRegionStartLocation();
+							Integer end = this.model.getRegionEndLocation();
+
+							List<Chromosome> chrNeeded = db.find(Chromosome.class, new QueryRule(Chromosome.ORDERNR,
+									Operator.LESS, this.model.getRegionChromosome()));
+
+							for (Chromosome chr : chrNeeded)
+							{
+								start = start + chr.getBpLength();
+								end = end + chr.getBpLength();
+							}
+
+							probesInRegion = db.find(Probe.class,
+									new QueryRule(Probe.BPSTART, Operator.GREATER, start), new QueryRule(Probe.BPSTART,
+											Operator.LESS, end));
 						}
 
-						// Turn on the cart view
-						this.model.setCartView(true);
-
-						// Because the shoppingCart macro needs hits, return a
-						// null
-						// map. Hits are not relevant for the current search.
+						this.model.setProbeToGene(new HashMap<String, Gene>());
 						this.model.setHits(new HashMap<String, Entity>());
 
-						this.model.setShoppingCart(genesToProbes(db, 100, this.model.getShoppingCart()));
-
-						this.model.setProbeToGene(new HashMap<String, Gene>());
-
-					}
-
-					if (action.equals("reset"))
-					{
-						this.model.setQuery(null);
-						this.model.setHits(null);
-						this.model.setShortenedQuery(null);
-						this.model.setShoppingCart(null);
-						this.model.setMultiplot(null);
-						this.model.setReport(null);
-						this.model.setQtls(null);
-						this.model.setCartView(false);
-						this.model.setProbeToGene(null);
+						for (Probe p : probesInRegion)
+						{
+							model.getHits().put(p.getName(), p);
+						}
 					}
 
 				}
+
+				if (action.equals("shop"))
+				{
+					this.model.setDisease(request.getString("diseaseSelect"));
+
+					// Call humanToWorm algorithm to convert disease into a
+					// list
+					// of one or more worm genes
+					List<String> wormGenes = this.model.getHumanToWorm().convert(this.model.getDisease());
+
+					// Call the database with the list of worm genes to get
+					// normal shopping cart view with probes to shop
+					List<? extends Entity> probes = db.find(ObservationElement.class, new QueryRule(
+							ObservationElement.NAME, Operator.IN, wormGenes));
+
+					probes = db.load((Class) ObservationElement.class, probes);
+
+					for (Entity p : probes)
+					{
+						this.model.getShoppingCart().put(p.get("name").toString(), p);
+					}
+
+					// Turn on the cart view
+					this.model.setCartView(true);
+
+					// Because the shoppingCart macro needs hits, return a
+					// null
+					// map. Hits are not relevant for the current search.
+					this.model.setHits(new HashMap<String, Entity>());
+					this.model.setShoppingCart(genesToProbes(db, 100, this.model.getShoppingCart()));
+					this.model.setProbeToGene(new HashMap<String, Gene>());
+
+				}
+
+				if (action.equals("reset"))
+				{
+					this.model.setQuery(null);
+					this.model.setHits(null);
+					this.model.setShortenedQuery(null);
+					this.model.setShoppingCart(null);
+					this.model.setMultiplot(null);
+					this.model.setReport(null);
+					this.model.setQtls(null);
+					this.model.setCartView(false);
+					this.model.setProbeToGene(null);
+				}
 			}
+
 			catch (Exception e)
 			{
 				e.printStackTrace();
@@ -139,6 +181,11 @@ public class QtlFinderHD extends QtlFinder2
 	@Override
 	public void reload(Database db)
 	{
+
+		if (model.getSelectedSearch() == null)
+		{
+			this.model.setSelectedSearch("diseaseToWorm");
+		}
 
 		if (model.getShoppingCart() == null)
 		{

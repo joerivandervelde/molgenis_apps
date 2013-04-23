@@ -44,37 +44,42 @@
 
 <table>
 	<tr>
-		<td style="padding-left:20px;padding-top:20px;">
-			<input type="radio" name="humanToWorm" value="wormToDisease" 
-			onclick="display('hide', 'diseaseToWorm');display('hide', 'humanToWorm');display('show', 'wormToDisease');"
-			>Search database for worm phenotypes</input>
-		</td>
-	</tr>
-	<tr>
 		<td style="padding-left:20px;padding-top:5px;">
-			<input type="radio" name="humanToWorm" value="wormToDisease" 
-			onclick="display('hide', 'diseaseToWorm');display('hide', 'humanToWorm');display('show', 'wormToDisease');"
+			<input type="radio" name="filterSelect"
+			onclick=";display('hide', 'diseaseToWorm');display('hide', 'humanGeneToWorm');display('hide', 'wormToDisease');display('show', 'regionToWorm');display('hide', 'regionToQtl');"
+			<#if model.selectedSearch == 'regionToWorm'>checked</#if>
 			>Search worm probes by genetic region</input>
 		</td>
 	</tr>
 	<tr>
 		<td style="padding-left:20px;padding-top:5px;">
-			<input type="radio" name="humanToWorm" value="diseaseToWorm" 
-			onclick="display('show', 'diseaseToWorm');display('hide', 'humanToWorm');display('hide', 'wormToDisease');" 
+			<input type="radio" name="filterSelect" value="regionToQtl" 
+			onclick="display('hide', 'diseaseToWorm');display('hide', 'humanGeneToWorm');display('hide', 'wormToDisease');display('hide', 'regionToWorm');display('show', 'regionToQtl');"
+			<#if model.selectedSearch == 'regionToQtl'>checked</#if>
+			>Search a region for significant QTLs</input>
+		</td>
+	</tr>
+	<tr>
+		<td style="padding-left:20px;padding-top:5px;">
+			<input type="radio" name="filterSelect" 
+			onclick="display('show', 'diseaseToWorm');display('hide', 'humanGeneToWorm');display('hide', 'wormToDisease');display('hide', 'regionToWorm');display('hide', 'regionToQtl');" 
+			<#if model.selectedSearch == 'diseaseToWorm'>checked</#if>
 			checked>Find worm genes by human disease</input>
 		</td>
 	</tr>
 	<tr>
 		<td style="padding-left:20px;padding-top:5px;">
-			<input type="radio" name="humanToWorm" value="humanToWorm"
-			onclick="display('hide', 'diseaseToWorm');display('show', 'humanToWorm');display('hide', 'wormToDisease');"
+			<input type="radio" name="filterSelect"
+			onclick="display('hide', 'diseaseToWorm');display('show', 'humanGeneToWorm');display('hide', 'wormToDisease');display('hide', 'regionToWorm');display('hide', 'regionToQtl');"
+			<#if model.selectedSearch == 'humanGeneToWorm'>checked</#if>
 			>Find orthologs in worm for your own set of human genes</input>
 		</td>
 	</tr>
 	<tr>
 		<td style="padding-left:20px;padding-top:5px;">
-			<input type="radio" name="humanToWorm" value="wormToDisease" 
-			onclick="display('hide', 'diseaseToWorm');display('hide', 'humanToWorm');display('show', 'wormToDisease');"
+			<input type="radio" name="filterSelect" 
+			onclick="display('hide', 'diseaseToWorm');display('hide', 'humanGeneToWorm');display('show', 'wormToDisease');display('hide', 'regionToWorm');display('hide', 'regionToQtl');"
+			<#if model.selectedSearch == 'wormToDisease'>checked</#if>
 			>Scan regions of the worm for possible disease association within human</input>
 		</td>
 	</tr>
@@ -82,10 +87,126 @@
 
 <#---------------END OF RADIO BUTTON SELECTION--------------->
 
+<#---------------------WORM REGION SEARCH-------------------->
+
+<div id="regionToWorm" <#if model.selectedSearch != "regionToWorm">style="display:none"</#if>>
+	<table>
+		<tr>
+			<td colspan="3" height="10" align="center">
+				&nbsp;
+			</td>
+		</tr>
+		<tr width="200">
+			<td style="padding-left:25px;">
+				Start:<br /> <input title="starting index" id="regionStart" name="regionStart" type="text" />
+			</td>
+		
+			<td style="padding-left:25px;">
+				End:<br /> <input title="ending index" id="regionEnd" name="regionEnd" type="text" />
+			</td>	
+		
+			<td style="padding-left:25px;">
+				Chromosome:<br /> 
+				<select name="regionChr">
+					<option value="1">I</option>
+					<option value="2">II</option>
+					<option value="3">III</option>
+					<option value="4">IV</option>
+					<option value="5">V</option>
+					<option value="6">X</option>
+					<option value="7">MtDNA</option>
+				</select>
+			</td>	
+	
+			<td width="290" style="padding-left: 30px;">
+				<div class="buttons">
+					<button type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__regionSearch';
+					document.forms.${screen.name}.submit();">
+					<img src="generated-res/img/recordview.png" alt=""/>Submit</button>
+				</div>	
+					
+				<div class="buttons">
+			 		<button type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__reset'; 
+			 		document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset</button>			 	
+	    		</div>
+					
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" height="70" align="center" style="padding-top:20px;">
+				<span style="font-size:12px;">Browse a region of a specific chromosome to find genes there</span>
+			</td>
+		</tr>
+	</table>
+</div>
+
+
+<#-----------------END WORM REGION SEARCH-------------------->
+
+<#-----------------WORM REGION QTL SEARCH-------------------->
+
+<div id="regionToQtl" <#if model.selectedSearch != 'regionToQtl'>style="display:none;"</#if>>
+	<table>
+		<tr>
+			<td colspan="3" height="10" align="center">
+				&nbsp;
+			</td>
+		</tr>
+			<td style="padding-left:25px;">
+			Dataset:<br/><select><option>Select a dataset...</option></select>
+			</td>
+			<td style="padding-left:25px;">
+				Start:<br/><input title="starting index" id="regionStart" name="regionStart" type="text" />
+			</td>
+			<td style="padding-left:25px;">
+				Chromosome:<br /> 
+				<select name="regionChr">
+					<option value="1">I</option>
+					<option value="2">II</option>
+					<option value="3">III</option>
+					<option value="4">IV</option>
+					<option value="5">V</option>
+					<option value="6">X</option>
+					<option value="7">MtDNA</option>
+				</select>
+			</td>	
+		<tr>
+			<td style="padding-left:25px;">
+				Threshold:<br/><input title="LOD Score Threshold" id="lodThreshold" name="lodTreshold" type="text" size="4"/>
+			</td>
+			<td style="padding-left:25px;">
+				End:<br/><input title="ending index" id="regionEnd" name="regionEnd" type="text" />
+			</td>	
+		</tr>
+		<tr style="margin-top:8px;">
+			<td style="padding-left:25px;padding-top:10px;">
+				<div class="buttons">
+					<button type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__regionSearch';
+					document.forms.${screen.name}.submit();">
+					<img src="generated-res/img/recordview.png" alt=""/>Submit</button>
+				</div>	
+			</td>
+			<td style="padding-left:25px;padding-top:10px;">		
+				<div class="buttons">
+			 		<button type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__reset'; 
+			 		document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset</button>			 	
+	    		</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" height="70" align="center" style="padding-top:20px;">
+				<span style="font-size:12px;">Browse a region for QTLs that are above a specified threshold</span>
+			</td>
+		</tr>		
+	</table>
+</div>
+
+<#-----------------END WORM REGION QTL SEARCH---------------->
+
 
 <#---------------DISEASE SELECTION DROPDOWN BAR-------------->
 
-<div class="diseaseToWorm" style="display:show;">
+<div id="diseaseToWorm" <#if model.selectedSearch != 'diseaseToWorm'>style="display:none"</#if>>
 	<table>
 		<tr>
 			<td colspan="3" height="10" align="center">
@@ -97,7 +218,7 @@
 				<select class=" ui-widget-content ui-corner-all" id="Phenotype_select" name="diseaseSelect"  style="width:500px;">
 					<#list model.humanToWorm.diseaseToHuman?keys as disease>
 						<option value="${disease}" <#if model.disease == disease>selected="selected"</#if>
-						>${disease} ... ( ${model.humanToWorm.diseaseToHuman[disease]?size} Gene(s) )</option> 
+						>${disease} [ ${model.humanToWorm.diseaseToHuman[disease]?size} Gene(s) ]</option> 
 					</#list>
 				</select><script>$("#Phenotype_select").chosen();</script>
 			</td>
@@ -107,7 +228,7 @@
 			 	<div class="buttons">
 					<button type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__shop'; 
 				 	document.forms.${screen.name}.submit();">
-				 	<img src="clusterdemo/icons/shoppingcart.png" alt=""/> Add to Cart</button>
+				 	<img src="clusterdemo/icons/shoppingcart.png" alt=""/>Add to Cart</button>
 			 	</div>
 				
 				<div class="buttons">
@@ -129,11 +250,37 @@
 
 <#-----------HUMAN GENE FILL IN FORM (UPLOAD FILE?)---------->
 
-<div class="humanToWorm">
-	<table align="center">
+<div id="humanGeneToWorm" <#if model.selectedSearch != 'humanGeneToWorm'>style="display:none"</#if>>
+	<table>
 		<tr>
-			<td>
-			Search Bar 1
+			<td colspan="3" height="10" align="center">
+				&nbsp;
+			</td>
+		</tr>
+		<tr>
+			<td style="padding-left:25px;">
+				<textarea name="enspIds" cols="50" rows="6">Please fill in one or several ENSP identifiers to see if there is an ortholog in C. elegans. Seperate by comma.
+			
+EXAMPLE: ENSP00000230732, ENSP00000005178, ENSP00000301067	
+				</textarea>
+			</td>
+			
+			<td width="290">
+			 	<div class="buttons">
+					<button type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__humanGeneSearch';
+					document.forms.${screen.name}.submit();">
+					<img src="generated-res/img/recordview.png" alt=""/>Submit</button>
+				</div>		
+				
+				<div class="buttons">
+			 		<button type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__reset'; 
+			 		document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset</button>			 	
+	    		</div>		 	
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" height="70" align="center" style="padding-top:20px;">
+				<span style="font-size:12px;">Search for worm genes by submitting human ENSP gene identifiers.</span>
 			</td>
 		</tr>
 	</table>
@@ -143,11 +290,16 @@
 
 <#---------WORM REGION BROWSER------------------------------>
 
-<div class="wormToDisease">
+<div id="wormToDisease" <#if model.selectedSearch != 'wormToDisease'>style="display:none"</#if>>
 	<table align="center">
 		<tr>
+			<td colspan="3" height="10" align="center">
+				&nbsp;
+			</td>
+		</tr>
+		<tr>
 			<td>
-			Search Bar 2
+				DROPDOWN DATASET SELECT
 			</td>
 		</tr>
 	</table>
