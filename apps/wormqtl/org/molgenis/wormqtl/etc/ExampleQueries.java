@@ -12,6 +12,7 @@ import matrix.general.DataMatrixHandler;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.molgenis.auth.DatabaseLogin;
+import org.molgenis.cluster.DataValue;
 import org.molgenis.data.Data;
 import org.molgenis.framework.db.Database;
 import org.molgenis.framework.db.QueryRule;
@@ -27,43 +28,99 @@ import app.DatabaseFactory;
 
 public class ExampleQueries
 {
-	
+
 	public ExampleQueries(String usr, String pwd) throws HandleRequestDelegationException, Exception
 	{
 		Database db = getDb(usr, pwd);
-		
-		//get all chromosomes
+
+		regionSearch(db);
+	}
+
+	public void QTLsearch(Database db) throws HandleRequestDelegationException, Exception
+	{
+
+		// give user dropdown of datasets with LOD scores
+		List<DataValue> dvList = db.find(DataValue.class, new QueryRule(DataValue.DATANAME_NAME, Operator.EQUALS,
+				"LOD_score"));
+		List<String> dataNames = new ArrayList<String>();
+		for (DataValue dv : dvList)
+		{
+			dataNames.add(dv.getValue_Name());
+		}
+		List<Data> datasets = db.find(Data.class, new QueryRule(Data.NAME, Operator.IN, dataNames));
+
+		// simulate user input
+		String dataName = "rnai_FC_qtl";
+		double threshold = 5.0;
+
+		DataMatrixHandler dmh = new DataMatrixHandler(db);
+
+	}
+
+	public void regionSearch(Database db) throws HandleRequestDelegationException, Exception
+	{
+		// user selects bp 10.000 - 20.000 from chromosome 3
+		int from = 10000;
+		int to = 20000;
+		int chromosome = 2;
+		// end user
+
+		List<Chromosome> chrNeeded = db.find(Chromosome.class, new QueryRule(Chromosome.ORDERNR, Operator.LESS,
+				chromosome));
+
+		for (Chromosome chr : chrNeeded)
+		{
+			from = from + chr.getBpLength();
+			to = to + chr.getBpLength();
+		}
+
+		System.out.println("Get region from: " + from + " to: " + to);
+
+		List<Probe> probesInRegion = db.find(Probe.class, new QueryRule(Probe.BPSTART, Operator.GREATER, from),
+				new QueryRule(Probe.BPSTART, Operator.LESS, to));
+		System.out.println(probesInRegion.size() + " probes in region");
+
+	}
+
+	public void Example1(Database db) throws HandleRequestDelegationException, Exception
+	{
+		// get all chromosomes
 		List<Chromosome> chromosomes = db.find(Chromosome.class);
 		System.out.println(chromosomes.size() + " chromosomes found");
-		
-		//get count of genes per chromosome
-		for(Chromosome chr : chromosomes)
+
+		// get count of genes per chromosome
+		for (Chromosome chr : chromosomes)
 		{
-			List<Gene> genesOnThisChr = db.find(Gene.class, new QueryRule(Gene.CHROMOSOME_NAME, Operator.EQUALS, chr.getName()));
+			List<Gene> genesOnThisChr = db.find(Gene.class,
+					new QueryRule(Gene.CHROMOSOME_NAME, Operator.EQUALS, chr.getName()));
 			System.out.println(genesOnThisChr.size() + " genes on chromosome " + chr.getName());
 		}
-		
-		//get probes in a certain region
-		//BEWARE: probe bp location is CUMULATIVE over all chromosomes (by order nr) !!
-		List<Probe> probesInRegion = db.find(Probe.class, new QueryRule(Probe.BPSTART, Operator.GREATER, 100000), new QueryRule(Probe.BPSTART, Operator.LESS, 900000));
+
+		// get probes in a certain region
+		// BEWARE: probe bp location is CUMULATIVE over all chromosomes (by
+		// order nr) !!
+		List<Probe> probesInRegion = db.find(Probe.class, new QueryRule(Probe.BPSTART, Operator.GREATER, 100000),
+				new QueryRule(Probe.BPSTART, Operator.LESS, 900000));
 		System.out.println(probesInRegion.size() + " probes in region");
-		
-		//get all datasets ('feature' = columns, 'target' = rows)
+
+		// get all datasets ('feature' = columns, 'target' = rows)
 		List<Data> datasets = db.find(Data.class);
 		DataMatrixHandler dmh = new DataMatrixHandler(db);
-		for(Data data : datasets){
+		for (Data data : datasets)
+		{
 			DataMatrixInstance dataMatrix = dmh.createInstance(data, db);
-			System.out.println("data matrix: " + dataMatrix.getData().getName() + " (" + dataMatrix.getData().getFeatureType() + " x " + dataMatrix.getData().getTargetType() + ")");
+			System.out.println("data matrix: " + dataMatrix.getData().getName() + " ("
+					+ dataMatrix.getData().getFeatureType() + " x " + dataMatrix.getData().getTargetType() + ")");
 			System.out.println("row name 0: " + dataMatrix.getRowNames().get(0));
 			System.out.println("col name 0: " + dataMatrix.getColNames().get(0));
 			System.out.println("value at 0,0: " + dataMatrix.getElement(0, 0));
-			//etc
+			// etc
 		}
-		
 	}
-	
+
 	/**
 	 * Helper: create database with this login info
+	 * 
 	 * @param usr
 	 * @param pwd
 	 * @return
@@ -72,7 +129,7 @@ public class ExampleQueries
 	 */
 	private Database getDb(String usr, String pwd) throws HandleRequestDelegationException, Exception
 	{
-		//create db
+		// create db
 		BasicDataSource data_src = new BasicDataSource();
 		data_src.setDriverClassName("org.hsqldb.jdbcDriver");
 		data_src.setUsername("sa");
@@ -80,21 +137,22 @@ public class ExampleQueries
 		data_src.setUrl("jdbc:hsqldb:file:hsqldb/molgenisdb;shutdown=true");
 		data_src.setInitialSize(10);
 		data_src.setTestOnBorrow(true);
-		DataSource dataSource = (DataSource)data_src;
+		DataSource dataSource = (DataSource) data_src;
 		Connection conn = dataSource.getConnection();
-		//Database db = new app.JDBCDatabase(conn);
-		Database db = DatabaseFactory.create(conn);	
-		
-		//login
+		// Database db = new app.JDBCDatabase(conn);
+		Database db = DatabaseFactory.create(conn);
+
+		// login
 		Login login = new DatabaseLogin(new TokenFactory());
 		login.login(db, usr, pwd);
 		db.setLogin(login);
 		System.out.println("logged in as: " + db.getLogin().getUserName());
 		return db;
 	}
-	
+
 	/**
 	 * Helper: make chromosome basepair lengths cumulative
+	 * 
 	 * @param chromosomes
 	 * @return
 	 * @throws Exception
@@ -135,25 +193,26 @@ public class ExampleQueries
 
 	/**
 	 * @param args
-	 * @throws Exception 
-	 * @throws HandleRequestDelegationException 
+	 * @throws Exception
+	 * @throws HandleRequestDelegationException
 	 */
 	public static void main(String[] args) throws HandleRequestDelegationException, Exception
 	{
-		
-		//arg checking
-		if(args.length != 2 || args[0].length() == 0 || args[1].length() == 0)
+
+		// arg checking
+		if (args.length != 2 || args[0].length() == 0 || args[1].length() == 0)
 		{
-			throw new IllegalArgumentException("You must supply username and password. Add e.g. 'admin admin' to program arguments. Add '-Xmx2g' to VM arguments to make it fast.");
+			throw new IllegalArgumentException(
+					"You must supply username and password. Add e.g. 'admin admin' to program arguments. Add '-Xmx2g' to VM arguments to make it fast.");
 		}
-		
+
 		System.out.println("starting ExampleQueries, arguments ok");
 		System.out.println("user: " + args[0]);
 		char[] stars = new char[args[1].length()];
 		Arrays.fill(stars, '*');
 		String starString = new String(stars);
 		System.out.println("pass: " + starString);
-		
+
 		new ExampleQueries(args[0], args[1]);
 	}
 
