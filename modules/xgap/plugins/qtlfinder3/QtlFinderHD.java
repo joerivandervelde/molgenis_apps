@@ -9,7 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import matrix.DataMatrixInstance;
+import matrix.general.DataMatrixHandler;
+
+import org.molgenis.cluster.DataValue;
+import org.molgenis.data.Data;
 import org.molgenis.framework.db.Database;
+import org.molgenis.framework.db.Query;
 import org.molgenis.framework.db.QueryRule;
 import org.molgenis.framework.db.QueryRule.Operator;
 import org.molgenis.framework.server.MolgenisRequest;
@@ -20,6 +26,7 @@ import org.molgenis.util.Entity;
 import org.molgenis.wormqtl.etc.HumanToWorm;
 import org.molgenis.xgap.Chromosome;
 import org.molgenis.xgap.Gene;
+import org.molgenis.xgap.Marker;
 import org.molgenis.xgap.Probe;
 
 import plugins.qtlfinder2.QtlFinder2;
@@ -62,16 +69,20 @@ public class QtlFinderHD extends QtlFinder2
 					super.model = this.model;
 					super.handleRequest(db, request);
 				}
+
 				else
 				{
 					// Remove the prefix from the handle request
 					action = action.substring(this.model.prefix.length());
 
+					// //////////////
+					// REGION SEARCH
+					// //////////////
 					if (action.equals("regionSearch"))
 					{
 						List<Probe> probesInRegion = new ArrayList<Probe>();
 
-						if (request.getString("regionStart") == null || request.getString("regionEnd") == null)
+						if (request.getInt("regionStart") == null || request.getInt("regionEnd") == null)
 						{
 							this.setMessages(new ScreenMessage("Please fill in a starting and ending point "
 									+ "for your region search. An entire chromosome selection will result in to "
@@ -79,9 +90,9 @@ public class QtlFinderHD extends QtlFinder2
 						}
 						else
 						{
-							this.model.setRegionStartLocation(Integer.valueOf(request.getString("regionStart")));
-							this.model.setRegionEndLocation(Integer.valueOf(request.getString("regionEnd")));
-							this.model.setRegionChromosome(Integer.valueOf(request.getString("regionChr")));
+							this.model.setRegionStartLocation(request.getInt("regionStart"));
+							this.model.setRegionEndLocation(request.getInt("regionEnd"));
+							this.model.setRegionChromosome(request.getInt("regionChr"));
 
 							Integer start = this.model.getRegionStartLocation();
 							Integer end = this.model.getRegionEndLocation();
@@ -109,52 +120,180 @@ public class QtlFinderHD extends QtlFinder2
 						}
 					}
 
-				}
-
-				if (action.equals("shop"))
-				{
-					this.model.setDisease(request.getString("diseaseSelect"));
-
-					// Call humanToWorm algorithm to convert disease into a
-					// list
-					// of one or more worm genes
-					List<String> wormGenes = this.model.getHumanToWorm().convert(this.model.getDisease());
-
-					// Call the database with the list of worm genes to get
-					// normal shopping cart view with probes to shop
-					List<? extends Entity> probes = db.find(ObservationElement.class, new QueryRule(
-							ObservationElement.NAME, Operator.IN, wormGenes));
-
-					probes = db.load((Class) ObservationElement.class, probes);
-
-					for (Entity p : probes)
+					// //////////////
+					// DISEASE SEARCH
+					// //////////////
+					if (action.equals("shop"))
 					{
-						this.model.getShoppingCart().put(p.get("name").toString(), p);
+						this.model.setDisease(request.getString("diseaseSelect"));
+
+						// Call humanToWorm algorithm to convert disease into a
+						// list
+						// of one or more worm genes
+						List<String> wormGenes = this.model.getHumanToWorm().convert(this.model.getDisease());
+
+						// Call the database with the list of worm genes to get
+						// normal shopping cart view with probes to shop
+						List<? extends Entity> probes = db.find(ObservationElement.class, new QueryRule(
+								ObservationElement.NAME, Operator.IN, wormGenes));
+
+						probes = db.load((Class) ObservationElement.class, probes);
+
+						for (Entity p : probes)
+						{
+							this.model.getShoppingCart().put(p.get("name").toString(), p);
+						}
+
+						// Turn on the cart view
+						this.model.setCartView(true);
+
+						// Because the shoppingCart macro needs hits, return a
+						// null
+						// map. Hits are not relevant for the current search.
+						this.model.setHits(new HashMap<String, Entity>());
+						this.model.setShoppingCart(genesToProbes(db, 100, this.model.getShoppingCart()));
+						this.model.setProbeToGene(new HashMap<String, Gene>());
+
 					}
 
-					// Turn on the cart view
-					this.model.setCartView(true);
+					// /////////////////////
+					// REGION QTL SEARCH
+					// /////////////////////
+					if (action.equals("QtlSearch"))
+					{
+						if (request.getInt("QtlRegionStart") == null || request.getInt("QtlRegionEnd") == null)
+						{
+							this.setMessages(new ScreenMessage("Please fill in a starting and ending point "
+									+ "for your region search. An entire chromosome selection will result in to "
+									+ "many hits, overloading your browser", false));
+						}
+						else
+						{
+							this.model.setDataSet(request.getString("dataSetSelect"));
+							this.model.setQtlRegionStartLocation(request.getInt("QtlRegionStart"));
+							this.model.setQtlRegionEndLocation(request.getInt("QtlRegionEnd"));
+							this.model.setQtlRegionChromosome(request.getInt("QtlRegionChr"));
+							this.model.setLodThreshold(Double.valueOf(request.getInt("lodThreshold")));
 
-					// Because the shoppingCart macro needs hits, return a
-					// null
-					// map. Hits are not relevant for the current search.
-					this.model.setHits(new HashMap<String, Entity>());
-					this.model.setShoppingCart(genesToProbes(db, 100, this.model.getShoppingCart()));
-					this.model.setProbeToGene(new HashMap<String, Gene>());
+							Integer start = this.model.getQtlRegionStartLocation();
+							Integer end = this.model.getQtlRegionEndLocation();
 
-				}
+							List<Chromosome> chrNeeded = db.find(Chromosome.class, new QueryRule(Chromosome.ORDERNR,
+									Operator.LESS, this.model.getQtlRegionChromosome()));
 
-				if (action.equals("reset"))
-				{
-					this.model.setQuery(null);
-					this.model.setHits(null);
-					this.model.setShortenedQuery(null);
-					this.model.setShoppingCart(null);
-					this.model.setMultiplot(null);
-					this.model.setReport(null);
-					this.model.setQtls(null);
-					this.model.setCartView(false);
-					this.model.setProbeToGene(null);
+							for (Chromosome chr : chrNeeded)
+							{
+								start = start + chr.getBpLength();
+								end = end + chr.getBpLength();
+							}
+
+							DataMatrixHandler dmh = new DataMatrixHandler(db);
+							Data selectDataset = db.find(Data.class,
+									new QueryRule(Data.NAME, Operator.EQUALS, this.model.getDataSet())).get(0);
+
+							DataMatrixInstance dataMatrix = dmh.createInstance(selectDataset, db);
+
+							List<String> markers = selectDataset.getFeatureType().equals(Marker.class.getSimpleName()) ? dataMatrix
+									.getColNames() : dataMatrix.getRowNames();
+
+							Query<Marker> q = db.query(Marker.class);
+							// Get markers used in dataset name
+							q.addRules(new QueryRule(Marker.NAME, Operator.IN, markers));
+							// Get markers in specific region
+							q.addRules(new QueryRule(Marker.BPSTART, Operator.GREATER_EQUAL, start));
+							q.addRules(new QueryRule(Marker.BPSTART, Operator.LESS_EQUAL, end));
+							// Save markers selected from region
+							List<Marker> regionMarkers = q.find();
+
+							if (regionMarkers.size() == 0)
+							{
+								this.setMessages(new ScreenMessage("No markers where found within this region of "
+										+ "chromosome " + this.model.getQtlRegionChromosome(), false));
+							}
+							else
+							{
+
+								// Get lowest and highest BP number
+								Marker lowest = regionMarkers.get(0);
+								Marker highest = regionMarkers.get(regionMarkers.size() - 1);
+								for (Marker m : regionMarkers)
+								{
+									if (m.getBpStart().doubleValue() < lowest.getBpStart().doubleValue())
+									{
+										lowest = m;
+									}
+									else if (m.getBpStart().doubleValue() > highest.getBpStart().doubleValue())
+									{
+										highest = m;
+									}
+								}
+
+								// Slice selected region from datamatrix
+								if (selectDataset.getFeatureType().equals(Marker.class.getSimpleName()))
+								{
+									int colStart = dataMatrix.getColIndexForName(lowest.getName());
+									int colStop = dataMatrix.getColIndexForName(highest.getName());
+
+									// cut out slice with our flanking markers
+									// (start,
+									// stop)
+									DataMatrixInstance slice = dataMatrix.getSubMatrixByOffset(0,
+											dataMatrix.getNumberOfRows(), colStart, colStop - colStart);
+
+									// we want "1" value per row (trait) with a
+									// value
+									// GREATER than
+									// THRESHOLD
+									QueryRule findAboveThreshold = new QueryRule("1", Operator.GREATER,
+											this.model.getLodThreshold());
+
+									// apply filter and get result: number of
+									// rows
+									// (traits)
+									// are now
+									// reduced
+									DataMatrixInstance traitsAboveThreshold = slice
+											.getSubMatrix2DFilterByRow(findAboveThreshold);
+
+									List<String> rowNames = traitsAboveThreshold.getRowNames();
+
+									Class<? extends Entity> traitClass = db.getClassForName(selectDataset
+											.getTargetType());
+									List<? extends Entity> traits = db.find(traitClass, new QueryRule(
+											ObservationElement.NAME, Operator.IN, rowNames));
+
+									HashMap<String, Entity> hits = new HashMap<String, Entity>();
+									for (Entity t : traits)
+									{
+										hits.put(t.get(ObservationElement.NAME).toString(), t);
+									}
+
+									this.model.setHits(hits);
+									this.model.setProbeToGene(new HashMap<String, Gene>());
+
+								}
+								else
+								{
+
+								}
+							}
+						}
+					}
+					// //////
+					// RESET
+					// //////
+					if (action.equals("reset"))
+					{
+						this.model.setQuery(null);
+						this.model.setHits(null);
+						this.model.setShortenedQuery(null);
+						this.model.setShoppingCart(null);
+						this.model.setMultiplot(null);
+						this.model.setReport(null);
+						this.model.setQtls(null);
+						this.model.setCartView(false);
+						this.model.setProbeToGene(null);
+					}
 				}
 			}
 
@@ -200,6 +339,23 @@ public class QtlFinderHD extends QtlFinder2
 
 		try
 		{
+			if (model.getDataSets() == null)
+			{
+				// give user dropdown of datasets with LOD scores
+				List<DataValue> dvList = db.find(DataValue.class, new QueryRule(DataValue.DATANAME_NAME,
+						Operator.EQUALS, "LOD_score"));
+
+				List<String> dataNames = new ArrayList<String>();
+
+				for (DataValue dv : dvList)
+				{
+					dataNames.add(dv.getValue_Name());
+				}
+
+				// list with datasets to be shown in dropdown menu
+				this.model.setDataSets(dataNames);
+			}
+
 			if (model.getHumanToWorm() == null)
 			{
 				MolgenisFileHandler filehandle = new MolgenisFileHandler(db);
@@ -218,6 +374,11 @@ public class QtlFinderHD extends QtlFinder2
 			if (this.model.getDisease() == null)
 			{
 				this.model.setDisease(this.model.getHumanToWorm().getDiseaseToHuman().keySet().iterator().next());
+			}
+
+			if (this.model.getDataSet() == null)
+			{
+				this.model.setDataSet(this.model.getDataSets().get(0));
 			}
 
 		}

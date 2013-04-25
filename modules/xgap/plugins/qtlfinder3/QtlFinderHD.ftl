@@ -98,11 +98,11 @@
 		</tr>
 		<tr width="200">
 			<td style="padding-left:25px;">
-				Start:<br /> <input title="starting index" id="regionStart" name="regionStart" type="text" />
+				Start:<br /> <input title="starting index" id="regionStart" name="regionStart" type="text" size="10"/>
 			</td>
 		
 			<td style="padding-left:25px;">
-				End:<br /> <input title="ending index" id="regionEnd" name="regionEnd" type="text" />
+				End:<br /> <input title="ending index" id="regionEnd" name="regionEnd" type="text" size="10"/>
 			</td>	
 		
 			<td style="padding-left:25px;">
@@ -133,7 +133,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan="3" height="70" align="center" style="padding-top:20px;">
+			<td colspan="3" height="70" align="center" style="padding-top:20px;padding-left:25px;">
 				<span style="font-size:12px;">Browse a region of a specific chromosome to find genes there</span>
 			</td>
 		</tr>
@@ -153,14 +153,21 @@
 			</td>
 		</tr>
 			<td style="padding-left:25px;">
-			Dataset:<br/><select><option>Select a dataset...</option></select>
+			Dataset:<br/>
+				<select name="dataSetSelect"  style="width:50px;">
+					<#list model.dataSets as dataset>
+						<option value="${dataset}" <#if model.dataSet == dataset>selected="selected"</#if>
+						>${dataset}</option> 
+					</#list>
+				</select>
 			</td>
 			<td style="padding-left:25px;">
-				Start:<br/><input title="starting index" id="regionStart" name="regionStart" type="text" />
+				Start:<br/><input title="starting index" id="QtlRegionStart" name="QtlRegionStart" type="text" size="10" 
+				<#if !model.QtlRegionStartLocation??>value="1000000"</#if>/> 
 			</td>
 			<td style="padding-left:25px;">
 				Chromosome:<br /> 
-				<select name="regionChr">
+				<select name="QtlRegionChr">
 					<option value="1">I</option>
 					<option value="2">II</option>
 					<option value="3">III</option>
@@ -172,16 +179,17 @@
 			</td>	
 		<tr>
 			<td style="padding-left:25px;">
-				Threshold:<br/><input title="LOD Score Threshold" id="lodThreshold" name="lodTreshold" type="text" size="4"/>
+				Threshold:<br/><input title="LOD Score Threshold" id="lodThreshold" name="lodThreshold" type="text" size="4"/>
 			</td>
 			<td style="padding-left:25px;">
-				End:<br/><input title="ending index" id="regionEnd" name="regionEnd" type="text" />
+				End:<br/><input title="ending index" id="QtlRegionEnd" name="QtlRegionEnd" type="text" size="10"
+				<#if !model.QtlRegionEndLocation??>value="10000000"</#if>/> 
 			</td>	
 		</tr>
 		<tr style="margin-top:8px;">
 			<td style="padding-left:25px;padding-top:10px;">
 				<div class="buttons">
-					<button type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__regionSearch';
+					<button type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__QtlSearch';
 					document.forms.${screen.name}.submit();">
 					<img src="generated-res/img/recordview.png" alt=""/>Submit</button>
 				</div>	
@@ -194,7 +202,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan="3" height="70" align="center" style="padding-top:20px;">
+			<td colspan="3" height="70" align="center" style="padding-top:20px;padding-left:25px;">
 				<span style="font-size:12px;">Browse a region for QTLs that are above a specified threshold</span>
 			</td>
 		</tr>		
@@ -308,9 +316,8 @@ EXAMPLE: ENSP00000230732, ENSP00000005178, ENSP00000301067
 <#---------END WORM REGION BROWSER-------------------------->
 
 
-
+<#-- <@qtlSearchResult model=model screen=screen/> -->
 <#import "../qtlfinder2/QtlFinder2.ftl" as qtlf>
-
 <@qtlf.cartAndPlot model=model screen=screen/>
 
 
@@ -321,6 +328,15 @@ EXAMPLE: ENSP00000230732, ENSP00000005178, ENSP00000301067
 	</div>
 </form>
 </#macro>
+
+<#--
+<#macro qtlSearchResult model screen>
+	<#if model.qtlSearch>
+		
+	
+	</#if>
+</#macro>
+-->
 
 
 

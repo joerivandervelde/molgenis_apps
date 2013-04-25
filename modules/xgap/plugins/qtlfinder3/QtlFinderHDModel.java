@@ -3,6 +3,8 @@
  */
 package plugins.qtlfinder3;
 
+import java.util.List;
+
 import org.molgenis.wormqtl.etc.HumanToWorm;
 
 import plugins.qtlfinder2.QtlFinderModel2;
@@ -34,6 +36,84 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// The selected search makes it possible to switch between different kinds
 	// of searching
 	private String selectedSearch;
+
+	// List with data sets from the database that has Lod scores for QTLs
+	private List<String> dataSets;
+
+	// Data set that is selected for the QTL search
+	private String dataSet;
+
+	// Lod threshold for the QTL searching
+	private double lodThreshold;
+
+	// User specified location to start on in QTL region search
+	private int QtlRegionStartLocation;
+
+	// User specified location to end on in QTL region search
+	private int QtlRegionEndLocation;
+
+	// User specified chromosome to look at in region search
+	private int QtlRegionChromosome;
+
+	public int getQtlRegionStartLocation()
+	{
+		return QtlRegionStartLocation;
+	}
+
+	public void setQtlRegionStartLocation(int qtlRegionStartLocation)
+	{
+		QtlRegionStartLocation = qtlRegionStartLocation;
+	}
+
+	public int getQtlRegionEndLocation()
+	{
+		return QtlRegionEndLocation;
+	}
+
+	public void setQtlRegionEndLocation(int qtlRegionEndLocation)
+	{
+		QtlRegionEndLocation = qtlRegionEndLocation;
+	}
+
+	public int getQtlRegionChromosome()
+	{
+		return QtlRegionChromosome;
+	}
+
+	public void setQtlRegionChromosome(int qtlRegionChromosome)
+	{
+		QtlRegionChromosome = qtlRegionChromosome;
+	}
+
+	public double getLodThreshold()
+	{
+		return lodThreshold;
+	}
+
+	public void setLodThreshold(double lodThreshold)
+	{
+		this.lodThreshold = lodThreshold;
+	}
+
+	public String getDataSet()
+	{
+		return dataSet;
+	}
+
+	public void setDataSet(String dataSet)
+	{
+		this.dataSet = dataSet;
+	}
+
+	public List<String> getDataSets()
+	{
+		return dataSets;
+	}
+
+	public void setDataSets(List<String> dataSets)
+	{
+		this.dataSets = dataSets;
+	}
 
 	public int getRegionStartLocation()
 	{
@@ -94,5 +174,4 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	{
 		this.selectedSearch = selectedSearch;
 	}
-
 }

@@ -60,7 +60,7 @@ public class ExampleQueries
 		int end = 10000000;
 		int chromosome = 3;
 
-		// use regionSearch start end algorithm
+		// Retrieve
 
 		DataMatrixHandler dmh = new DataMatrixHandler(db);
 		Data selectDataset = db.find(Data.class, new QueryRule(Data.NAME, Operator.EQUALS, dataName)).get(0);
