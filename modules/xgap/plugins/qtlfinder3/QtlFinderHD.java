@@ -5,6 +5,7 @@ package plugins.qtlfinder3;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +75,42 @@ public class QtlFinderHD extends QtlFinder2
 				{
 					// Remove the prefix from the handle request
 					action = action.substring(this.model.prefix.length());
+
+					// //////////////
+					// ORTHOLOG SEARCH
+					// //////////////
+					if (action.equals("humanGeneSearch"))
+					{
+						String[] humanGeneQuery = request.getString("enspIds").split(", ");
+
+						List<String> enpsIDs = new ArrayList<String>(Arrays.asList(humanGeneQuery));
+						this.model.setHumanGeneQuery(new ArrayList<String>());
+						for (String enpsID : enpsIDs)
+						{
+							if (this.model.getHumanToWorm().getHumanToWorm().get(enpsID) == null)
+							{
+								continue;
+							}
+
+							this.model.getHumanGeneQuery()
+									.add(this.model.getHumanToWorm().getHumanToWorm().get(enpsID));
+						}
+
+						System.out.println(this.model.getHumanGeneQuery());
+
+						List<Probe> probes = db.find(Probe.class,
+								new QueryRule(Probe.SYMBOL, Operator.IN, this.model.getHumanGeneQuery()));
+
+						System.out.println(probes);
+
+						this.model.setProbeToGene(new HashMap<String, Gene>());
+						this.model.setHits(new HashMap<String, Entity>());
+
+						for (Probe p : probes)
+						{
+							model.getHits().put(p.getName(), p);
+						}
+					}
 
 					// //////////////
 					// REGION SEARCH
@@ -244,14 +281,13 @@ public class QtlFinderHD extends QtlFinder2
 									// value
 									// GREATER than
 									// THRESHOLD
+
 									QueryRule findAboveThreshold = new QueryRule("1", Operator.GREATER,
 											this.model.getLodThreshold());
 
-									// apply filter and get result: number of
-									// rows
-									// (traits)
-									// are now
-									// reduced
+									// apply filter and get result: number
+									// of rows (traits) are now reduced
+
 									DataMatrixInstance traitsAboveThreshold = slice
 											.getSubMatrix2DFilterByRow(findAboveThreshold);
 
@@ -270,8 +306,8 @@ public class QtlFinderHD extends QtlFinder2
 
 									this.model.setHits(hits);
 									this.model.setProbeToGene(new HashMap<String, Gene>());
-
 								}
+
 								else
 								{
 
@@ -279,6 +315,7 @@ public class QtlFinderHD extends QtlFinder2
 							}
 						}
 					}
+
 					// //////
 					// RESET
 					// //////

@@ -46,7 +46,7 @@
 	<tr>
 		<td style="padding-left:20px;padding-top:5px;">
 			<input type="radio" name="filterSelect"
-			onclick=";display('hide', 'diseaseToWorm');display('hide', 'humanGeneToWorm');display('hide', 'wormToDisease');display('show', 'regionToWorm');display('hide', 'regionToQtl');"
+			onclick=";display('hide', 'diseaseToWorm');display('hide', 'humanGeneToWorm');display('show', 'regionToWorm');display('hide', 'regionToQtl');"
 			<#if model.selectedSearch == 'regionToWorm'>checked</#if>
 			>Search worm probes by genetic region</input>
 		</td>
@@ -54,7 +54,7 @@
 	<tr>
 		<td style="padding-left:20px;padding-top:5px;">
 			<input type="radio" name="filterSelect" value="regionToQtl" 
-			onclick="display('hide', 'diseaseToWorm');display('hide', 'humanGeneToWorm');display('hide', 'wormToDisease');display('hide', 'regionToWorm');display('show', 'regionToQtl');"
+			onclick="display('hide', 'diseaseToWorm');display('hide', 'humanGeneToWorm');display('hide', 'regionToWorm');display('show', 'regionToQtl');"
 			<#if model.selectedSearch == 'regionToQtl'>checked</#if>
 			>Search a region for significant QTLs</input>
 		</td>
@@ -62,7 +62,7 @@
 	<tr>
 		<td style="padding-left:20px;padding-top:5px;">
 			<input type="radio" name="filterSelect" 
-			onclick="display('show', 'diseaseToWorm');display('hide', 'humanGeneToWorm');display('hide', 'wormToDisease');display('hide', 'regionToWorm');display('hide', 'regionToQtl');" 
+			onclick="display('show', 'diseaseToWorm');display('hide', 'humanGeneToWorm');display('hide', 'regionToWorm');display('hide', 'regionToQtl');" 
 			<#if model.selectedSearch == 'diseaseToWorm'>checked</#if>
 			checked>Find worm genes by human disease</input>
 		</td>
@@ -70,17 +70,9 @@
 	<tr>
 		<td style="padding-left:20px;padding-top:5px;">
 			<input type="radio" name="filterSelect"
-			onclick="display('hide', 'diseaseToWorm');display('show', 'humanGeneToWorm');display('hide', 'wormToDisease');display('hide', 'regionToWorm');display('hide', 'regionToQtl');"
+			onclick="display('hide', 'diseaseToWorm');display('show', 'humanGeneToWorm');display('hide', 'regionToWorm');display('hide', 'regionToQtl');"
 			<#if model.selectedSearch == 'humanGeneToWorm'>checked</#if>
 			>Find orthologs in worm for your own set of human genes</input>
-		</td>
-	</tr>
-	<tr>
-		<td style="padding-left:20px;padding-top:5px;">
-			<input type="radio" name="filterSelect" 
-			onclick="display('hide', 'diseaseToWorm');display('hide', 'humanGeneToWorm');display('show', 'wormToDisease');display('hide', 'regionToWorm');display('hide', 'regionToQtl');"
-			<#if model.selectedSearch == 'wormToDisease'>checked</#if>
-			>Scan regions of the worm for possible disease association within human</input>
 		</td>
 	</tr>
 </table>
@@ -179,7 +171,8 @@
 			</td>	
 		<tr>
 			<td style="padding-left:25px;">
-				Threshold:<br/><input title="LOD Score Threshold" id="lodThreshold" name="lodThreshold" type="text" size="4"/>
+				Threshold:<br/><input title="LOD Score Threshold" id="lodThreshold" name="lodThreshold" type="text" size="4"
+				<#if !model.QtlRegionChromosome??>value="4"</#if>/>
 			</td>
 			<td style="padding-left:25px;">
 				End:<br/><input title="ending index" id="QtlRegionEnd" name="QtlRegionEnd" type="text" size="10"
@@ -256,7 +249,7 @@
 
 <#-----------END DISEASE SELECTION DROPDOWN BAR-------------->
 
-<#-----------HUMAN GENE FILL IN FORM (UPLOAD FILE?)---------->
+<#----------------HUMAN GENE FILL IN FORM-------------------->
 
 <div id="humanGeneToWorm" <#if model.selectedSearch != 'humanGeneToWorm'>style="display:none"</#if>>
 	<table>
@@ -267,10 +260,9 @@
 		</tr>
 		<tr>
 			<td style="padding-left:25px;">
-				<textarea name="enspIds" cols="50" rows="6">Please fill in one or several ENSP identifiers to see if there is an ortholog in C. elegans. Seperate by comma.
+				<textarea name="enspIds" cols="50" rows="5">Please fill in one or several ENSP identifiers to see if there is an ortholog in C. elegans. Seperate by comma.
 			
-EXAMPLE: ENSP00000230732, ENSP00000005178, ENSP00000301067	
-				</textarea>
+EXAMPLE: ENSP00000230732, ENSP00000005178, ENSP00000301067</textarea>
 			</td>
 			
 			<td width="290">
@@ -294,27 +286,9 @@ EXAMPLE: ENSP00000230732, ENSP00000005178, ENSP00000301067
 	</table>
 </div>
 
-<#---------END HUMAN GENE FILL IN FORM (UPLOAD FILE?)------->
 
-<#---------WORM REGION BROWSER------------------------------>
 
-<div id="wormToDisease" <#if model.selectedSearch != 'wormToDisease'>style="display:none"</#if>>
-	<table align="center">
-		<tr>
-			<td colspan="3" height="10" align="center">
-				&nbsp;
-			</td>
-		</tr>
-		<tr>
-			<td>
-				DROPDOWN DATASET SELECT
-			</td>
-		</tr>
-	</table>
-</div>
-
-<#---------END WORM REGION BROWSER-------------------------->
-
+<#---------------END HUMAN GENE FILL IN FORM---------------->
 
 <#-- <@qtlSearchResult model=model screen=screen/> -->
 <#import "../qtlfinder2/QtlFinder2.ftl" as qtlf>

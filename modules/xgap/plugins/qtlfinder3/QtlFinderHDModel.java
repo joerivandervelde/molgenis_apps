@@ -55,6 +55,9 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// User specified chromosome to look at in region search
 	private int QtlRegionChromosome;
 
+	// User specified (and parsed) list of ENPS ids
+	private List<String> humanGeneQuery;
+
 	public int getQtlRegionStartLocation()
 	{
 		return QtlRegionStartLocation;
@@ -173,5 +176,15 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	public void setSelectedSearch(String selectedSearch)
 	{
 		this.selectedSearch = selectedSearch;
+	}
+
+	public List<String> getHumanGeneQuery()
+	{
+		return humanGeneQuery;
+	}
+
+	public void setHumanGeneQuery(List<String> humanGeneQuery)
+	{
+		this.humanGeneQuery = humanGeneQuery;
 	}
 }
