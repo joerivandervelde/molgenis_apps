@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 /**
@@ -34,6 +35,17 @@ public class HumanToWorm
 		return diseaseToProtein;
 	}
 
+	/**
+	 * This method takes Omim / DGA disease map, an InParanoid custom WBGene -
+	 * ENSP map and a custom disease - protein count map to create three
+	 * hashmaps that can be used by wormQTL to link human diseases to worm
+	 * genes, and to do hyper geometric testing
+	 * 
+	 * @param diseaseMap
+	 * @param orthologs
+	 * @param diseaseProteinCount
+	 * @throws FileNotFoundException
+	 */
 	public <diseaseToHuman> HumanToWorm(File diseaseMap, File orthologs, File diseaseProteinCount)
 			throws FileNotFoundException
 	{
@@ -102,6 +114,13 @@ public class HumanToWorm
 		}
 	}
 
+	/**
+	 * This method converts a human disease to a list of orthologous worm genes
+	 * 
+	 * @param disease
+	 * @return a list of worm genes that are ortholog for the disease that was
+	 *         put in
+	 */
 	public List<String> convert(String disease)
 	{
 
@@ -119,6 +138,60 @@ public class HumanToWorm
 		return wormGenes;
 	}
 
+	/**
+	 * This method takes a worm gene, and goes back through two hashmaps to
+	 * determine what human disease is associated with this worm gene through
+	 * ortholog matching
+	 * 
+	 * @param wbGene
+	 * @return a linked hashmap containing a wb Gene with a 1 (or more) diseases
+	 *         associated with that gene
+	 */
+
+	public LinkedHashMap<String, List<String>> linkToDisease(String wbGene)
+	{
+		LinkedHashMap<String, List<String>> wormToDisease = new LinkedHashMap<String, List<String>>();
+		List<String> enpsIDs = new ArrayList<String>();
+		List<String> diseases = new ArrayList<String>();
+
+		for (Entry<String, String> id : getHumanToWorm().entrySet())
+		{
+			if (wbGene.equals(id.getValue()))
+			{
+				enpsIDs.add(id.getKey());
+			}
+		}
+
+		for (String id : enpsIDs)
+		{
+			for (Entry<String, List<String>> value : getDiseaseToHuman().entrySet())
+			{
+				for (String enps : getDiseaseToHuman().get(value))
+				{
+					if (id.equals(enps))
+					{
+						diseases.add(value.getKey());
+					}
+				}
+			}
+		}
+
+		if (diseases.isEmpty())
+		{
+			diseases.add("No ortholog available");
+		}
+
+		wormToDisease.put(wbGene, diseases);
+		return wormToDisease;
+	}
+
+	/**
+	 * This method uses a disease name to get the total number of proteins that
+	 * is associated with said disease via hashmap
+	 * 
+	 * @param disease
+	 * @return total number of proteins associated with a certain human disease
+	 */
 	public Integer retrieve(String disease)
 	{
 		return Integer.parseInt(diseaseToProtein.get(disease));

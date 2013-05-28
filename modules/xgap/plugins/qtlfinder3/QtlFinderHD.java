@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import matrix.DataMatrixInstance;
 import matrix.general.DataMatrixHandler;
@@ -36,7 +35,9 @@ import plugins.qtlfinder2.QtlFinder2;
 import decorators.MolgenisFileHandler;
 
 /**
- * @author mark
+ * @author Mark de Haan
+ * @version 1.0
+ * @since 15/04/2013
  * 
  */
 public class QtlFinderHD extends QtlFinder2
@@ -57,10 +58,20 @@ public class QtlFinderHD extends QtlFinder2
 		return model;
 	}
 
+	/**
+	 * This method determines what probes and genes are inside the region that
+	 * was selected, either by qtl search or by region search
+	 * 
+	 * @param start
+	 * @param end
+	 * @param chromosome
+	 * @param db
+	 * @param search
+	 * @throws Exception
+	 */
 	public void setRegion(Integer start, Integer end, Integer chromosome, Database db, Integer search) throws Exception
 	{
 		List<Probe> probesInRegion = new ArrayList<Probe>();
-
 		List<Chromosome> chrNeeded = db.find(Chromosome.class, new QueryRule(Chromosome.ORDERNR, Operator.LESS,
 				chromosome));
 
@@ -79,27 +90,40 @@ public class QtlFinderHD extends QtlFinder2
 		this.model.setProbeToGene(new HashMap<String, Gene>());
 		this.model.setHits(new HashMap<String, Entity>());
 
-		String enpsID;
 		for (Probe p : probesInRegion)
 		{
 			model.getHits().put(p.getName(), p);
-
-			for (Entry<String, String> id : this.model.getHumanToWorm().getHumanToWorm().entrySet())
+			if (p.getSymbol().contains("WBGene"))
 			{
-				if (p.getSymbol().equals(id.getValue()))
-				{
-					enpsID = id.getKey();
-				}
+				this.model.getHumanToWorm().linkToDisease(p.getSymbol());
 			}
+			else
+			{
+				this.model.getHumanToWorm().linkToDisease(p.getReportsFor_Name());
+			}
+
+			// TODO: Fill this model hashmap with wbgene - disease mappings
+			this.model.getGeneAssociatedDiseases();
 
 		}
 
+		// System.out.println(this.model.getGeneAssociatedDiseases());
 	}
 
+	/**
+	 * This method retrieves the highest scoring QTL from a certain probe and
+	 * determines which marker that QTL is located on
+	 * 
+	 * @param dm
+	 * @param probe
+	 * @param threshold
+	 * @return returns the name of the marker that has the highest scoring qtl
+	 * @throws Exception
+	 */
 	public String getProbeExpression(DataMatrixInstance dm, String probe, double threshold) throws Exception
 	{
 		// TODO: Change method of determining region inside QTL
-		// Now: Highest scoring marker + / - 100.000 bp positions = Region
+		// Now: Highest scoring marker + / - 10.000 bp positions = Region
 
 		String bestMarker = "";
 		// Double flankLeft = 0.0;
@@ -170,9 +194,16 @@ public class QtlFinderHD extends QtlFinder2
 					// Remove the prefix from the handle request
 					action = action.substring(this.model.prefix.length());
 
-					// ///////////////////////////////////////////
-					// REGION SEARCH VIA START, END AND CHROMOSOME
-					// ///////////////////////////////////////////
+					/**
+					 * @author Mark de Haan
+					 * 
+					 *         Region search
+					 * 
+					 *         User fills in (in bp) start and stop positions,
+					 *         and a chromosome. Algorithm then uses these
+					 *         parameters to determine which probes are located
+					 *         in this region
+					 */
 					if (action.equals("regionSearch"))
 					{
 						if (request.getString("regionStart") == null || request.getString("regionEnd") == null)
@@ -190,9 +221,22 @@ public class QtlFinderHD extends QtlFinder2
 							setRegion(start, end, chromosome, db, 1);
 						}
 					}
-					// /////////////////////////////////////
-					// REGION SEARCH VIA TRAIT AND LOD SCORE
-					// /////////////////////////////////////
+
+					/**
+					 * @author Mark de Haan
+					 * 
+					 *         Probe QTL region search
+					 * 
+					 *         User fills in a probe / trait name, a lod
+					 *         threshold and a dataset to search in. The
+					 *         algorithm then uses these parameters to determine
+					 *         the highest QTL score present for the submitted
+					 *         probe. Then based on the position of the marker
+					 *         containing this QTL, the surrounding region is
+					 *         taken and a region search is performed. This
+					 *         determines what probes are located within the QTL
+					 *         peak region
+					 */
 					if (action.equals("traitRegionSearch"))
 					{
 						if (request.getString("traitInput") == null)
@@ -220,6 +264,10 @@ public class QtlFinderHD extends QtlFinder2
 							List<Chromosome> chromosomes = db.find(Chromosome.class, new QueryRule(Chromosome.NAME,
 									Operator.EQUALS, highestProbe.get(0).getChromosome_Name()));
 
+							// Once the marker has been determined, the region
+							// within the Qtl is determines by taking the
+							// starting position, and adding or retracting
+							// 10.000 (temporary solution)
 							Integer start = (int) (highestProbe.get(0).getBpStart() - 10000);
 							Integer end = (int) (highestProbe.get(0).getBpStart() + 10000);
 							Integer chromosome = chromosomes.get(0).getOrderNr();
@@ -228,10 +276,23 @@ public class QtlFinderHD extends QtlFinder2
 						}
 					}
 
-					// //////////////////////////////////////////////////////
-					// QTL HOTSPOT SEARCH VIA DATASET, START, END,
-					// CHROMOSOME AND LOD SCORE
-					// //////////////////////////////////////////////////////
+					/**
+					 * @author Joeri van der Velde, Mark de Haan
+					 * 
+					 *         QTL Search
+					 * 
+					 *         User can submit a region to start and end, a
+					 *         chromosome to look at, a dataset to search in and
+					 *         a QTL lod score threshold. The algorithm then
+					 *         looks into the selected region and returns probes
+					 *         if there is a 'QTL hotspot' present in this
+					 *         region. This hotspot is located at the position
+					 *         where a QTL peak is above the pre determined
+					 *         threshold
+					 * 
+					 *         TODO: Determine which disease can be mapped to
+					 *         found hotspot
+					 */
 					if (action.equals("QtlSearch"))
 					{
 						if (request.getInt("QtlRegionStart") == null || request.getInt("QtlRegionEnd") == null)
@@ -309,9 +370,7 @@ public class QtlFinderHD extends QtlFinder2
 											dataMatrix.getNumberOfRows(), colStart, colStop - colStart);
 
 									// we want "1" value per row (trait)
-									// with a
-									// value GREATER than THRESHOLD
-
+									// with a value GREATER than THRESHOLD
 									QueryRule findAboveThreshold = new QueryRule("1", Operator.GREATER, threshold);
 
 									// apply filter and get result: number
@@ -336,19 +395,8 @@ public class QtlFinderHD extends QtlFinder2
 										hits.put(trait, t);
 									}
 
-									// To show if a disease maps to a the
-									// hotspot that was found
-									// TODO: Add WB genes found to
-									// this.model.diseaseAssociatedGenes
-									// TODO: Add diseases to
-									// this.model.geneAssociatedDiseases
-
 									this.model.setHits(hits);
-
-									System.out.println(hits);
-
 									this.model.setProbeToGene(new HashMap<String, Gene>());
-
 								}
 
 								else
@@ -358,9 +406,20 @@ public class QtlFinderHD extends QtlFinder2
 							}
 						}
 					}
-					// //////////////
-					// DISEASE SEARCH
-					// //////////////
+
+					/**
+					 * @author Mark de Haan
+					 * 
+					 *         Disease Search
+					 * 
+					 *         User selects a disease from a dropdown list,
+					 *         genes that are associated with selected disease
+					 *         via ortholog matching are put in the shopping
+					 *         cart
+					 * 
+					 *         TODO: Change the instant adding to shopping cart
+					 *         into showing a list of hits to select from
+					 */
 					if (action.equals("diseaseSearch"))
 					{
 						this.model.setDisease(request.getString("diseaseSelect"));
@@ -375,13 +434,11 @@ public class QtlFinderHD extends QtlFinder2
 								orthologSpecific));
 
 						// Call humanToWorm algorithm to convert disease
-						// into a
-						// list of one or more worm genes
+						// into a list of one or more worm genes
 						List<String> wormGenes = this.model.getHumanToWorm().convert(this.model.getDisease());
 
 						// Call the database with the list of worm genes to
-						// get
-						// normal shopping cart view with probes to shop
+						// get normal shopping cart view with probes to shop
 						List<? extends Entity> probes = db.find(ObservationElement.class, new QueryRule(
 								ObservationElement.NAME, Operator.IN, wormGenes));
 
@@ -396,9 +453,7 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.setCartView(true);
 
 						// Because the shoppingCart macro needs hits, return
-						// a
-						// null
-						// map. Hits are not relevant for the current
+						// a null map. Hits are not relevant for the current
 						// search.
 						this.model.setHits(new HashMap<String, Entity>());
 						this.model.setShoppingCart(genesToProbes(db, 100, this.model.getShoppingCart()));
@@ -406,9 +461,17 @@ public class QtlFinderHD extends QtlFinder2
 
 					}
 
-					// ///////////////
-					// ORTHOLOG SEARCH
-					// ///////////////
+					/**
+					 * @author Mark de Haan
+					 * 
+					 *         Ortholog Search
+					 * 
+					 *         User can submit human genes. The algorithm will
+					 *         then determine the ortholog genes belonging to
+					 *         these human genes.
+					 * 
+					 *         TODO: Greatly increase the input possibilities
+					 */
 					if (action.equals("humanGeneSearch"))
 					{
 						String[] humanGeneQuery = request.getString("enspIds").split(", ");
@@ -442,9 +505,15 @@ public class QtlFinderHD extends QtlFinder2
 						}
 					}
 
-					// //////
-					// RESET
-					// //////
+					/**
+					 * @author Joeri van der Velde
+					 * 
+					 *         Reset
+					 * 
+					 *         When the user presses the reset button,
+					 *         everything is returned to its original state
+					 * 
+					 */
 					if (action.equals("reset"))
 					{
 						this.model.setQuery(null);
@@ -466,12 +535,6 @@ public class QtlFinderHD extends QtlFinder2
 				this.setMessages(new ScreenMessage(e.getMessage() != null ? e.getMessage() : "null", false));
 			}
 		}
-	}
-
-	private void valueOf(String ordernr)
-	{
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -507,6 +570,14 @@ public class QtlFinderHD extends QtlFinder2
 
 		try
 		{
+
+			/**
+			 * @author Mark de Haan
+			 * 
+			 *         Generates a list of datasets that contain QTL lod scores.
+			 *         Used by searching algorithms that set thresholds for QTL
+			 *         values
+			 */
 			if (model.getDataSets() == null)
 			{
 				// give user dropdown of datasets that contain LOD scores
@@ -524,6 +595,12 @@ public class QtlFinderHD extends QtlFinder2
 				this.model.setDataSets(dataNames);
 			}
 
+			/**
+			 * @author Mark de Haan
+			 * 
+			 *         Pre-loads the hashmaps used by the HumanToWorm class by
+			 *         reading in files
+			 */
 			if (model.getHumanToWorm() == null)
 			{
 				MolgenisFileHandler filehandle = new MolgenisFileHandler(db);
