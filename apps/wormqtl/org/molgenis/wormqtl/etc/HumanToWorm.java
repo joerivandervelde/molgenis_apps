@@ -17,6 +17,7 @@ public class HumanToWorm
 	// LinkedHashMap so the list of keys always has the same order
 	private LinkedHashMap<String, List<String>> diseaseToHuman;
 	private LinkedHashMap<String, String> humanToWorm;
+	private LinkedHashMap<String, String> diseaseToProtein;
 
 	public LinkedHashMap<String, List<String>> getDiseaseToHuman()
 	{
@@ -28,23 +29,34 @@ public class HumanToWorm
 		return humanToWorm;
 	}
 
-	public <diseaseToHuman> HumanToWorm(File omimMap, File orthologs) throws FileNotFoundException
+	public LinkedHashMap<String, String> getDiseaseToProtein()
+	{
+		return diseaseToProtein;
+	}
+
+	public <diseaseToHuman> HumanToWorm(File diseaseMap, File orthologs, File diseaseProteinCount)
+			throws FileNotFoundException
 	{
 		System.out.println("> Building Hash maps....");
 
 		diseaseToHuman = new LinkedHashMap<String, List<String>>();
 		humanToWorm = new LinkedHashMap<String, String>();
+		diseaseToProtein = new LinkedHashMap<String, String>();
 
-		Scanner omimScan = new Scanner(omimMap);
+		Scanner dM = new Scanner(diseaseMap);
 		Scanner h2w = new Scanner(orthologs);
+		Scanner dpc = new Scanner(diseaseProteinCount);
 
 		// Loop through OMIM file, skip the first line (header)
-		omimScan.nextLine();
-		while (omimScan.hasNext())
+		dM.nextLine();
+		while (dM.hasNext())
 		{
-			String line = omimScan.nextLine();
-			String enpsID = line.split("\",\"")[1];
-			String disease = line.split("\",\"")[2].split("  \"")[0];
+			String line = dM.nextLine();
+			// String enpsID = line.split("\",\"")[1];
+			// String disease = line.split("\",\"")[2].split("  \"")[0];
+
+			String enpsID = line.split("\t")[0];
+			String disease = line.split("\t")[1];
 
 			// If disease is not in the hashmap yet
 			if (diseaseToHuman.get(disease) == null)
@@ -69,12 +81,24 @@ public class HumanToWorm
 		h2w.nextLine();
 		while (h2w.hasNext())
 		{
-			String s = h2w.nextLine();
-			String enpsID = s.split("	")[0];
-			String wbgeneID = s.split("	")[1];
+			String line = h2w.nextLine();
+			String enpsID = line.split("\t")[0];
+			String wbgeneID = line.split("\t")[1].replaceAll("\\s", "");
 
 			// Add the human ID as key, WB id as value
 			humanToWorm.put(enpsID, wbgeneID);
+		}
+
+		dpc.nextLine();
+		while (dpc.hasNext())
+		{
+			String line = dpc.nextLine();
+			String disease = line.split("\t")[0];
+			String proteinCount = line.split("\t")[1];
+
+			// Add the disease as key, and the number of proteins involved as
+			// value
+			diseaseToProtein.put(disease, proteinCount);
 		}
 	}
 
@@ -93,5 +117,10 @@ public class HumanToWorm
 		}
 
 		return wormGenes;
+	}
+
+	public Integer retrieve(String disease)
+	{
+		return Integer.parseInt(diseaseToProtein.get(disease));
 	}
 }
