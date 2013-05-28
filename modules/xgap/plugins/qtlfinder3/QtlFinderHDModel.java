@@ -26,10 +26,6 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// The disease that is selected by the user
 	private String disease;
 
-	// The selected search makes it possible to switch between different kinds
-	// of searching
-	private String selectedSearch;
-
 	// List with data sets from the database that has Lod scores for QTLs
 	private List<String> dataSets;
 
@@ -92,16 +88,6 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	public void setHumanToWorm(HumanToWorm humanToWorm)
 	{
 		this.humanToWorm = humanToWorm;
-	}
-
-	public String getSelectedSearch()
-	{
-		return selectedSearch;
-	}
-
-	public void setSelectedSearch(String selectedSearch)
-	{
-		this.selectedSearch = selectedSearch;
 	}
 
 	public List<String> getHumanGeneQuery()

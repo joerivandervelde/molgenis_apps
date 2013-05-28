@@ -339,14 +339,12 @@ EXAMPLE: ENSP00000230732, ENSP00000005178, ENSP00000301067</textarea>
 <br />
 <br />
 
-
-
+<#if model.showTable>
+	<@resultTable model = model screen = screen />
+</#if>
 
 <#import "../qtlfinder2/QtlFinder2.ftl" as qtlf>
 <@qtlf.cartAndPlot model=model screen=screen />
-
-
-
 
 <#--end of your plugin-->	
 			</div>
@@ -355,6 +353,41 @@ EXAMPLE: ENSP00000230732, ENSP00000005178, ENSP00000301067</textarea>
 </form>
 </#macro>
 
+<#macro resultTable model screen>
+
+<table class="table" style="margin-left:25px;">
+	<caption>Diseases mapped to this region</caption>
+	<thead>
+	<tr>
+		<th scope="col">Worm genes</th>
+		<th scope="col">Human disease</th>
+		<th scope="col">Probability</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td>WBGene0000001</td>
+		<td>Cancer</td>
+		<td>0.000023</td>
+	</tr>
+	<tr>
+		<td>WBGene0000002</td>
+		<td>Angiosarcoma</td>
+		<td>0.002</td>
+	</tr>
+	<tr>
+		<td>WBGene0000003</td>
+		<td>Hypertension</td>
+		<td>0.029</td>
+	</tr>	
+	</tbody>
+</table>
+
+<br />
+<br />
+<br />
+
+</#macro>
 
 
 

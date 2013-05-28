@@ -61,7 +61,11 @@ public class QtlFinderHD extends QtlFinder2
 
 	/**
 	 * This method determines what probes and genes are inside the region that
-	 * was selected, either by qtl search or by region search
+	 * was selected, either by qtl search or by region search.
+	 * 
+	 * Calls the HumanToWorm class to determine which diseases are mapped to the
+	 * selected region. Sets table view to true to show gene - disease -
+	 * probability as a result
 	 * 
 	 * @param start
 	 * @param end
@@ -109,6 +113,7 @@ public class QtlFinderHD extends QtlFinder2
 		}
 
 		System.out.println(this.model.getGeneAssociatedDiseases());
+		this.model.setShowTable(true);
 	}
 
 	/**
@@ -526,6 +531,7 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.setQtls(null);
 						this.model.setCartView(false);
 						this.model.setProbeToGene(null);
+						this.model.setShowTable(false);
 					}
 				}
 			}
@@ -550,25 +556,17 @@ public class QtlFinderHD extends QtlFinder2
 		return "plugins/qtlfinder3/QtlFinderHD.ftl";
 	}
 
+	/**
+	 * @author Joeri van der Velde, Mark de Haan
+	 * 
+	 *         Reload
+	 * 
+	 *         Initiates objects that are used by the freemarker template from
+	 *         the start
+	 */
 	@Override
 	public void reload(Database db)
 	{
-		if (model.getSelectedSearch() == null)
-		{
-			this.model.setSelectedSearch("diseaseToWorm");
-		}
-
-		if (model.getShoppingCart() == null)
-		{
-			Map<String, Entity> shoppingCart = new HashMap<String, Entity>();
-			this.model.setShoppingCart(shoppingCart);
-		}
-
-		if (this.model.getCartView() == null)
-		{
-			this.model.setCartView(false);
-		}
-
 		try
 		{
 
@@ -619,6 +617,17 @@ public class QtlFinderHD extends QtlFinder2
 
 			}
 
+			if (model.getShoppingCart() == null)
+			{
+				Map<String, Entity> shoppingCart = new HashMap<String, Entity>();
+				this.model.setShoppingCart(shoppingCart);
+			}
+
+			if (this.model.getCartView() == null)
+			{
+				this.model.setCartView(false);
+			}
+
 			if (this.model.getDisease() == null)
 			{
 				this.model.setDisease(this.model.getHumanToWorm().getDiseaseToHuman().keySet().iterator().next());
@@ -627,6 +636,11 @@ public class QtlFinderHD extends QtlFinder2
 			if (this.model.getDataSet() == null)
 			{
 				this.model.setDataSet(this.model.getDataSets().get(0));
+			}
+
+			if (this.model.getShowTable() == null)
+			{
+				this.model.setShowTable(false);
 			}
 
 		}
