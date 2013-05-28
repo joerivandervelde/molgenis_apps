@@ -1,21 +1,3 @@
-.diseaseToWorm{
-	display:show;
-}
-
-.humanToWorm{
-	display:none;
-}
-
-.wormToDisease{
-	display:none;
-	
-}
-
-
-.diseaseSearchResult{
-	width:100px;
-	height:100px;
-}
 
 .searchBox{
 	border:none;
