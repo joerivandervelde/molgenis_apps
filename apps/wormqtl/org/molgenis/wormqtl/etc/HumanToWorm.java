@@ -144,44 +144,42 @@ public class HumanToWorm
 	 * ortholog matching
 	 * 
 	 * @param wbGene
-	 * @return a linked hashmap containing a wb Gene with a 1 (or more) diseases
-	 *         associated with that gene
+	 * @return a list containing a wb Gene on index 0 with one (or more)
+	 *         diseases associated with that gene
 	 */
 
-	public LinkedHashMap<String, List<String>> linkToDisease(String wbGene)
+	public List<String> linkToDisease(String wbGene)
 	{
-		LinkedHashMap<String, List<String>> wormToDisease = new LinkedHashMap<String, List<String>>();
-		List<String> enpsIDs = new ArrayList<String>();
-		List<String> diseases = new ArrayList<String>();
+		List<String> wormToDisease = new ArrayList<String>();
+		String enpsID = new String();
 
+		wormToDisease.add(wbGene);
+
+		// Get ENPS ID Key from WB gene value
 		for (Entry<String, String> id : getHumanToWorm().entrySet())
 		{
 			if (wbGene.equals(id.getValue()))
 			{
-				enpsIDs.add(id.getKey());
+				enpsID = id.getKey();
 			}
 		}
 
-		for (String id : enpsIDs)
+		// Get DISEASE Key from ENPS value
+		for (Entry<String, List<String>> value : getDiseaseToHuman().entrySet())
 		{
-			for (Entry<String, List<String>> value : getDiseaseToHuman().entrySet())
+			if (getDiseaseToHuman().get(value.getKey()).contains(enpsID))
 			{
-				for (String enps : getDiseaseToHuman().get(value))
-				{
-					if (id.equals(enps))
-					{
-						diseases.add(value.getKey());
-					}
-				}
+				wormToDisease.add(value.getKey());
 			}
 		}
 
-		if (diseases.isEmpty())
+		// If the second entry (should be the first disease) is empty, mention
+		// that there are no orthologs available
+		if (wormToDisease.size() < 2)
 		{
-			diseases.add("No ortholog available");
+			wormToDisease.add("No ortholog available");
 		}
 
-		wormToDisease.put(wbGene, diseases);
 		return wormToDisease;
 	}
 

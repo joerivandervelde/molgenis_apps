@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -89,25 +90,25 @@ public class QtlFinderHD extends QtlFinder2
 
 		this.model.setProbeToGene(new HashMap<String, Gene>());
 		this.model.setHits(new HashMap<String, Entity>());
+		this.model.setGeneAssociatedDiseases(new LinkedHashMap<String, List<String>>());
 
 		for (Probe p : probesInRegion)
 		{
 			model.getHits().put(p.getName(), p);
+
 			if (p.getSymbol().contains("WBGene"))
 			{
-				this.model.getHumanToWorm().linkToDisease(p.getSymbol());
+				List<String> myList = this.model.getHumanToWorm().linkToDisease(p.getSymbol());
+				this.model.getGeneAssociatedDiseases().put(myList.get(0), myList.subList(1, myList.size()));
 			}
 			else
 			{
-				this.model.getHumanToWorm().linkToDisease(p.getReportsFor_Name());
+				List<String> myList = this.model.getHumanToWorm().linkToDisease(p.getReportsFor_Name());
+				this.model.getGeneAssociatedDiseases().put(myList.get(0), myList.subList(1, myList.size()));
 			}
-
-			// TODO: Fill this model hashmap with wbgene - disease mappings
-			this.model.getGeneAssociatedDiseases();
-
 		}
 
-		// System.out.println(this.model.getGeneAssociatedDiseases());
+		System.out.println(this.model.getGeneAssociatedDiseases());
 	}
 
 	/**
