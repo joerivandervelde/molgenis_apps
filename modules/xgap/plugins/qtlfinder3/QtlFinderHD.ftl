@@ -58,7 +58,9 @@
 		$( "#accordion" ).accordion();	
 		
 		<#-- DROPDOWN WIDGET -->
-		$("#Phenotype_select").chosen();
+		$("#diseaseSelect").chosen();
+		$("#humanPhenotype").chosen();
+		$("#wormPhenotype").chosen();
 	});
 </script>
 
@@ -265,7 +267,7 @@
 			</tr>
 			<tr>
 				<td width="200" style="padding-left:25px;">
-					<select class=" ui-widget-content ui-corner-all" id="Phenotype_select" name="diseaseSelect"  style="width:500px;">
+					<select class=" ui-widget-content ui-corner-all" id="diseaseSelect" name="diseaseSelect"  style="width:500px;">
 						<#list model.humanToWorm.diseaseToHuman?keys as disease>
 							<option value="${disease}" <#if model.disease == disease>selected="selected"</#if>
 							>${disease} [ ${model.humanToWorm.diseaseToHuman[disease]?size} human protein(s) with ortholog ]</option> 
@@ -291,10 +293,7 @@
 				</td>
 			</tr>
 		</table>
-	</div>
-	
-	<#----------------HUMAN GENE FILL IN FORM-------------------->
-	<div id="tabs-4">
+		
 		<table>
 			<tr>
 				<td colspan="3" height="10" align="center">
@@ -328,7 +327,36 @@ EXAMPLE: ENSP00000230732, ENSP00000005178, ENSP00000301067</textarea>
 			</tr>
 		</table>
 	</div>
-
+	
+	<#----------------HUMAN GENE FILL IN FORM-------------------->
+	<div id="tabs-4">
+		<table>
+			<tr>
+				<td colspan="3" height="10" align="center">
+					&nbsp;
+				</td>
+			</tr>	
+			<tr>
+				<td width="200" style="padding-left:25px;">
+					<select class=" ui-widget-content ui-corner-all" id="humanPhenotype" name="humanPhenotype"  style="width:500px;">
+						<#list model.humanToWorm.diseaseToHuman?keys as disease>
+							<option value="${disease}" <#if model.disease == disease>selected="selected"</#if>
+							>${disease} [ ${model.humanToWorm.diseaseToHuman[disease]?size} human protein(s) with ortholog ]</option> 
+						</#list>
+					</select>
+				</td>
+			</tr>
+			
+			<tr>
+				<td width="200" style="padding-left:25px;">
+					<select class=" ui-widget-content ui-corner-all" id="wormPhenotype" name="wormPhenotype"  style="width:500px;">
+						<option>WORM PHENOTYPES</option>
+					</select>
+				</td>
+			</tr>
+		</table>	
+	</div>
+	
 </div>
 
 <br />
@@ -450,7 +478,7 @@ EXAMPLE: ENSP00000230732, ENSP00000005178, ENSP00000301067</textarea>
 </style>
 
 <table id="result" cellspacing='0' class="table">
-	<caption><h3>Diseases mapped to this region</h3></caption>
+	<caption><h3>Diseases mapped to this QTL</h3></caption>
 	<thead>
 		<tr>
 			<th scope="col">Worm genes</th>

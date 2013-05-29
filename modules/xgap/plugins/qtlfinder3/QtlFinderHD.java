@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import matrix.DataMatrixInstance;
 import matrix.general.DataMatrixHandler;
@@ -92,9 +91,6 @@ public class QtlFinderHD extends QtlFinder2
 		probesInRegion = db.find(Probe.class, new QueryRule(Probe.BPSTART, Operator.GREATER, start), new QueryRule(
 				Probe.BPSTART, Operator.LESS, end));
 
-		this.model.setProbeToGene(new HashMap<String, Gene>());
-		this.model.setHits(new HashMap<String, Entity>());
-
 		for (Probe p : probesInRegion)
 		{
 			model.getHits().put(p.getName(), p);
@@ -111,7 +107,6 @@ public class QtlFinderHD extends QtlFinder2
 			}
 		}
 
-		System.out.println(this.model.getGeneAssociatedDiseases());
 		this.model.setShowTable(true);
 	}
 
@@ -391,19 +386,27 @@ public class QtlFinderHD extends QtlFinder2
 									List<? extends Entity> traits = db.find(traitClass, new QueryRule(
 											ObservationElement.NAME, Operator.IN, rowNames));
 
-									HashMap<String, Entity> hits = new HashMap<String, Entity>();
+									String wbGene;
 
-									String trait;
 									for (Entity t : traits)
 									{
-										trait = t.get(ObservationElement.NAME).toString();
-										hits.put(trait, t);
+										this.model.getHits().put(t.get(ObservationElement.NAME).toString(), t);
+
+										if (t.get("symbol") == null)
+										{
+											continue;
+										}
+
+										wbGene = t.get("symbol").toString();
+
+										List<String> myList = this.model.getHumanToWorm().linkToDisease(wbGene);
+
+										this.model.getGeneAssociatedDiseases().put(myList.get(0),
+												myList.subList(1, myList.size()));
 									}
 
-									this.model.setHits(hits);
-									this.model.setProbeToGene(new HashMap<String, Gene>());
+									this.model.setShowTable(true);
 								}
-
 								else
 								{
 									// TODO: Do something that is different
@@ -460,9 +463,7 @@ public class QtlFinderHD extends QtlFinder2
 						// Because the shoppingCart macro needs hits, return
 						// a null map. Hits are not relevant for the current
 						// search.
-						this.model.setHits(new HashMap<String, Entity>());
 						this.model.setShoppingCart(genesToProbes(db, 100, this.model.getShoppingCart()));
-						this.model.setProbeToGene(new HashMap<String, Gene>());
 					}
 
 					/**
@@ -493,15 +494,8 @@ public class QtlFinderHD extends QtlFinder2
 									.add(this.model.getHumanToWorm().getHumanToWorm().get(enpsID));
 						}
 
-						System.out.println(this.model.getHumanGeneQuery());
-
 						List<Probe> probes = db.find(Probe.class,
 								new QueryRule(Probe.SYMBOL, Operator.IN, this.model.getHumanGeneQuery()));
-
-						System.out.println(probes);
-
-						this.model.setProbeToGene(new HashMap<String, Gene>());
-						this.model.setHits(new HashMap<String, Entity>());
 
 						for (Probe p : probes)
 						{
@@ -615,10 +609,19 @@ public class QtlFinderHD extends QtlFinder2
 
 			}
 
+			if (model.getHits() == null)
+			{
+				this.model.setHits(new HashMap<String, Entity>());
+			}
+
+			if (model.getProbeToGene() == null)
+			{
+				this.model.setProbeToGene(new HashMap<String, Gene>());
+			}
+
 			if (model.getShoppingCart() == null)
 			{
-				Map<String, Entity> shoppingCart = new HashMap<String, Entity>();
-				this.model.setShoppingCart(shoppingCart);
+				this.model.setShoppingCart(new HashMap<String, Entity>());
 			}
 
 			if (this.model.getCartView() == null)
