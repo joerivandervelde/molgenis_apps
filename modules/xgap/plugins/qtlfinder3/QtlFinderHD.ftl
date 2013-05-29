@@ -42,34 +42,31 @@
 
 <#--- SCRIPT AND STYLE SECTION --->
 
-<script>
-	<#-- Set active to 0, first tab on initialization -->
-	$( "#tabs" ).tabs({ active: 0 });
-
+<script> <#-- JQuery widget scripts -->
 	$(document).ready(function(){
 		
-		<#--Disease search box-->
-		$("#Phenotype_select").chosen();
-		
-		<#--Tabbed menu bar-->
+		<#-- TAB WIDGET -->
+		$( "#tabs" ).tabs({ active: 0 });
+			
 		$( "#tabs" ).tabs();
 		$( ".tabs-bottom .ui-tabs-nav, .tabs-bottom .ui-tabs-nav > *" ).removeClass( "ui-corner-all ui-corner-top" ).addClass( "ui-corner-bottom" );
 		$( ".tabs-bottom .ui-tabs-nav" ).appendTo( ".tabs-bottom" );
 		
-		<#-- Collapsible -->
-		$( "#tabs" ).tabs({ collapsible: true });
+		$( "#tabs" ).tabs({ collapsible: false });
 		
-		<#-- Getter for the active tab -->
-		var active = $( "#tabs" ).tabs( "option", "active");
+		<#-- ACCORDION WIDGET -->
+		$( "#accordion" ).accordion();	
 		
+		<#-- DROPDOWN WIDGET -->
+		$("#Phenotype_select").chosen();
 	});
 </script>
-	
-<style>
+
+<style> <#-- JQuery widget style -->
 	#tabs { background: #EAEAEA; border:none;}
-	#tabs ul { height: 30px; background: #13507A; width: auto; }
-	#tabs li { height: 30px; background: white; font-size: 12px;}
-	#tabs li.ui-tabs-active {background: #EAEAEA; border-bottom: 1;}
+	.allTabs { height: 30px; background: #13507A; width: auto; }
+	.selectTab { height: 30px; background: white; font-size: 12px;}
+	#tabs li.ui-tabs-active {background: white; border-bottom: 1;}
 	
 	#tabs .tabs-spacer { float: left; height: 300px; }
 	.tabs-bottom .ui-tabs-nav { clear: left;}
@@ -80,115 +77,116 @@
 <#-- TAB AREA -->
 
 <div id="tabs" class="tabs-bottom" >
-	<ul>
-		<li><a href="#tabs-1" onclick=$( "#tabs" ).tabs( "option", "active", 0 );>Region Search</a></li>
-		<li><a href="#tabs-2" onclick=$( "#tabs" ).tabs( "option", "active", 1 );>QTL Search</a></li>
-		<li><a href="#tabs-3" onclick=$( "#tabs" ).tabs( "option", "active", 2 );>Disease Search</a></li>
-		<li><a href="#tabs-4" onclick=$( "#tabs" ).tabs( "option", "active", 3 );>Worm pheno and Human pheno</a></li>
+	<ul class="allTabs">
+		<li class="selectTab"><a href="#tabs-1" onclick=$( "#tabs" ).tabs( "option", "active", 0 );>Region Search</a></li>
+		<li class="selectTab"><a href="#tabs-2" onclick=$( "#tabs" ).tabs( "option", "active", 1 );>QTL Search</a></li>
+		<li class="selectTab"><a href="#tabs-3" onclick=$( "#tabs" ).tabs( "option", "active", 2 );>Disease Search</a></li>
+		<li class="selectTab"><a href="#tabs-4" onclick=$( "#tabs" ).tabs( "option", "active", 3 );>Worm pheno and Human pheno</a></li>
 	</ul>	
 	
 	<div class="tabs-spacer"></div>
 	
 	<#---------------------WORM REGION SEARCH-------------------->
 	<div id="tabs-1">
-		<table>
-			<tr>
-				<td colspan="3" height="10" align="center">
-					&nbsp;
-				</td>
-			</tr>
-			<tr width="200">
-				<td style="padding-left:25px;">
-					Start:<br /> <input title="starting index" id="regionStart" name="regionStart" type="text" size="10"/>
-				</td>
-			
-				<td style="padding-left:25px;">
-					End:<br /> <input title="ending index" id="regionEnd" name="regionEnd" type="text" size="10"/>
-				</td>	
-			
-				<td style="padding-left:25px;">
-					Chromosome:<br /> 
-					<select id="regionChr" name="regionChr">
-						<option value="1">I</option>
-						<option value="2">II</option>
-						<option value="3">III</option>
-						<option value="4">IV</option>
-						<option value="5">V</option>
-						<option value="6">X</option>
-						<option value="7">MtDNA</option>
-					</select>
-				</td>	
-		
-				<td width="290" style="padding-left: 30px;padding-top:10px;">
-					<div class="buttons">
-						<button type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__regionSearch';
-						document.forms.${screen.name}.submit();">
-						<img src="generated-res/img/recordview.png" alt=""/>Submit</button>
-					</div>	
+		<div id="accordion">
+			<h3>Region search</h3>
+			<div>
+				<table>
+					<tr>
+						<td colspan="3" height="10" align="center">
+							&nbsp;
+						</td>
+					</tr>
+					<tr width="200">
+						<td style="padding-left:25px;">
+							Start:<br /> <input title="starting index" id="regionStart" name="regionStart" type="text" size="10"/>
+						</td>
+					
+						<td style="padding-left:25px;">
+							End:<br /> <input title="ending index" id="regionEnd" name="regionEnd" type="text" size="10"/>
+						</td>	
+					
+						<td style="padding-left:25px;">
+							Chromosome:<br /> 
+							<select id="regionChr" name="regionChr">
+								<option value="1">I</option>
+								<option value="2">II</option>
+								<option value="3">III</option>
+								<option value="4">IV</option>
+								<option value="5">V</option>
+								<option value="6">X</option>
+								<option value="7">MtDNA</option>
+							</select>
+						</td>	
+				
+						<td width="290" style="padding-left: 30px;padding-top:10px;">
+							<div class="buttons">
+								<button type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__regionSearch';
+								document.forms.${screen.name}.submit();">
+								<img src="generated-res/img/recordview.png" alt=""/>Submit</button>
+							</div>	
+								
+							<div class="buttons">
+						 		<button type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__reset'; 
+						 		document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset</button>			 	
+				    		</div>			
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" height="70" style="padding-top:20px;padding-left:25px;">
+							<span style="font-size:12px;">Browse a region of a specific chromosome to find genes there</span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<h3>Region searching by Trait</h3>
+			<div>
+				<table>
+					<tr>
+						<td colspan="3" height="10" align="center">
+							&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td style="padding-left:25px;">
+							Probe or Trait name:<br /> <input title="trait name" id="traitInput" name="traitInput" type="text" size="10"/>
+						</td>
 						
-					<div class="buttons">
-				 		<button type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__reset'; 
-				 		document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset</button>			 	
-		    		</div>			
-				</td>
-			</tr>
-			<tr>
-				<td colspan="3" height="70" style="padding-top:20px;padding-left:25px;">
-					<span style="font-size:12px;">Browse a region of a specific chromosome to find genes there</span>
-				</td>
-			</tr>
-		</table>
-		
-		<div style="text-align:center">
-  			<hr style="display:inline-block; position:relative; top:4px; width:45%" />
-       		&nbsp;OR&nbsp;
-    		<hr style="display:inline-block; position:relative; top:4px; width:45%" />
+						<td style="padding-left:25px;">
+							Threshold:<br /> <input title="LOD Score Threshold" id="lodThreshold2" name="lodThreshold" type="text" size="4"/>
+						</td>
+						
+						<td style="padding-left:25px;">
+						Dataset:<br/>
+						<select name="regionDataSetSelect"  style="width:50px;">
+							<#list model.dataSets as dataset>
+								<option value="${dataset}" <#if model.dataSet == dataset>selected="selected"</#if>
+								>${dataset}</option> 
+							</#list>
+						</select>
+						</td>
+						
+						<td width="290" style="padding-top:10px;">
+							<div class="buttons">
+								<button type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__traitRegionSearch';
+								document.forms.${screen.name}.submit();">
+								<img src="generated-res/img/recordview.png" alt=""/>Submit</button>
+							</div>	
+								
+							<div class="buttons">
+						 		<button type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__reset'; 
+						 		document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset</button>			 	
+				    		</div>			
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" height="40" style="padding-top:20px;padding-left:25px;">
+							<span style="font-size:12px;">Submit a probe and a lod score threshold to get genes that are located in the region matching your criteria</span>
+						</td>
+					</tr>		
+				</table>
+			</div>
 		</div>
-		
-		<table>
-			<tr>
-				<td colspan="3" height="10" align="center">
-					&nbsp;
-				</td>
-			</tr>
-			<tr>
-				<td style="padding-left:25px;">
-					Probe or Trait name:<br /> <input title="trait name" id="traitInput" name="traitInput" type="text" size="10"/>
-				</td>
-				
-				<td style="padding-left:25px;">
-					Threshold:<br /> <input title="LOD Score Threshold" id="lodThreshold2" name="lodThreshold" type="text" size="4"/>
-				</td>
-				
-				<td style="padding-left:25px;">
-				Dataset:<br/>
-				<select name="regionDataSetSelect"  style="width:50px;">
-					<#list model.dataSets as dataset>
-						<option value="${dataset}" <#if model.dataSet == dataset>selected="selected"</#if>
-						>${dataset}</option> 
-					</#list>
-				</select>
-				</td>
-				
-				<td width="290" style="padding-top:10px;">
-					<div class="buttons">
-						<button type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__traitRegionSearch';
-						document.forms.${screen.name}.submit();">
-						<img src="generated-res/img/recordview.png" alt=""/>Submit</button>
-					</div>	
-						
-					<div class="buttons">
-				 		<button type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__reset'; 
-				 		document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset</button>			 	
-		    		</div>			
-				</td>
-			</tr>
-			<tr>
-				<td colspan="3" height="40" style="padding-top:20px;padding-left:25px;">
-					<span style="font-size:12px;">Submit a probe and a lod score threshold to get genes that are located in the region matching your criteria</span>
-				</td>
-			</tr>		
-		</table>
 	</div>
 	
 	<#-----------------WORM REGION QTL SEARCH-------------------->
@@ -260,34 +258,30 @@
 	<#---------------DISEASE SELECTION DROPDOWN BAR-------------->
 	<div id="tabs-3">
 		<table>
-		<tr>
-			<td colspan="3" height="10" align="center">
-				&nbsp;
-			</td>
-		</tr>
-		<tr>
-			<td width="200" style="padding-left:25px;">
-				<select class=" ui-widget-content ui-corner-all" id="Phenotype_select" name="diseaseSelect"  style="width:500px;">
-					<#list model.humanToWorm.diseaseToHuman?keys as disease>
-						<option value="${disease}" <#if model.disease == disease>selected="selected"</#if>
-						>${disease} [ ${model.humanToWorm.diseaseToHuman[disease]?size} human protein(s) with ortholog ]</option> 
-					</#list>
-				</select>
-			</td>
-		
-			<td width="290">
-			 	
-			 	<div class="buttons">
-					<button type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__diseaseSearch'; 
-				 	document.forms.${screen.name}.submit();">
-				 	<img src="clusterdemo/icons/shoppingcart.png" alt=""/>Add to Cart</button>
-			 	</div>
-				
-				<div class="buttons">
-			 		<button type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__reset'; 
-			 		document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset</button>			 	
-	    		</div>
-			 	
+			<tr>
+				<td colspan="3" height="10" align="center">
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td width="200" style="padding-left:25px;">
+					<select class=" ui-widget-content ui-corner-all" id="Phenotype_select" name="diseaseSelect"  style="width:500px;">
+						<#list model.humanToWorm.diseaseToHuman?keys as disease>
+							<option value="${disease}" <#if model.disease == disease>selected="selected"</#if>
+							>${disease} [ ${model.humanToWorm.diseaseToHuman[disease]?size} human protein(s) with ortholog ]</option> 
+						</#list>
+					</select>
+				</td>
+				<td width="290">
+			 		<div class="buttons">
+						<button type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__diseaseSearch'; 
+				 		document.forms.${screen.name}.submit();">
+				 		<img src="clusterdemo/icons/shoppingcart.png" alt=""/>Add to Cart</button>
+			 		</div>				
+					<div class="buttons">
+			 			<button type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__reset'; 
+			 			document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset</button>			 	
+	    			</div>
 				</td>
 			</tr>
 			<tr>
@@ -334,6 +328,7 @@ EXAMPLE: ENSP00000230732, ENSP00000005178, ENSP00000301067</textarea>
 			</tr>
 		</table>
 	</div>
+
 </div>
 
 <br />
@@ -354,38 +349,129 @@ EXAMPLE: ENSP00000230732, ENSP00000005178, ENSP00000301067</textarea>
 </#macro>
 
 <#macro resultTable model screen>
+<style> <#-- Result table style -->
+	#result a:link {
+		color: #666;
+		font-weight: bold;
+		text-decoration:none;
+	}
+	#result a:visited {
+		color: #999999;
+		font-weight:bold;
+		text-decoration:none;
+	}
+	#result a:active,
+	#result a:hover {
+		color: #bd5a35;
+		text-decoration:underline;
+	}
+	#result {
+		font-family:Arial, Helvetica, sans-serif;
+		color:#666;
+		font-size:12px;
+		text-shadow: 1px 1px 0px #fff;
+		background:#eaebec;
+		margin:20px;
+		border:#ccc 1px solid;
+	
+		-moz-border-radius:3px;
+		-webkit-border-radius:3px;
+		border-radius:3px;
+	
+		-moz-box-shadow: 0 1px 2px #d1d1d1;
+		-webkit-box-shadow: 0 1px 2px #d1d1d1;
+		box-shadow: 0 1px 2px #d1d1d1;
+	}
+	#result th {
+		padding:21px 25px 22px 25px;
+		border-top:1px solid #fafafa;
+		border-bottom:1px solid #e0e0e0;
+	
+		background: #ededed;
+		background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));
+		background: -moz-linear-gradient(top,  #ededed,  #ebebeb);
+	}
+	#result th:first-child {
+		text-align: left;
+		padding-left:20px;
+	}
+	#result tr:first-child th:first-child {
+		-moz-border-radius-topleft:3px;
+		-webkit-border-top-left-radius:3px;
+		border-top-left-radius:3px;
+	}
+	#result tr:first-child th:last-child {
+		-moz-border-radius-topright:3px;
+		-webkit-border-top-right-radius:3px;
+		border-top-right-radius:3px;
+	}
+	#result tr {
+		text-align: center;
+		padding-left:20px;
+	}
+	#result td:first-child {
+		text-align: left;
+		padding-left:20px;
+		border-left: 0;
+	}
+	#result td {
+		padding:18px;
+		border-top: 1px solid #ffffff;
+		border-bottom:1px solid #e0e0e0;
+		border-left: 1px solid #e0e0e0;
+	
+		background: #fafafa;
+		background: -webkit-gradient(linear, left top, left bottom, from(#fbfbfb), to(#fafafa));
+		background: -moz-linear-gradient(top,  #fbfbfb,  #fafafa);
+	}
+	#result tr.even td {
+		background: #f6f6f6;
+		background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6f6));
+		background: -moz-linear-gradient(top,  #f8f8f8,  #f6f6f6);
+	}
+	#result tr:last-child td {
+		border-bottom:0;
+	}
+	#result tr:last-child td:first-child {
+		-moz-border-radius-bottomleft:3px;
+		-webkit-border-bottom-left-radius:3px;
+		border-bottom-left-radius:3px;
+	}
+	#result tr:last-child td:last-child {
+		-moz-border-radius-bottomright:3px;
+		-webkit-border-bottom-right-radius:3px;
+		border-bottom-right-radius:3px;
+	}
+	#result tr:hover td {
+		background: #f2f2f2;
+		background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
+		background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);	
+	}
+</style>
 
-<table class="table" style="margin-left:25px;">
-	<caption>Diseases mapped to this region</caption>
+<table id="result" cellspacing='0' class="table">
+	<caption><h3>Diseases mapped to this region</h3></caption>
 	<thead>
-	<tr>
-		<th scope="col">Worm genes</th>
-		<th scope="col">Human disease</th>
-		<th scope="col">Probability</th>
-	</tr>
+		<tr>
+			<th scope="col">Worm genes</th>
+			<th scope="col">Human disease</th>
+			<th scope="col">Probability</th>
+		</tr>
 	</thead>
 	<tbody>
-	<tr>
-		<td>WBGene0000001</td>
-		<td>Cancer</td>
-		<td>0.000023</td>
-	</tr>
-	<tr>
-		<td>WBGene0000002</td>
-		<td>Angiosarcoma</td>
-		<td>0.002</td>
-	</tr>
-	<tr>
-		<td>WBGene0000003</td>
-		<td>Hypertension</td>
-		<td>0.029</td>
-	</tr>	
+		<#list model.geneAssociatedDiseases?keys as gene>
+			<tr>
+				<td>${gene}</td>
+				<td>${model.geneAssociatedDiseases[gene][0]}</td>
+				<td>0.000001</td>
+			<tr>
+		</#list>
 	</tbody>
 </table>
 
 <br />
 <br />
-<br />
+<br /> 
 
 </#macro>
 

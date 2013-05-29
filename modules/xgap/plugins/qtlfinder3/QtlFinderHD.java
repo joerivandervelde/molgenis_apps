@@ -94,7 +94,6 @@ public class QtlFinderHD extends QtlFinder2
 
 		this.model.setProbeToGene(new HashMap<String, Gene>());
 		this.model.setHits(new HashMap<String, Entity>());
-		this.model.setGeneAssociatedDiseases(new LinkedHashMap<String, List<String>>());
 
 		for (Probe p : probesInRegion)
 		{
@@ -464,7 +463,6 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.setHits(new HashMap<String, Entity>());
 						this.model.setShoppingCart(genesToProbes(db, 100, this.model.getShoppingCart()));
 						this.model.setProbeToGene(new HashMap<String, Gene>());
-
 					}
 
 					/**
@@ -641,6 +639,11 @@ public class QtlFinderHD extends QtlFinder2
 			if (this.model.getShowTable() == null)
 			{
 				this.model.setShowTable(false);
+			}
+
+			if (this.model.getGeneAssociatedDiseases() == null)
+			{
+				this.model.setGeneAssociatedDiseases(new LinkedHashMap<String, List<String>>());
 			}
 
 		}
