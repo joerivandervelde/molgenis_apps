@@ -9,6 +9,8 @@
 		<dependency org="commons-pool" name="commons-pool" rev="20030825.183949" />
 		<dependency org="org.apache.commons" name="commons-math"
 			rev="2.2" />
+		<dependency org="org.apache.commons" name="commons-math3"
+			rev="3.2" />	
 		<dependency org="commons-collections" name="commons-collections"
 			rev="3.2.1" />
 		<dependency org="mysql" name="mysql-connector-java" rev="5.1.20" />
