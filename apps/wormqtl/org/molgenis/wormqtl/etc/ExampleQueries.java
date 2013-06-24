@@ -33,9 +33,9 @@ public class ExampleQueries
 
 	public ExampleQueries(String usr, String pwd) throws HandleRequestDelegationException, Exception
 	{
+		System.out.println("Before db");
 		Database db = getDb(usr, pwd);
-
-		QTLsearch(db);
+		System.out.println("Test run....");
 	}
 
 	public void QTLsearch(Database db) throws HandleRequestDelegationException, Exception
@@ -192,6 +192,11 @@ public class ExampleQueries
 	 */
 	private Database getDb(String usr, String pwd) throws HandleRequestDelegationException, Exception
 	{
+		/*
+		 * minEvictableIdleTimeMillis="4000"
+		 * timeBetweenEvictionRunsMillis="5000" maxActive="20" minIdle="4"
+		 * maxIdle="8"
+		 */
 		// create db
 		BasicDataSource data_src = new BasicDataSource();
 		data_src.setDriverClassName("org.hsqldb.jdbcDriver");
@@ -200,8 +205,15 @@ public class ExampleQueries
 		data_src.setUrl("jdbc:hsqldb:file:hsqldb/molgenisdb;shutdown=true");
 		data_src.setInitialSize(10);
 		data_src.setTestOnBorrow(true);
+		data_src.setMinEvictableIdleTimeMillis(4000);
+		data_src.setTimeBetweenEvictionRunsMillis(5000);
+		data_src.setMaxActive(20);
+		data_src.setMinIdle(4);
+		data_src.setMaxIdle(8);
 		DataSource dataSource = (DataSource) data_src;
 		Connection conn = dataSource.getConnection();
+		conn = dataSource.getConnection();
+		conn = dataSource.getConnection();
 		// Database db = new app.JDBCDatabase(conn);
 		Database db = DatabaseFactory.create(conn);
 

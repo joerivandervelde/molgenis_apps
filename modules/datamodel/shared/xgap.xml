@@ -201,15 +201,5 @@
 				xref_field="id" xref_label="name" nillable="true"
 				description="Which channel or Fluorescent labeling is associated with the second subject" />
 		</entity>
-		
-		<entity name="GeneToClassicalPhenotype" extends="ObservableFeature">
-			<description>A collection of classical phenotypes that are 
-			associated with a gene.</description>
-			<field name="Gene" label="Gene" type="xref" xref_entity="Gene"
-            	xref_field="id" xref_label="name" nillable="false"
-            	description="The gene that is linked to this phenotype" />
-		 	<field name="PhenotypeDescription" label="PhenotypeDescription" type="varchar" length="128"
-            	nillable="false" description="The phenotype linked to this gene." />
-		</entity>
 	</module>
 </molgenis>

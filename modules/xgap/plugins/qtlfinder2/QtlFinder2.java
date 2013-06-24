@@ -106,6 +106,8 @@ public class QtlFinder2 extends PluginModel<Entity>
 					List<? extends Entity> input = db.find(ObservationElement.class, new QueryRule(
 							ObservationElement.NAME, Operator.EQUALS, shopMeName));
 					input = db.load((Class) ObservationElement.class, input);
+
+					this.model.setShowResults(true);
 					this.model.getShoppingCart().put(shopMeName, input.get(0));
 				}
 
@@ -117,7 +119,9 @@ public class QtlFinder2 extends PluginModel<Entity>
 
 				if (action.equals("gotoCart"))
 				{
+					this.model.setShowResults(false);
 					this.model.setCartView(true);
+					this.model.setQuery(null);
 				}
 
 				if (action.equals("reset"))
@@ -131,10 +135,12 @@ public class QtlFinder2 extends PluginModel<Entity>
 					this.model.setQtls(null);
 					this.model.setCartView(false);
 					this.model.setProbeToGene(null);
+					this.model.setShowResults(false);
 				}
 
 				if (action.equals("gotoSearch"))
 				{
+					this.model.setShowResults(true);
 					this.model.setCartView(false);
 					this.model.setMultiplot(null);
 				}
@@ -154,7 +160,10 @@ public class QtlFinder2 extends PluginModel<Entity>
 						permaLink.append(e.get(ObservableFeature.ID) + ",");
 					}
 					permaLink.deleteCharAt(permaLink.length() - 1);
+
 					this.model.setPermaLink(permaLink.toString());
+					this.model.setShowResults(false);
+					this.model.setCartView(false);
 				}
 
 				if (action.equals("emptyShoppingCart"))
@@ -234,6 +243,7 @@ public class QtlFinder2 extends PluginModel<Entity>
 					System.out.println("after converting genes to probes, number of hits: " + hits.size());
 					// printResults(hits);
 
+					this.model.setShowResults(true);
 					this.model.setHits(hits);
 
 				}
@@ -800,17 +810,6 @@ public class QtlFinder2 extends PluginModel<Entity>
 
 		try
 		{
-			if (model.getShoppingCart() == null)
-			{
-				Map<String, Entity> shoppingCart = new HashMap<String, Entity>();
-				this.model.setShoppingCart(shoppingCart);
-			}
-
-			if (this.model.getCartView() == null)
-			{
-				this.model.setCartView(false);
-			}
-
 			if (model.getAnnotationTypeAndNr() == null)
 			{
 				int totalAmount = 0;
@@ -848,6 +847,32 @@ public class QtlFinder2 extends PluginModel<Entity>
 				}
 				annotationTypeAndNr.put(__ALL__DATATYPES__SEARCH__KEY, totalAmount);
 				model.setAnnotationTypeAndNr(annotationTypeAndNr);
+			}
+
+			if (model.getShoppingCart() == null)
+			{
+				Map<String, Entity> shoppingCart = new HashMap<String, Entity>();
+				this.model.setShoppingCart(shoppingCart);
+			}
+
+			if (this.model.getCartView() == null)
+			{
+				this.model.setCartView(false);
+			}
+
+			if (this.model.getHits() == null)
+			{
+				this.model.setHits(new HashMap<String, Entity>());
+			}
+
+			if (this.model.getShowTable() == null)
+			{
+				this.model.setShowTable(false);
+			}
+
+			if (this.model.getShowResults() == null)
+			{
+				this.model.setShowResults(false);
 			}
 
 		}

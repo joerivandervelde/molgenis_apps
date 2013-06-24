@@ -50,6 +50,9 @@ public class QtlFinderModel2
 	// additional infomation: what gene was a hit for this probe?
 	Map<String, Gene> probeToGene;
 
+	// show results when a search query is submitted
+	private Boolean showResults;
+
 	public Map<String, Gene> getProbeToGene()
 	{
 		return probeToGene;
@@ -168,6 +171,16 @@ public class QtlFinderModel2
 	public void setReport(Report report)
 	{
 		this.report = report;
+	}
+
+	public Boolean getShowResults()
+	{
+		return showResults;
+	}
+
+	public void setShowResults(Boolean showResults)
+	{
+		this.showResults = showResults;
 	}
 
 }

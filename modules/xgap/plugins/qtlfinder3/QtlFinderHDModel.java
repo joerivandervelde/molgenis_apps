@@ -26,6 +26,9 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// The disease that is selected by the user
 	private String disease;
 
+	// The phenotype that is selected by the user
+	private String phenotype;
+
 	// List with data sets from the database that has Lod scores for QTLs
 	private List<String> dataSets;
 
@@ -49,6 +52,9 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// If true, then result screen will show a table with genes in the region +
 	// diseases mapped to them
 	private Boolean showTable;
+
+	// Worm phenotype that is selected for phenotype comparison
+	private List<String> selectedPhenotype;
 
 	public String getDataSet()
 	{
@@ -140,4 +146,23 @@ public class QtlFinderHDModel extends QtlFinderModel2
 		this.showTable = showTable;
 	}
 
+	public List<String> getSelectedPhenotype()
+	{
+		return selectedPhenotype;
+	}
+
+	public void setSelectedPhenotype(List<String> selectedPhenotype)
+	{
+		this.selectedPhenotype = selectedPhenotype;
+	}
+
+	public String getPhenotype()
+	{
+		return phenotype;
+	}
+
+	public void setPhenotype(String phenotype)
+	{
+		this.phenotype = phenotype;
+	}
 }

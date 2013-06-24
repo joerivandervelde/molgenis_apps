@@ -15,6 +15,8 @@
 		<include file="apps/wormqtl/org/molgenis/wormqtl/browsedata.xml" />
 		<plugin label="Help" name="Help" type="org.molgenis.wormqtl.help.Help"
 			group="biologist" />
+		<plugin label="ShoppingCart" name="ShoppingCart" type="plugins.qtlfinder3.ShoppingCart"
+			group="biologist" />	
 		<include file="apps/xqtl/org/molgenis/xqtl/gui/importdata.xml" />
 		<plugin label="Run QTL mapping" name="Cluster"
 			type="plugins.cluster.ClusterPlugin" group="biologist" />

@@ -75,6 +75,9 @@ public class QtlFinderHD extends QtlFinder2
 	 */
 	public void setRegion(Integer start, Integer end, Integer chromosome, Database db, Integer search) throws Exception
 	{
+		this.model.setHits(new HashMap<String, Entity>());
+		this.model.setProbeToGene(new HashMap<String, Gene>());
+
 		List<Probe> probesInRegion = new ArrayList<Probe>();
 		List<Chromosome> chrNeeded = db.find(Chromosome.class, new QueryRule(Chromosome.ORDERNR, Operator.LESS,
 				chromosome));
@@ -405,7 +408,7 @@ public class QtlFinderHD extends QtlFinder2
 												myList.subList(1, myList.size()));
 									}
 
-									this.model.setShowTable(true);
+									this.model.setShowResults(true);
 								}
 								else
 								{
@@ -430,6 +433,9 @@ public class QtlFinderHD extends QtlFinder2
 					 */
 					if (action.equals("diseaseSearch"))
 					{
+						this.model.setHits(new HashMap<String, Entity>());
+						this.model.setProbeToGene(new HashMap<String, Gene>());
+
 						this.model.setDisease(request.getString("diseaseSelect"));
 
 						HypergeometricTest hg = new HypergeometricTest();
@@ -458,7 +464,7 @@ public class QtlFinderHD extends QtlFinder2
 						}
 
 						// Turn on the cart view
-						this.model.setCartView(true);
+						this.model.setShowResults(true);
 
 						// Because the shoppingCart macro needs hits, return
 						// a null map. Hits are not relevant for the current
@@ -480,6 +486,9 @@ public class QtlFinderHD extends QtlFinder2
 					if (action.equals("humanGeneSearch"))
 					{
 						String[] humanGeneQuery = request.getString("enspIds").split(", ");
+
+						this.model.setHits(new HashMap<String, Entity>());
+						this.model.setProbeToGene(new HashMap<String, Gene>());
 
 						List<String> enpsIDs = new ArrayList<String>(Arrays.asList(humanGeneQuery));
 						this.model.setHumanGeneQuery(new ArrayList<String>());
@@ -514,6 +523,7 @@ public class QtlFinderHD extends QtlFinder2
 					 */
 					if (action.equals("reset"))
 					{
+						this.model.setShowResults(false);
 						this.model.setQuery(null);
 						this.model.setHits(null);
 						this.model.setShortenedQuery(null);
@@ -561,7 +571,6 @@ public class QtlFinderHD extends QtlFinder2
 	{
 		try
 		{
-
 			/**
 			 * @author Mark de Haan
 			 * 
@@ -603,20 +612,22 @@ public class QtlFinderHD extends QtlFinder2
 				File orthologs = new File(storage, "speciesTransTable.csv");
 				// Format: Disease \t Number of proteins associated
 				File diseaseProteinCount = new File(storage, "diseaseProteinCount.csv");
+				// Format: Worm gene \t Worm phenotype
+				File wormToPhenotype = new File(storage, "classicalWormPhenotypes.csv");
 
-				HumanToWorm h2w = new HumanToWorm(diseaseMap, orthologs, diseaseProteinCount);
+				HumanToWorm h2w = new HumanToWorm(diseaseMap, orthologs, diseaseProteinCount, wormToPhenotype);
 				this.model.setHumanToWorm(h2w);
 
 			}
 
-			if (model.getHits() == null)
+			if (this.model.getDataSet() == null)
 			{
-				this.model.setHits(new HashMap<String, Entity>());
+				this.model.setDataSet(this.model.getDataSets().get(0));
 			}
 
-			if (model.getProbeToGene() == null)
+			if (this.model.getPhenotype() == null)
 			{
-				this.model.setProbeToGene(new HashMap<String, Gene>());
+				this.model.setPhenotype(this.model.getHumanToWorm().getWormToPhenotype().keySet().iterator().next());
 			}
 
 			if (model.getShoppingCart() == null)
@@ -624,19 +635,14 @@ public class QtlFinderHD extends QtlFinder2
 				this.model.setShoppingCart(new HashMap<String, Entity>());
 			}
 
-			if (this.model.getCartView() == null)
+			if (this.model.getShowResults() == null)
 			{
-				this.model.setCartView(false);
+				this.model.setShowResults(false);
 			}
 
 			if (this.model.getDisease() == null)
 			{
 				this.model.setDisease(this.model.getHumanToWorm().getDiseaseToHuman().keySet().iterator().next());
-			}
-
-			if (this.model.getDataSet() == null)
-			{
-				this.model.setDataSet(this.model.getDataSets().get(0));
 			}
 
 			if (this.model.getShowTable() == null)
@@ -649,6 +655,16 @@ public class QtlFinderHD extends QtlFinder2
 				this.model.setGeneAssociatedDiseases(new LinkedHashMap<String, List<String>>());
 			}
 
+			if (this.model.getSelectedPhenotype() == null)
+			{
+				List<String> phenotypes = new ArrayList<String>();
+				Object[] myList = this.model.getHumanToWorm().getWormToPhenotype().values().toArray();
+
+				for (Object list : myList)
+				{
+
+				}
+			}
 		}
 		catch (Exception e)
 		{

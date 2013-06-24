@@ -19,6 +19,7 @@ public class HumanToWorm
 	private LinkedHashMap<String, List<String>> diseaseToHuman;
 	private LinkedHashMap<String, String> humanToWorm;
 	private LinkedHashMap<String, String> diseaseToProtein;
+	private LinkedHashMap<String, List<String>> wormToPhenotype;
 
 	public LinkedHashMap<String, List<String>> getDiseaseToHuman()
 	{
@@ -35,6 +36,11 @@ public class HumanToWorm
 		return diseaseToProtein;
 	}
 
+	public LinkedHashMap<String, List<String>> getWormToPhenotype()
+	{
+		return wormToPhenotype;
+	}
+
 	/**
 	 * This method takes Omim / DGA disease map, an InParanoid custom WBGene -
 	 * ENSP map and a custom disease - protein count map to create three
@@ -46,7 +52,7 @@ public class HumanToWorm
 	 * @param diseaseProteinCount
 	 * @throws FileNotFoundException
 	 */
-	public <diseaseToHuman> HumanToWorm(File diseaseMap, File orthologs, File diseaseProteinCount)
+	public <diseaseToHuman> HumanToWorm(File diseaseMap, File orthologs, File diseaseProteinCount, File wormPhenotypes)
 			throws FileNotFoundException
 	{
 		System.out.println("> Building Hash maps....");
@@ -54,10 +60,12 @@ public class HumanToWorm
 		diseaseToHuman = new LinkedHashMap<String, List<String>>();
 		humanToWorm = new LinkedHashMap<String, String>();
 		diseaseToProtein = new LinkedHashMap<String, String>();
+		wormToPhenotype = new LinkedHashMap<String, List<String>>();
 
 		Scanner dM = new Scanner(diseaseMap);
 		Scanner h2w = new Scanner(orthologs);
 		Scanner dpc = new Scanner(diseaseProteinCount);
+		Scanner w2p = new Scanner(wormPhenotypes);
 
 		// Loop through OMIM file, skip the first line (header)
 		dM.nextLine();
@@ -101,6 +109,7 @@ public class HumanToWorm
 			humanToWorm.put(enpsID, wbgeneID);
 		}
 
+		// Loop through the protein count file, skip the first line (header)
 		dpc.nextLine();
 		while (dpc.hasNext())
 		{
@@ -111,6 +120,34 @@ public class HumanToWorm
 			// Add the disease as key, and the number of proteins involved as
 			// value
 			diseaseToProtein.put(disease, proteinCount);
+		}
+
+		// Loop through the worm gene - phenotype file, skip the first line
+		// (header)
+		w2p.nextLine();
+		while (w2p.hasNext())
+		{
+			String line = w2p.nextLine();
+			String wormGene = line.split("\t")[0];
+			String disease = line.split("\t")[1];
+
+			// If disease is not in the hashmap yet
+			if (wormToPhenotype.get(disease) == null)
+			{
+				// Put the disease with its gene into the hashmap.
+				// Give a list in case one disease can have more then one gene
+				List<String> myList = new ArrayList<String>();
+				myList.add(wormGene);
+				wormToPhenotype.put(disease, myList);
+			}
+
+			// If the disease is in the hashmap
+			else
+			{
+				// This is not the first gene causing this disease, add another
+				// entry
+				wormToPhenotype.get(disease).add(wormGene);
+			}
 		}
 	}
 
