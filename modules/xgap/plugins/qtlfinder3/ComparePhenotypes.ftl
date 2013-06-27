@@ -14,7 +14,7 @@
 						>${disease} [ ${model.humanToWorm.diseaseToHuman[disease]?size} human protein(s) with ortholog ]</option> 
 					</#list>
 				</select>
-			</td>
+			</td>			
 		</tr>
 		
 		<tr>
@@ -27,5 +27,19 @@
 				</select>
 			</td>
 		</tr>
+		
+		<tr style="margin-top:25px;">
+			<td width="290" style="padding:25px 0px 5px 25px;">
+				<div class="buttons">
+					<button style="color:blue;" type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__comparePhenotypes'; 
+					document.forms.${screen.name}.submit();"><img src="generated-res/img/recordview.png" alt=""/>Compare</button>
+		 		</div>				
+		 		
+				<div class="buttons">
+		 			<button type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__reset'; 
+		 			document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset</button>			 	
+    			</div>
+			</td>	
+		</tr>	
 	</table>
 </#macro>		

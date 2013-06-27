@@ -54,7 +54,7 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	private Boolean showTable;
 
 	// Worm phenotype that is selected for phenotype comparison
-	private List<String> selectedPhenotype;
+	private List<String> selectedWormPhenotype;
 
 	public String getDataSet()
 	{
@@ -146,14 +146,14 @@ public class QtlFinderHDModel extends QtlFinderModel2
 		this.showTable = showTable;
 	}
 
-	public List<String> getSelectedPhenotype()
+	public List<String> getSelectedWormPhenotype()
 	{
-		return selectedPhenotype;
+		return selectedWormPhenotype;
 	}
 
-	public void setSelectedPhenotype(List<String> selectedPhenotype)
+	public void setSelectedWormPhenotype(List<String> selectedWormPhenotype)
 	{
-		this.selectedPhenotype = selectedPhenotype;
+		this.selectedWormPhenotype = selectedWormPhenotype;
 	}
 
 	public String getPhenotype()

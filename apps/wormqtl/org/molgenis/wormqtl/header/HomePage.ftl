@@ -26,6 +26,32 @@
 			#browse a:visited {color:#13507A;}
 			#browse a:hover {color:#4682b4;}
 			#browse a:active {color:#0000FF;}
+			
+			#browse a.tip {
+   				text-decoration: none
+			}
+			
+			#browse a.tip:hover {
+			    position: relative
+			}
+			
+			#browse a.tip span {
+			    display: none
+			}
+			
+			#browse a.tip:hover span {
+			    border: #c0c0c0 1px dotted;
+			    padding: 5px 20px 5px 5px;
+			    display: block;
+			    z-index: 100;
+			    background: url(../images/status-info.png) #f0f0f0 no-repeat 100% 5%;
+			    left: 0px;
+			    margin: 10px;
+			    width: 250px;
+			    position: absolute;
+			    top: 10px;
+			    text-decoration: none
+			}
 			</style>
 			
 			<div align="center">
@@ -91,27 +117,26 @@
 					
 					<tr>	
 						<td align="center">
-							<a href="?select=QtlFinderPublic2"><img height="100" width="100" src="clusterdemo/wormqtl/FindQtls.png" /><h3>Find QTLs</h3></a>
+							<a class="tip" href="?select=QtlFinderPublic2"><img height="100" width="100" src="clusterdemo/wormqtl/FindQtls.png" /><h3>Find QTLs</h3>
+							<span>Explore the WormQTL database, search for genes you are interested in and find QTLs</span>
+							</a>
 						</td>
 						<td align="center">
-							<a href="?select=GenomeBrowser"><img height="100" width="100" src="clusterdemo/wormqtl/qtl_gb_button.png" /><h3>Genome browser</h3></a>
+							<a class="tip" href="?select=GenomeBrowser"><img height="100" width="100" src="clusterdemo/wormqtl/qtl_gb_button.png" /><h3>Genome browser</h3>
+							<span>Browse the genome of <i>C. elegans</i></span>
+							</a>
 						</td>
 						<td align="center">
-							<a href="?select=Investigations"><img height="100" width="100" src="clusterdemo/wormqtl/qtl_data_button.png" /><h3>Browse data</h3></a>
+							<a class="tip" href="?select=Investigations"><img height="100" width="100" src="clusterdemo/wormqtl/qtl_data_button.png" /><h3>Browse data</h3>
+							<span>Scroll through all the different data sets</span>
+							</a>
 						</td>
 						<td align="center">
-							<a href="?select=Help"><img height="100" width="100" src="res/img/designgg/helpicon.gif" /><h3>Help</h3></a>
+							<a class="tip" href="?select=Help"><img height="100" width="100" src="res/img/designgg/helpicon.gif" /><h3>Help</h3>
+							<span>Go here for a more indepth explanation on all the different functions provided by WormQTL</span>
+							</a>
 						</td>
 					</tr>
-					
-					<#--	
-					<tr>
-						<td><span><h4>Explanation</h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta nisi ut ipsum sodales, at feugiat nisl accumsan.</span></td>
-						<td><span><h4>Explanation</h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta nisi ut ipsum sodales, at feugiat nisl accumsan.</span></td>
-						<td><span><h4>Explanation</h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta nisi ut ipsum sodales, at feugiat nisl accumsan.</span></td>
-						<td><span><h4>Explanation</h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta nisi ut ipsum sodales, at feugiat nisl accumsan.</span></td>
-					</tr>
-					-->
 					
 					<tr>	
 						<td colspan="4" align="center">
@@ -124,26 +149,25 @@
 					</tr>
 					<tr>
 						<td align="center">
-							<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease"><img height="100" width="100" src="clusterdemo/wormqtl/humanDisease.png" /><h3>Human Diseases</h3></a>
+							<a class="tip" href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease"><img height="100" width="100" src="clusterdemo/wormqtl/humanDisease.png" /><h3>Human Diseases</h3>
+							<span>Explore novel causal genes for a human phenotype (disease) of interest by using worm (e)QTL findings</span>
+							</a>
 						</td>	
 						<td align="center">		
-							<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=genomicRegion"><img height="100" width="100" src="clusterdemo/wormqtl/genomicRegion.png" /><h3>Genomic region</h3></a>
+							<a class="tip" href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=genomicRegion"><img height="100" width="100" src="clusterdemo/wormqtl/genomicRegion.png" /><h3>Genomic region</h3>
+							<span>Select regions of the worm genome and link (e)QTLs to human disease phenotypes</span>
+							</a>
 						</td>	
 						<td align="center">	
-							<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=qtlLoci"><img height="100" width="100" src="clusterdemo/wormqtl/QtlLoci.png" /><h3>QTL Loci</h3></a>
+							<a class="tip" href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=qtlLoci"><img height="100" width="100" src="clusterdemo/wormqtl/QtlLoci.png" /><h3>QTL Loci</h3>
+							<span>Select specific (e)QTLs from the WormQTL database and find if any can be mapped to a human disease</span>
+							</a>
 						</td>	
 						<td align="center">
-							<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=comparePhenotypes"><img height="100" width="100" src="clusterdemo/wormqtl/ComparePhenotypes.png" /><h3>Compare Phenotypes</h3></a>
+							<a class="tip" href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=comparePhenotypes"><img height="100" width="100" src="clusterdemo/wormqtl/ComparePhenotypes.png" /><h3>Compare Phenotypes</h3>
+							<span>Compare human and worm phenotypes and look for evolutionary conserved gene networks</span></a>
 						</td>	
 					</tr>
-					<#--
-					<tr>
-						<td><span><h4>Search for human diseases</h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta nisi ut ipsum sodales, at feugiat nisl accumsan.</span></td>
-						<td><span><h4>Genomic regions of <i>C. elegans</i></h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta nisi ut ipsum sodales, at feugiat nisl accumsan.</span></td>
-						<td><span><h4>QTL's within the WormQTL database</h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta nisi ut ipsum sodales, at feugiat nisl accumsan.</span></td>
-						<td><span><h4>Compare disease phenotypes</h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta nisi ut ipsum sodales, at feugiat nisl accumsan.</span></td>
-					</tr>
-					-->	
 					
 					<tr>
 						<td colspan="4">

@@ -146,6 +146,11 @@ public class QtlFinderHD extends QtlFinder2
 					// Phenotype comparison
 					if (action.equals("comparePhenotypes"))
 					{
+						String humanPhenotype = request.getString("humanPhenotype");
+						String wormPhenotype = request.getString("wormPhenotype");
+
+						ComparePhenotypes cp = new ComparePhenotypes();
+						cp.comparePhenotypes(model, this.getModel(), humanPhenotype, wormPhenotype);
 
 					}
 
@@ -178,7 +183,6 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.setProbeToGene(null);
 						this.model.setShowTable(false);
 						this.model.setShowResults(false);
-						this.model.setScreenType("");
 					}
 				}
 
@@ -303,17 +307,6 @@ public class QtlFinderHD extends QtlFinder2
 			if (this.model.getScreenType() == null || this.model.getScreenType() == "")
 			{
 				this.model.setScreenType("humanDisease");
-			}
-
-			if (this.model.getSelectedPhenotype() == null)
-			{
-				List<String> phenotypes = new ArrayList<String>();
-				Object[] myList = this.model.getHumanToWorm().getWormToPhenotype().values().toArray();
-
-				for (Object list : myList)
-				{
-
-				}
 			}
 		}
 		catch (Exception e)
