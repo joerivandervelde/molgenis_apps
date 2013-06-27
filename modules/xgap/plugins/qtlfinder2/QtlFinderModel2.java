@@ -53,6 +53,19 @@ public class QtlFinderModel2
 	// show results when a search query is submitted
 	private Boolean showResults;
 
+	// The type of screen that should be showed to the user
+	private String screenType;
+
+	public String getScreenType()
+	{
+		return screenType;
+	}
+
+	public void setScreenType(String screenType)
+	{
+		this.screenType = screenType;
+	}
+
 	public Map<String, Gene> getProbeToGene()
 	{
 		return probeToGene;
@@ -182,5 +195,4 @@ public class QtlFinderModel2
 	{
 		this.showResults = showResults;
 	}
-
 }

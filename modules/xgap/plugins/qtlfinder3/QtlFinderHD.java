@@ -5,31 +5,19 @@ package plugins.qtlfinder3;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import matrix.DataMatrixInstance;
-import matrix.general.DataMatrixHandler;
-
 import org.molgenis.cluster.DataValue;
-import org.molgenis.data.Data;
 import org.molgenis.framework.db.Database;
-import org.molgenis.framework.db.Query;
 import org.molgenis.framework.db.QueryRule;
 import org.molgenis.framework.db.QueryRule.Operator;
 import org.molgenis.framework.server.MolgenisRequest;
 import org.molgenis.framework.ui.ScreenController;
 import org.molgenis.framework.ui.ScreenMessage;
-import org.molgenis.pheno.ObservationElement;
 import org.molgenis.util.Entity;
 import org.molgenis.wormqtl.etc.HumanToWorm;
-import org.molgenis.wormqtl.etc.HypergeometricTest;
-import org.molgenis.xgap.Chromosome;
-import org.molgenis.xgap.Gene;
-import org.molgenis.xgap.Marker;
-import org.molgenis.xgap.Probe;
 
 import plugins.qtlfinder2.QtlFinder2;
 import decorators.MolgenisFileHandler;
@@ -42,13 +30,11 @@ import decorators.MolgenisFileHandler;
  */
 public class QtlFinderHD extends QtlFinder2
 {
-
 	private static final long serialVersionUID = 1L;
 
 	public QtlFinderHD(String name, ScreenController<?> parent)
 	{
 		super(name, parent);
-		// TODO Auto-generated constructor stub
 	}
 
 	private QtlFinderHDModel model = new QtlFinderHDModel();
@@ -58,128 +44,16 @@ public class QtlFinderHD extends QtlFinder2
 		return model;
 	}
 
-	/**
-	 * This method determines what probes and genes are inside the region that
-	 * was selected, either by qtl search or by region search.
-	 * 
-	 * Calls the HumanToWorm class to determine which diseases are mapped to the
-	 * selected region. Sets table view to true to show gene - disease -
-	 * probability as a result
-	 * 
-	 * @param start
-	 * @param end
-	 * @param chromosome
-	 * @param db
-	 * @param search
-	 * @throws Exception
-	 */
-	public void setRegion(Integer start, Integer end, Integer chromosome, Database db, Integer search) throws Exception
-	{
-		this.model.setHits(new HashMap<String, Entity>());
-		this.model.setProbeToGene(new HashMap<String, Gene>());
-
-		List<Probe> probesInRegion = new ArrayList<Probe>();
-		List<Chromosome> chrNeeded = db.find(Chromosome.class, new QueryRule(Chromosome.ORDERNR, Operator.LESS,
-				chromosome));
-
-		if (search == 1)
-		{
-			for (Chromosome chr : chrNeeded)
-			{
-				start = start + chr.getBpLength();
-				end = end + chr.getBpLength();
-			}
-		}
-
-		probesInRegion = db.find(Probe.class, new QueryRule(Probe.BPSTART, Operator.GREATER, start), new QueryRule(
-				Probe.BPSTART, Operator.LESS, end));
-
-		for (Probe p : probesInRegion)
-		{
-			model.getHits().put(p.getName(), p);
-
-			if (p.getSymbol().contains("WBGene"))
-			{
-				List<String> myList = this.model.getHumanToWorm().linkToDisease(p.getSymbol());
-				this.model.getGeneAssociatedDiseases().put(myList.get(0), myList.subList(1, myList.size()));
-			}
-			else
-			{
-				List<String> myList = this.model.getHumanToWorm().linkToDisease(p.getReportsFor_Name());
-				this.model.getGeneAssociatedDiseases().put(myList.get(0), myList.subList(1, myList.size()));
-			}
-		}
-
-		this.model.setShowTable(true);
-	}
-
-	/**
-	 * This method retrieves the highest scoring QTL from a certain probe and
-	 * determines which marker that QTL is located on
-	 * 
-	 * @param dm
-	 * @param probe
-	 * @param threshold
-	 * @return returns the name of the marker that has the highest scoring qtl
-	 * @throws Exception
-	 */
-	public String getProbeExpression(DataMatrixInstance dm, String probe, double threshold) throws Exception
-	{
-		// TODO: Change method of determining region inside QTL
-		// Now: Highest scoring marker + / - 10.000 bp positions = Region
-
-		String bestMarker = "";
-		// Double flankLeft = 0.0;
-		// Double flankRight = 0.0;
-		Double highest = 0.0;
-		Integer highestIdx = 0;
-		Object[] myTraitQtlScore = dm.getRow(probe);
-
-		for (int i = 0; i < myTraitQtlScore.length; i++)
-		{
-			if (highest == 0)
-			{
-				highest = (Double) myTraitQtlScore[i];
-				highestIdx = i;
-			}
-			else
-			{
-				if (highest < (Double) myTraitQtlScore[i])
-				{
-					highest = (Double) myTraitQtlScore[i];
-					highestIdx = i;
-				}
-				else
-				{
-					continue;
-				}
-			}
-		}
-
-		if (highest > threshold)
-		{
-			// flankLeft = (Double) myTraitQtlScore[(highestIdx - 1)];
-			// flankRight = (Double) myTraitQtlScore[(highestIdx + 1)];
-
-			// System.out.println("Flanking left: " + flankLeft +
-			// " The highest QTL is: " + highest + " Flanking right: "
-			// + flankRight);
-
-			bestMarker = dm.getColNames().get(highestIdx);
-
-		}
-		else
-		{
-			this.setMessages(new ScreenMessage(
-					"There was no QTL for this probe / trait that scored above the submitted threshold", false));
-		}
-		return bestMarker;
-	}
-
 	@Override
 	public void handleRequest(Database db, MolgenisRequest request)
 	{
-
+		if (request.getString("screen") != null)
+		{
+			this.model.setScreenType(request.getString("screen"));
+			this.model.setCartView(false);
+			this.model.setMultiplot(null);
+			this.model.setShowResults(false);
+		}
 		if (request.getString("__action") != null)
 		{
 			String action = request.getString("__action");
@@ -197,16 +71,16 @@ public class QtlFinderHD extends QtlFinder2
 					// Remove the prefix from the handle request
 					action = action.substring(this.model.prefix.length());
 
-					/**
-					 * @author Mark de Haan
-					 * 
-					 *         Region search
-					 * 
-					 *         User fills in (in bp) start and stop positions,
-					 *         and a chromosome. Algorithm then uses these
-					 *         parameters to determine which probes are located
-					 *         in this region
-					 */
+					// Human Disease search
+					if (action.equals("diseaseSearch"))
+					{
+						this.model.setDisease(request.getString("diseaseSelect"));
+
+						HumanDiseaseSearch hds = new HumanDiseaseSearch();
+						hds.diseaseSearch(model, db);
+					}
+
+					// Region search
 					if (action.equals("regionSearch"))
 					{
 						if (request.getString("regionStart") == null || request.getString("regionEnd") == null)
@@ -221,81 +95,13 @@ public class QtlFinderHD extends QtlFinder2
 							Integer end = request.getInt("regionEnd");
 							Integer chromosome = request.getInt("regionChr");
 
-							setRegion(start, end, chromosome, db, 1);
+							SetRegion sr = new SetRegion();
+							sr.setRegion(start, end, chromosome, db, 1, model);
+
 						}
 					}
 
-					/**
-					 * @author Mark de Haan
-					 * 
-					 *         Probe QTL region search
-					 * 
-					 *         User fills in a probe / trait name, a lod
-					 *         threshold and a dataset to search in. The
-					 *         algorithm then uses these parameters to determine
-					 *         the highest QTL score present for the submitted
-					 *         probe. Then based on the position of the marker
-					 *         containing this QTL, the surrounding region is
-					 *         taken and a region search is performed. This
-					 *         determines what probes are located within the QTL
-					 *         peak region
-					 */
-					if (action.equals("traitRegionSearch"))
-					{
-						if (request.getString("traitInput") == null)
-						{
-							this.setMessages(new ScreenMessage("Please fill in a trait in the form"
-									+ "of a probe name.", false));
-						}
-						else
-						{
-							String trait = request.getString("traitInput");
-							String dataset = request.getString("regionDataSetSelect");
-							double threshold = request.getInt("lodThreshold");
-
-							DataMatrixHandler dmh = new DataMatrixHandler(db);
-
-							Data selectDataset = db
-									.find(Data.class, new QueryRule(Data.NAME, Operator.EQUALS, dataset)).get(0);
-							DataMatrixInstance dataMatrix = dmh.createInstance(selectDataset, db);
-
-							String highestMarker = getProbeExpression(dataMatrix, trait, threshold);
-
-							List<Marker> highestProbe = db.find(Marker.class, new QueryRule(Marker.NAME,
-									Operator.EQUALS, highestMarker));
-
-							List<Chromosome> chromosomes = db.find(Chromosome.class, new QueryRule(Chromosome.NAME,
-									Operator.EQUALS, highestProbe.get(0).getChromosome_Name()));
-
-							// Once the marker has been determined, the region
-							// within the Qtl is determines by taking the
-							// starting position, and adding or retracting
-							// 10.000 (temporary solution)
-							Integer start = (int) (highestProbe.get(0).getBpStart() - 10000);
-							Integer end = (int) (highestProbe.get(0).getBpStart() + 10000);
-							Integer chromosome = chromosomes.get(0).getOrderNr();
-
-							setRegion(start, end, chromosome, db, 0);
-						}
-					}
-
-					/**
-					 * @author Joeri van der Velde, Mark de Haan
-					 * 
-					 *         QTL Search
-					 * 
-					 *         User can submit a region to start and end, a
-					 *         chromosome to look at, a dataset to search in and
-					 *         a QTL lod score threshold. The algorithm then
-					 *         looks into the selected region and returns probes
-					 *         if there is a 'QTL hotspot' present in this
-					 *         region. This hotspot is located at the position
-					 *         where a QTL peak is above the pre determined
-					 *         threshold
-					 * 
-					 *         TODO: Determine which disease can be mapped to
-					 *         found hotspot
-					 */
+					// QTL search
 					if (action.equals("QtlSearch"))
 					{
 						if (request.getInt("QtlRegionStart") == null || request.getInt("QtlRegionEnd") == null)
@@ -312,215 +118,52 @@ public class QtlFinderHD extends QtlFinder2
 							Integer chromosome = request.getInt("QtlRegionChr");
 							Integer threshold = request.getInt("QtlLodThreshold");
 
-							List<Chromosome> chrNeeded = db.find(Chromosome.class, new QueryRule(Chromosome.ORDERNR,
-									Operator.LESS, chromosome));
-
-							for (Chromosome chr : chrNeeded)
-							{
-								start = start + chr.getBpLength();
-								end = end + chr.getBpLength();
-							}
-
-							DataMatrixHandler dmh = new DataMatrixHandler(db);
-							Data selectDataset = db
-									.find(Data.class, new QueryRule(Data.NAME, Operator.EQUALS, dataset)).get(0);
-
-							DataMatrixInstance dataMatrix = dmh.createInstance(selectDataset, db);
-
-							List<String> markers = selectDataset.getFeatureType().equals(Marker.class.getSimpleName()) ? dataMatrix
-									.getColNames() : dataMatrix.getRowNames();
-
-							Query<Marker> q = db.query(Marker.class);
-							// Get markers used in dataset name
-							q.addRules(new QueryRule(Marker.NAME, Operator.IN, markers));
-							// Get markers in specific region
-							q.addRules(new QueryRule(Marker.BPSTART, Operator.GREATER_EQUAL, start));
-							q.addRules(new QueryRule(Marker.BPSTART, Operator.LESS_EQUAL, end));
-							// Save markers selected from region
-							List<Marker> regionMarkers = q.find();
-
-							if (regionMarkers.size() == 0)
-							{
-								this.setMessages(new ScreenMessage("No markers where found within this region of "
-										+ "chromosome " + chromosome, false));
-							}
-							else
-							{
-								// Get lowest and highest BP number
-								Marker lowest = regionMarkers.get(0);
-								Marker highest = regionMarkers.get(regionMarkers.size() - 1);
-								for (Marker m : regionMarkers)
-								{
-									if (m.getBpStart().doubleValue() < lowest.getBpStart().doubleValue())
-									{
-										lowest = m;
-									}
-									else if (m.getBpStart().doubleValue() > highest.getBpStart().doubleValue())
-									{
-										highest = m;
-									}
-								}
-
-								// Slice selected region from datamatrix
-								if (selectDataset.getFeatureType().equals(Marker.class.getSimpleName()))
-								{
-									int colStart = dataMatrix.getColIndexForName(lowest.getName());
-									int colStop = dataMatrix.getColIndexForName(highest.getName());
-
-									// cut out slice with our flanking
-									// markers(start, stop)
-									DataMatrixInstance slice = dataMatrix.getSubMatrixByOffset(0,
-											dataMatrix.getNumberOfRows(), colStart, colStop - colStart);
-
-									// we want "1" value per row (trait)
-									// with a value GREATER than THRESHOLD
-									QueryRule findAboveThreshold = new QueryRule("1", Operator.GREATER, threshold);
-
-									// apply filter and get result: number
-									// of rows (traits) are now reduced
-
-									DataMatrixInstance traitsAboveThreshold = slice
-											.getSubMatrix2DFilterByRow(findAboveThreshold);
-
-									List<String> rowNames = traitsAboveThreshold.getRowNames();
-
-									Class<? extends Entity> traitClass = db.getClassForName(selectDataset
-											.getTargetType());
-									List<? extends Entity> traits = db.find(traitClass, new QueryRule(
-											ObservationElement.NAME, Operator.IN, rowNames));
-
-									String wbGene;
-
-									for (Entity t : traits)
-									{
-										this.model.getHits().put(t.get(ObservationElement.NAME).toString(), t);
-
-										if (t.get("symbol") == null)
-										{
-											continue;
-										}
-
-										wbGene = t.get("symbol").toString();
-
-										List<String> myList = this.model.getHumanToWorm().linkToDisease(wbGene);
-
-										this.model.getGeneAssociatedDiseases().put(myList.get(0),
-												myList.subList(1, myList.size()));
-									}
-
-									this.model.setShowResults(true);
-								}
-								else
-								{
-									// TODO: Do something that is different
-								}
-							}
+							QtlSearch qs = new QtlSearch();
+							qs.qtlSearch(dataset, start, end, chromosome, threshold, model, db, this.getModel());
 						}
 					}
 
-					/**
-					 * @author Mark de Haan
-					 * 
-					 *         Disease Search
-					 * 
-					 *         User selects a disease from a dropdown list,
-					 *         genes that are associated with selected disease
-					 *         via ortholog matching are put in the shopping
-					 *         cart
-					 * 
-					 *         TODO: Change the instant adding to shopping cart
-					 *         into showing a list of hits to select from
-					 */
-					if (action.equals("diseaseSearch"))
+					// QTL search per probe
+					if (action.equals("traitRegionSearch"))
 					{
-						this.model.setHits(new HashMap<String, Entity>());
-						this.model.setProbeToGene(new HashMap<String, Gene>());
-
-						this.model.setDisease(request.getString("diseaseSelect"));
-
-						HypergeometricTest hg = new HypergeometricTest();
-
-						int proteinCount = this.model.getHumanToWorm().retrieve(this.model.getDisease());
-						int orthologSpecific = this.model.getHumanToWorm().getDiseaseToHuman()
-								.get(this.model.getDisease()).size();
-
-						this.model.setHyperTestProbability(hg.hyperGeometricTest(47361, 4988, proteinCount,
-								orthologSpecific));
-
-						// Call humanToWorm algorithm to convert disease
-						// into a list of one or more worm genes
-						List<String> wormGenes = this.model.getHumanToWorm().convert(this.model.getDisease());
-
-						// Call the database with the list of worm genes to
-						// get normal shopping cart view with probes to shop
-						List<? extends Entity> probes = db.find(ObservationElement.class, new QueryRule(
-								ObservationElement.NAME, Operator.IN, wormGenes));
-
-						probes = db.load((Class) ObservationElement.class, probes);
-
-						for (Entity p : probes)
+						if (request.getString("traitInput") == null)
 						{
-							this.model.getShoppingCart().put(p.get("name").toString(), p);
+							this.setMessages(new ScreenMessage("Please fill in a trait in the form"
+									+ "of a probe name.", false));
 						}
+						else
+						{
+							String trait = request.getString("traitInput");
+							String dataset = request.getString("regionDataSetSelect");
+							double threshold = request.getInt("lodThreshold");
 
-						// Turn on the cart view
-						this.model.setShowResults(true);
+							TraitRegionSearch trs = new TraitRegionSearch();
 
-						// Because the shoppingCart macro needs hits, return
-						// a null map. Hits are not relevant for the current
-						// search.
-						this.model.setShoppingCart(genesToProbes(db, 100, this.model.getShoppingCart()));
+							trs.traitRegionSearch(trait, dataset, threshold, model, db, this.getModel());
+						}
 					}
 
-					/**
-					 * @author Mark de Haan
-					 * 
-					 *         Ortholog Search
-					 * 
-					 *         User can submit human genes. The algorithm will
-					 *         then determine the ortholog genes belonging to
-					 *         these human genes.
-					 * 
-					 *         TODO: Greatly increase the input possibilities
-					 */
+					// Phenotype comparison
+					if (action.equals("comparePhenotypes"))
+					{
+
+					}
+
+					// Ortholog Search
 					if (action.equals("humanGeneSearch"))
 					{
 						String[] humanGeneQuery = request.getString("enspIds").split(", ");
-
-						this.model.setHits(new HashMap<String, Entity>());
-						this.model.setProbeToGene(new HashMap<String, Gene>());
-
-						List<String> enpsIDs = new ArrayList<String>(Arrays.asList(humanGeneQuery));
-						this.model.setHumanGeneQuery(new ArrayList<String>());
-						for (String enpsID : enpsIDs)
+						if (humanGeneQuery.length == 0)
 						{
-							if (this.model.getHumanToWorm().getHumanToWorm().get(enpsID) == null)
-							{
-								continue;
-							}
-
-							this.model.getHumanGeneQuery()
-									.add(this.model.getHumanToWorm().getHumanToWorm().get(enpsID));
+							this.setMessages(new ScreenMessage(
+									"Please fill in at least one human ENSP protein identifier", false));
 						}
 
-						List<Probe> probes = db.find(Probe.class,
-								new QueryRule(Probe.SYMBOL, Operator.IN, this.model.getHumanGeneQuery()));
-
-						for (Probe p : probes)
-						{
-							model.getHits().put(p.getName(), p);
-						}
+						OrthologSearch os = new OrthologSearch();
+						os.orthologSearch(humanGeneQuery, model, db);
 					}
 
-					/**
-					 * @author Joeri van der Velde
-					 * 
-					 *         Reset
-					 * 
-					 *         When the user presses the reset button,
-					 *         everything is returned to its original state
-					 * 
-					 */
+					// Reset
 					if (action.equals("reset"))
 					{
 						this.model.setShowResults(false);
@@ -534,10 +177,12 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.setCartView(false);
 						this.model.setProbeToGene(null);
 						this.model.setShowTable(false);
+						this.model.setShowResults(false);
+						this.model.setScreenType("");
 					}
 				}
-			}
 
+			}
 			catch (Exception e)
 			{
 				e.printStackTrace();
@@ -655,6 +300,11 @@ public class QtlFinderHD extends QtlFinder2
 				this.model.setGeneAssociatedDiseases(new LinkedHashMap<String, List<String>>());
 			}
 
+			if (this.model.getScreenType() == null || this.model.getScreenType() == "")
+			{
+				this.model.setScreenType("humanDisease");
+			}
+
 			if (this.model.getSelectedPhenotype() == null)
 			{
 				List<String> phenotypes = new ArrayList<String>();
@@ -677,5 +327,4 @@ public class QtlFinderHD extends QtlFinder2
 	{
 		return super.getCustomHtmlHeaders();
 	}
-
 }

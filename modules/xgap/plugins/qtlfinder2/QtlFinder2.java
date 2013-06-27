@@ -51,7 +51,6 @@ import app.JDBCMetaDatabase;
 
 public class QtlFinder2 extends PluginModel<Entity>
 {
-
 	private static final long serialVersionUID = 1L;
 
 	protected QtlFinderHDModel model = new QtlFinderHDModel();
@@ -69,6 +68,9 @@ public class QtlFinder2 extends PluginModel<Entity>
 	public QtlFinder2(String name, ScreenController<?> parent)
 	{
 		super(name, parent);
+		this.model.setCartView(false);
+		this.model.setMultiplot(null);
+		this.model.setShowResults(false);
 	}
 
 	@Override
@@ -85,6 +87,14 @@ public class QtlFinder2 extends PluginModel<Entity>
 
 	public void handleRequest(Database db, MolgenisRequest request)
 	{
+		if (request.getString("screen") != null)
+		{
+			this.model.setScreenType(request.getString("screen"));
+			this.model.setCartView(true);
+			this.model.setMultiplot(null);
+			this.model.setShowResults(false);
+		}
+
 		if (request.getString("__action") != null)
 		{
 			String action = request.getString("__action");
@@ -119,9 +129,11 @@ public class QtlFinder2 extends PluginModel<Entity>
 
 				if (action.equals("gotoCart"))
 				{
+					this.model.setScreenType("shoppingCart");
 					this.model.setShowResults(false);
 					this.model.setCartView(true);
 					this.model.setQuery(null);
+					this.model.setMultiplot(null);
 				}
 
 				if (action.equals("reset"))
@@ -136,6 +148,8 @@ public class QtlFinder2 extends PluginModel<Entity>
 					this.model.setCartView(false);
 					this.model.setProbeToGene(null);
 					this.model.setShowResults(false);
+					this.model.setScreenType("");
+
 				}
 
 				if (action.equals("gotoSearch"))
@@ -143,6 +157,7 @@ public class QtlFinder2 extends PluginModel<Entity>
 					this.model.setShowResults(true);
 					this.model.setCartView(false);
 					this.model.setMultiplot(null);
+					this.model.setScreenType("");
 				}
 
 				if (action.equals("shopAll"))
@@ -162,18 +177,20 @@ public class QtlFinder2 extends PluginModel<Entity>
 					permaLink.deleteCharAt(permaLink.length() - 1);
 
 					this.model.setPermaLink(permaLink.toString());
-					this.model.setShowResults(false);
-					this.model.setCartView(false);
+					this.model.setScreenType("");
+
 				}
 
 				if (action.equals("emptyShoppingCart"))
 				{
 					this.model.setShoppingCart(null);
+					this.model.setScreenType("");
 				}
 
 				if (action.startsWith("__entity__report__for__"))
 				{
 					this.model.setCartView(false);
+					this.model.setScreenType("");
 
 					String name = action.substring("__entity__report__for__".length());
 
@@ -205,6 +222,7 @@ public class QtlFinder2 extends PluginModel<Entity>
 					this.model.setMultiplot(null);
 					this.model.setReport(null);
 					this.model.setQtls(null);
+					this.model.setScreenType("");
 
 					if (query == null)
 					{
@@ -873,6 +891,11 @@ public class QtlFinder2 extends PluginModel<Entity>
 			if (this.model.getShowResults() == null)
 			{
 				this.model.setShowResults(false);
+			}
+
+			if (this.model.getScreenType() == null)
+			{
+				this.model.setScreenType("");
 			}
 
 		}

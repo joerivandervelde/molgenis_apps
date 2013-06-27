@@ -20,9 +20,16 @@
 					<p class="errormessage">${message.text}</p>
 				</#if>
 			</#list>
-		
+			
+			<style>
+			#browse	a {color:#13507A;}      
+			#browse a:visited {color:#13507A;}
+			#browse a:hover {color:#4682b4;}
+			#browse a:active {color:#0000FF;}
+			</style>
+			
 			<div align="center">
-				<table width="700px">
+				<table width="700px" id="browse">
 					<tr>
 						<td colspan="4">
 							<div style="height: 10px">&nbsp;</div>
@@ -76,6 +83,7 @@
 					<tr>
 						<td colspan="4" align="center">
 							<div align="left">
+							<hr style="border-color:#13507A;border-width:thin;">
 								<h2>Database exploring</h2>
 							</div>
 						</td>
@@ -96,17 +104,19 @@
 						</td>
 					</tr>
 					
+					<#--	
 					<tr>
 						<td><span><h4>Explanation</h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta nisi ut ipsum sodales, at feugiat nisl accumsan.</span></td>
 						<td><span><h4>Explanation</h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta nisi ut ipsum sodales, at feugiat nisl accumsan.</span></td>
 						<td><span><h4>Explanation</h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta nisi ut ipsum sodales, at feugiat nisl accumsan.</span></td>
 						<td><span><h4>Explanation</h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta nisi ut ipsum sodales, at feugiat nisl accumsan.</span></td>
 					</tr>
-					
+					-->
 					
 					<tr>	
 						<td colspan="4" align="center">
 							<div align="left">
+							<hr style="border-color:#13507A;border-width:thin;">
 								<h2>Human-worm linking study</h2>
 							</div>
 						</td>
@@ -114,25 +124,26 @@
 					</tr>
 					<tr>
 						<td align="center">
-							<a href="?select=QtlFinderHD"><img height="100" width="100" src="clusterdemo/wormqtl/humanDisease.png" /><h3>Human Diseases</h3></a>
+							<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease"><img height="100" width="100" src="clusterdemo/wormqtl/humanDisease.png" /><h3>Human Diseases</h3></a>
 						</td>	
 						<td align="center">		
-							<a href="?select=GenomicRegion"><img height="100" width="100" src="clusterdemo/wormqtl/genomicRegion.png" /><h3>Genomic region</h3></a>
+							<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=genomicRegion"><img height="100" width="100" src="clusterdemo/wormqtl/genomicRegion.png" /><h3>Genomic region</h3></a>
 						</td>	
 						<td align="center">	
-							<a href="?select=QtlLoci"><img height="100" width="100" src="clusterdemo/wormqtl/QtlLoci.png" /><h3>QTL Loci</h3></a>
+							<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=qtlLoci"><img height="100" width="100" src="clusterdemo/wormqtl/QtlLoci.png" /><h3>QTL Loci</h3></a>
 						</td>	
 						<td align="center">
-							<a href="?select=ComparePhenotypes"><img height="100" width="100" src="clusterdemo/wormqtl/ComparePhenotypes.png" /><h3>Compare Phenotypes</h3></a>
+							<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=comparePhenotypes"><img height="100" width="100" src="clusterdemo/wormqtl/ComparePhenotypes.png" /><h3>Compare Phenotypes</h3></a>
 						</td>	
 					</tr>
+					<#--
 					<tr>
-						<td><span><h4>Explanation</h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta nisi ut ipsum sodales, at feugiat nisl accumsan.</span></td>
-						<td><span><h4>Explanation</h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta nisi ut ipsum sodales, at feugiat nisl accumsan.</span></td>
-						<td><span><h4>Explanation</h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta nisi ut ipsum sodales, at feugiat nisl accumsan.</span></td>
-						<td><span><h4>Explanation</h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta nisi ut ipsum sodales, at feugiat nisl accumsan.</span></td>
+						<td><span><h4>Search for human diseases</h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta nisi ut ipsum sodales, at feugiat nisl accumsan.</span></td>
+						<td><span><h4>Genomic regions of <i>C. elegans</i></h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta nisi ut ipsum sodales, at feugiat nisl accumsan.</span></td>
+						<td><span><h4>QTL's within the WormQTL database</h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta nisi ut ipsum sodales, at feugiat nisl accumsan.</span></td>
+						<td><span><h4>Compare disease phenotypes</h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin porta nisi ut ipsum sodales, at feugiat nisl accumsan.</span></td>
 					</tr>
-					
+					-->	
 					
 					<tr>
 						<td colspan="4">

@@ -44,6 +44,8 @@
 			<#else>
 				<#assign query = "">
 			</#if>
+			
+			<#assign allDataTypes = "__ALL__DATATYPES__SEARCH__KEY">
 			<#--====================================-->	
 		
 			<#-- Imports -->
@@ -51,33 +53,32 @@
 			<#import "../qtlfinder3/ShoppingCart.ftl" as sc>
 			<#import "../qtlfinder3/ProbeReport.ftl" as pr>
 			<#import "../qtlfinder3/MultiPlot.ftl" as mp>
+			<#import "../qtlfinder3/ResultList.ftl" as rl>
 
 			<#-- Macro's -->
-			<@qtlFinder model=model screen=screen/>	
-			
-			<#if model.showResults>
-				<@rl.resultList model=model screen=screen />
-			</#if>
-			
-			<#if model.cartView>
+			<#if model.screenType == "shoppingCart">
 				<@sc.shoppingCart model=model screen=screen />
 			</#if>
-			
-			<#if model.report??>
-				<@pr.probeReport model=model screen=screen />
-			</#if>
-			
-			<#if model.multiplot??>
-				<@mp.multiPlot model=model screen=screen />
-			</#if>
-			
+			<#if model.screenType == "">	
+				<@qtlFinder model=model screen=screen/>	
+					
+				<#if model.showResults>
+					<@rl.resultList model=model screen=screen />
+				</#if>
+				
+				<#if model.report??>
+					<@pr.probeReport model=model screen=screen />
+				</#if>
+				
+				<#if model.multiplot??>
+					<@mp.multiPlot model=model screen=screen />
+				</#if>
+			</#if>	
 		</div>
 	</form>
 </#macro>
 
 <#macro qtlFinder model screen>
-	<#assign allDataTypes = "__ALL__DATATYPES__SEARCH__KEY">
-	
 	<br><br>
 	
 	<table>
