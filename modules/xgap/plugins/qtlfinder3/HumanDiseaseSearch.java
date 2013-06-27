@@ -55,7 +55,5 @@ public class HumanDiseaseSearch
 		{
 			model.getHits().put(p.getName(), p);
 		}
-
-		model.setShoppingCart(model.getHits());
 	}
 }
