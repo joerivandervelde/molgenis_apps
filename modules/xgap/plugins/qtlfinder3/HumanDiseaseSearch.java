@@ -1,15 +1,16 @@
 package plugins.qtlfinder3;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.molgenis.framework.db.Database;
 import org.molgenis.framework.db.QueryRule;
 import org.molgenis.framework.db.QueryRule.Operator;
-import org.molgenis.pheno.ObservationElement;
 import org.molgenis.util.Entity;
 import org.molgenis.wormqtl.etc.HypergeometricTest;
 import org.molgenis.xgap.Gene;
+import org.molgenis.xgap.Probe;
 
 public class HumanDiseaseSearch
 {
@@ -28,15 +29,12 @@ public class HumanDiseaseSearch
 	public void diseaseSearch(QtlFinderHDModel model, Database db) throws Exception
 	{
 		model.setCartView(false);
-		model.setShortenedQuery(null);
-		model.setMultiplot(null);
-		model.setReport(null);
-		model.setQtls(null);
 		model.setShowResults(true);
 
 		model.setHits(new HashMap<String, Entity>());
 		model.setProbeToGene(new HashMap<String, Gene>());
 
+		List<Probe> probesInRegion = new ArrayList<Probe>();
 		HypergeometricTest hg = new HypergeometricTest();
 
 		int proteinCount = model.getHumanToWorm().retrieve(model.getDisease());
@@ -50,14 +48,13 @@ public class HumanDiseaseSearch
 
 		// Call the database with the list of worm genes to
 		// get normal shopping cart view with probes to shop
-		List<? extends Entity> probes = db.find(ObservationElement.class, new QueryRule(ObservationElement.NAME,
-				Operator.IN, wormGenes));
+		probesInRegion = db.find(Probe.class, new QueryRule(Probe.SYMBOL, Operator.IN, wormGenes));
 
-		probes = db.load((Class) ObservationElement.class, probes);
-
-		for (Entity p : probes)
+		for (Probe p : probesInRegion)
 		{
-			model.getHits().put(p.get("name").toString(), p);
+			model.getHits().put(p.getName(), p);
 		}
+
+		model.setShoppingCart(model.getHits());
 	}
 }

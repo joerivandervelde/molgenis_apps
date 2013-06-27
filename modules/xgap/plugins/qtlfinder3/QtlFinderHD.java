@@ -51,7 +51,6 @@ public class QtlFinderHD extends QtlFinder2
 		{
 			this.model.setScreenType(request.getString("screen"));
 			this.model.setCartView(false);
-			this.model.setMultiplot(null);
 			this.model.setShowResults(false);
 		}
 		if (request.getString("__action") != null)

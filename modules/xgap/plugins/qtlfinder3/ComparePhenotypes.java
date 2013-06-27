@@ -1,6 +1,9 @@
 package plugins.qtlfinder3;
 
+import java.util.List;
+
 import org.molgenis.framework.ui.ScreenModel;
+import org.molgenis.wormqtl.etc.HypergeometricTest;
 
 public class ComparePhenotypes
 {
@@ -22,6 +25,28 @@ public class ComparePhenotypes
 	public void comparePhenotypes(QtlFinderHDModel model, ScreenModel screenModel, String humanPhenotype,
 			String wormPhenotype) throws Exception
 	{
+		Integer wormPhenoGeneNumber = model.getHumanToWorm().getWormToPhenotype().get(wormPhenotype).size();
+		Integer humanPhenoGeneNumber = model.getHumanToWorm().retrieve(humanPhenotype);
+		Integer numberOfOrthologs = 4988;
+		Integer numberOfOverlappingGenes = 0;
+
+		List<String> wormGenesForThisWormPhenotype = model.getHumanToWorm().getWormToPhenotype().get(wormPhenotype);
+		List<String> wormGenesForThisHumanPhenotype = model.getHumanToWorm().convert(humanPhenotype);
+
+		for (String gene : wormGenesForThisWormPhenotype)
+		{
+			if (wormGenesForThisHumanPhenotype.contains(gene))
+			{
+				numberOfOverlappingGenes++;
+			}
+		}
+
+		HypergeometricTest hg = new HypergeometricTest();
+
+		model.setHyperTestProbability(hg.hyperGeometricTest(numberOfOrthologs - wormPhenoGeneNumber, numberOfOrthologs,
+				humanPhenoGeneNumber, numberOfOverlappingGenes));
+
+		System.out.println(numberOfOverlappingGenes);
 
 	}
 }

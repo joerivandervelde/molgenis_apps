@@ -177,6 +177,7 @@ public class QtlFinder2 extends PluginModel<Entity>
 					permaLink.deleteCharAt(permaLink.length() - 1);
 
 					this.model.setPermaLink(permaLink.toString());
+
 					this.model.setScreenType("");
 
 				}

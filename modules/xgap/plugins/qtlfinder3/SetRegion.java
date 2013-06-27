@@ -70,5 +70,7 @@ public class SetRegion
 				model.getGeneAssociatedDiseases().put(myList.get(0), myList.subList(1, myList.size()));
 			}
 		}
+
+		model.setShoppingCart(model.getHits());
 	}
 }
