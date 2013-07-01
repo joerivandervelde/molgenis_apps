@@ -30,7 +30,7 @@
 		<tr>
 			<td colspan="3" height="70" align="center" style="padding-top:20px;">
 				<span style="font-size:12px;">(<i>for example</i>: Selecting primary breast cancer or celiac disease)<br>
-				Gene hits, for example on <a href="http://www.geneontology.org/">Geno Ontology</a> or anatomy terms, will show the probes and related terms for the genes that are orthologous to the human genes associated with primary breast cancer.
+				Gene hits, for example on <a href="http://www.geneontology.org/">Geno Ontology</a> or anatomy terms, will show the probes and related terms for the genes that are orthologous to the human genes associated with the selected disease.
 				</span>
 			</td>
 		</tr>
