@@ -87,6 +87,7 @@ public class QtlFinder2 extends PluginModel<Entity>
 
 	public void handleRequest(Database db, MolgenisRequest request)
 	{
+
 		if (request.getString("screen") != null)
 		{
 			this.model.setScreenType(request.getString("screen"));
@@ -179,7 +180,6 @@ public class QtlFinder2 extends PluginModel<Entity>
 					this.model.setPermaLink(permaLink.toString());
 
 					this.model.setScreenType("");
-
 				}
 
 				if (action.equals("emptyShoppingCart"))

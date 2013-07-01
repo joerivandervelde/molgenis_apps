@@ -87,12 +87,11 @@
 			<#if model.multiplot??>
 				<@mp.multiPlot model=model screen=screen />
 			</#if>
-		
 			
+			<#if model.screenType == "showOverlapTable">
+				<@or.overlapResult model = model screen = screen />	
+			</#if>
 			
-			
-			<#-- <@or.overlapResult model = model screen = screen /> -->
-				
 		</div>
 	</form>
 </#macro>

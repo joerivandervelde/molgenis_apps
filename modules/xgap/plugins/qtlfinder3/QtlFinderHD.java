@@ -167,6 +167,25 @@ public class QtlFinderHD extends QtlFinder2
 						os.orthologSearch(humanGeneQuery, model, db);
 					}
 
+					if (action.equals("plotOverlap"))
+					{
+						this.model.setGenes(new ArrayList<String>());
+
+						for (Entity h : this.model.getHits().values())
+						{
+							if (h.getValues().get("symbol").toString().startsWith("A_"))
+							{
+								this.model.getGenes().add(h.getValues().get("reportsFor_name").toString());
+							}
+							else
+							{
+								this.model.getGenes().add(h.getValues().get("symbol").toString());
+							}
+						}
+
+						this.model.setScreenType("showOverlapTable");
+					}
+
 					// Reset
 					if (action.equals("reset"))
 					{

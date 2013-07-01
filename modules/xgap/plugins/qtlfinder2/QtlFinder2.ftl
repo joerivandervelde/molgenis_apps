@@ -59,6 +59,7 @@
 			<#if model.screenType == "shoppingCart">
 				<@sc.shoppingCart model=model screen=screen />
 			</#if>
+			
 			<#if model.screenType == "">	
 				<@qtlFinder model=model screen=screen/>	
 					

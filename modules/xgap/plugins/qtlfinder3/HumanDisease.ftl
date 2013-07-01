@@ -1,6 +1,6 @@
 <#macro humanDisease model screen>	
 <#---------------DISEASE SELECTION DROPDOWN BAR-------------->
-	<table>
+	<table align="center">
 		<tr>
 			<td colspan="3" height="10" align="center">
 				&nbsp;
@@ -15,7 +15,7 @@
 					</#list>
 				</select>
 			</td>
-			<td width="290">
+			<td width="290" style="padding-left:10px;">
 				<div class="buttons">
 					<button style="color:blue;" type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__diseaseSearch'; 
 					document.forms.${screen.name}.submit();"><img src="generated-res/img/recordview.png" alt=""/>Search</button>
@@ -29,8 +29,11 @@
 		</tr>
 		<tr>
 			<td colspan="3" height="70" align="center" style="padding-top:20px;">
-				<span style="font-size:12px;">Search for worm genes via human disease worm gene ortholog linking.</span><br/> 
+				<span style="font-size:12px;">(<i>for example</i>: Selecting primary breast cancer or celiac disease)<br>
+				Gene hits, for example on <a href="http://www.geneontology.org/">Geno Ontology</a> or anatomy terms, will show the probes and related terms for the genes that are orthologous to the human genes associated with the selected disease.
+				</span>
 			</td>
 		</tr>
 	</table>
+	<br>
 </#macro>

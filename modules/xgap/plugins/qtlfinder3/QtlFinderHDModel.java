@@ -56,6 +56,9 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// Worm phenotype that is selected for phenotype comparison
 	private List<String> selectedWormPhenotype;
 
+	// List of genes that are coded by the probes, to show in the result table
+	private List<String> genes;
+
 	public String getDataSet()
 	{
 		return dataSet;
@@ -164,5 +167,15 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	public void setPhenotype(String phenotype)
 	{
 		this.phenotype = phenotype;
+	}
+
+	public List<String> getGenes()
+	{
+		return genes;
+	}
+
+	public void setGenes(List<String> genes)
+	{
+		this.genes = genes;
 	}
 }

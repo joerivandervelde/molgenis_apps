@@ -22,7 +22,8 @@
 				<b>Article in NAR</b>
 			</font>
 		</td>
-		<a href="molgenis.do?__target=QtlFinderPublic2&select=QtlFinderPublic2&screen=shoppingCart" type="submit"><img align="right" height="40" width="60" src="clusterdemo/wormqtl/shopping_cart_logo.png" alt="Shopping Cart"></a>
+		<#-- disabled shopping cart button until further notice -->
+		<#--<a href="molgenis.do?__target=QtlFinderPublic2&select=QtlFinderPublic2&screen=shoppingCart" type="submit"><img align="right" height="40" width="60" src="clusterdemo/wormqtl/shopping_cart_logo.png" alt="Shopping Cart"></a>-->
 	</tr>
 </table>
 
