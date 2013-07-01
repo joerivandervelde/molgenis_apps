@@ -64,7 +64,7 @@
 					<tr>
 						<td colspan="4" align="center">
 							<div align="left">
-								<h2>WormQTL<sup>HD</sup> - A comprehensive web-based toolset for linking human disease to natural variation data in C. elegans</h2>
+								<h2>WormQTL<sup>HD</sup> - A comprehensive web database for linking human disease to natural variation data in C. elegans</h2>
 								WormQTL<sup>HD</sup> is an online scalable system for QTL exploration to service the worm community. WormQTL<sup>HD</sup> provides many publicly available datasets and welcomes submissions from other worm researchers.
 							</div>
 						</td>
