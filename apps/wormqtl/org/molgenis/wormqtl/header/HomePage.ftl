@@ -65,7 +65,7 @@
 						<td colspan="4" align="center">
 							<div align="left">
 								<h2>WormQTL<sup>HD</sup> - A comprehensive web-based toolset for linking human disease to natural variation data in C. elegans</h2>
-								WormQTL is an online scalable system for QTL exploration to service the worm community. WormQTL provides many publicly available datasets and welcomes submissions from other worm researchers.
+								WormQTL<sup>HD</sup> is an online scalable system for QTL exploration to service the worm community. WormQTL<sup>HD</sup> provides many publicly available datasets and welcomes submissions from other worm researchers.
 							</div>
 						</td>
 					</tr>
@@ -87,7 +87,7 @@
 					<tr>	
 						<td align="center">
 							<a class="tip" href="?select=QtlFinderPublic2"><img height="100" width="100" src="clusterdemo/wormqtl/FindQtls.png" /><h3>Find QTLs</h3>
-							<span>Explore the WormQTL database, search for genes you are interested in and find QTLs</span>
+							<span>Explore the WormQTL<sup>HD</sup> database, search for genes you are interested in and find QTLs</span>
 							</a>
 						</td>
 						<td align="center">
@@ -102,7 +102,7 @@
 						</td>
 						<td align="center">
 							<a class="tip" href="?select=Help"><img height="100" width="100" src="res/img/designgg/helpicon.gif" /><h3>Help</h3>
-							<span>Go here for a more indepth explanation on all the different functions provided by WormQTL</span>
+							<span>Go here for a more indepth explanation on all the different functions provided by WormQTL<sup>HD</sup></span>
 							</a>
 						</td>
 					</tr>
@@ -129,7 +129,7 @@
 						</td>	
 						<td align="center">	
 							<a class="tip" href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=qtlLoci"><img height="100" width="100" src="clusterdemo/wormqtl/QtlLoci.png" /><h3>QTL Loci</h3>
-							<span>Select specific (e)QTLs from the WormQTL database and find if any can be mapped to a human disease</span>
+							<span>Select specific (e)QTLs from the WormQTL<sup>HD</sup> database and find if any can be mapped to a human disease</span>
 							</a>
 						</td>	
 						<td align="center">
