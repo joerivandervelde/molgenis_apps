@@ -1,22 +1,23 @@
 <#macro regionSearch model screen>
 <#---------------------WORM REGION SEARCH-------------------->
-	<table>
+	<table align="center" width="800">
 		<tr>
 			<td colspan="3" height="10" align="center">
 				&nbsp;
 			</td>
 		</tr>
-		<tr width="200">
-			<td style="padding-left:25px;">
-				Start:<br /> <input title="starting index" id="regionStart" name="regionStart" type="text" size="10"/>
+		<tr>
+			<td style="padding-left:25px;" width="50">
+				Start bp:<br> <input title="starting index" id="regionStart" name="regionStart" type="text" size="10"/>
 			</td>
 		
-			<td style="padding-left:25px;">
-				End:<br /> <input title="ending index" id="regionEnd" name="regionEnd" type="text" size="10"/>
+
+			<td style="padding-left:10px;" width="50">
+				End bp:<br> <input title="ending index" id="regionEnd" name="regionEnd" type="text" size="10"/>
 			</td>	
 		
-			<td style="padding-left:25px;">
-				Chromosome:<br /> 
+			<td style="padding-left:10px;" width="50">
+				Chromosome:<br> 
 				<select id="regionChr" name="regionChr">
 					<option value="1">I</option>
 					<option value="2">II</option>
@@ -27,12 +28,12 @@
 					<option value="7">MtDNA</option>
 				</select>
 			</td>	
-	
-			<td width="290" style="padding-left: 30px;padding-top:10px;">
+		
+			<td style="padding-left: 10px;padding-top:10px;" width="200">
 				<div class="buttons">
-					<button type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__regionSearch';
+					<button style="color:blue;" type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__regionSearch';
 					document.forms.${screen.name}.submit();">
-					<img src="generated-res/img/recordview.png" alt=""/>Submit</button>
+					<img src="generated-res/img/recordview.png" alt=""/>Search</button>
 				</div>	
 					
 				<div class="buttons">
@@ -42,13 +43,16 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan="3" height="70" style="padding-top:20px;padding-left:25px;">
-				<span style="font-size:12px;">Browse a region of a specific chromosome to find genes there</span>
-			</td>
+		<td colspan="3" height="10" align="center">
+			<br>
+			<span style="font-size:12px;">(<i>for example:</i> start bp = 1000, end bp = 25000, chromosome = 4)<br>
+			Gene hits, for example on <a href="http://www.geneontology.org/">Geno Ontology</a> or anatomy terms, will show the probes and related terms for the genes that are located in the selected region.
+			</span>
+		</td>
 		</tr>
 	</table>
-	
-	<input type="checkbox" id="QtlCheckBox" name="QtlCheckBox" onclick="allowQtlSearch();">QTL Region</option>
+	<br>
+	<#-- <input type="checkbox" id="QtlCheckBox" name="QtlCheckBox" onclick="allowQtlSearch();">QTL Region</option> -->
 	
 	<div id="elem" style="display:none;">
 		<table>

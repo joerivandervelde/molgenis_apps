@@ -9,7 +9,7 @@
 			</tr>
 		</table>		
 	</div>	
-
+	
 	<#-- RESULT TABLE -->
 	<table id="wormHumanTable"> 
 		<thead> 
@@ -21,30 +21,14 @@
 			</tr> 
 		</thead> 
 		<tbody> 
-			<tr> 
-			    <td>WBGene00000001</td> 
-			    <td>ENSP00000001</td> 
-			    <td>Cancer</td> 
-			    <td>1.29e-17</td> 
-			</tr> 
-			<tr> 
-			    <td>WBGene00000002</td> 
-			    <td>ENSP00000002</td> 
-			    <td>Cancer</td> 
-			    <td>1.29e-17</td> 
-			</tr> 
-			<tr> 
-			    <td>WBGene00000003</td> 
-			    <td>ENSP00000003</td> 
-			    <td>NA</td> 
-			    <td>NA</td> 
-			</tr> 
-			<tr> 
-			   <td>WBGene00000004</td> 
-			    <td>NA</td> 
-			    <td>NA</td> 
-			    <td>NA</td> 
-			</tr> 
+			<#list model.genes as gene>
+				<tr>
+				  	<td>${gene}</td> 
+				    <td></td> 
+				    <td></td> 
+				    <td>NA</td>
+				</tr> 
+			</#list>
 		</tbody> 
 	</table> 
 	

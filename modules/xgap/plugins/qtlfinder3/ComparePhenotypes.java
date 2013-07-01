@@ -43,9 +43,10 @@ public class ComparePhenotypes
 
 		HypergeometricTest hg = new HypergeometricTest();
 
-		model.setHyperTestProbability(hg.hyperGeometricTest(numberOfOrthologs - wormPhenoGeneNumber, numberOfOrthologs,
+		model.setHyperTestProbability(hg.hyperGeometricTest(numberOfOrthologs, numberOfOrthologs - wormPhenoGeneNumber,
 				humanPhenoGeneNumber, numberOfOverlappingGenes));
 
+		System.out.println(model.getHyperTestProbability());
 		System.out.println(numberOfOverlappingGenes);
 
 	}

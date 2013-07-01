@@ -22,7 +22,8 @@
 				<a target="_blank" href="http://nar.oxfordjournals.org/content/early/2012/11/23/nar.gks1124.abstract?sid=cc84651f-50d6-4473-a244-2840b04529b8"><b>Article in NAR</b></a>
 			</font>
 		</td>
-		<a href="molgenis.do?__target=QtlFinderPublic2&select=QtlFinderPublic2&screen=shoppingCart" type="submit"><img align="right" height="40" width="60" src="clusterdemo/wormqtl/shopping_cart_logo.png" alt="Shopping Cart"></a>
+		<#-- disabled shopping cart button until further notice -->
+		<#--<a href="molgenis.do?__target=QtlFinderPublic2&select=QtlFinderPublic2&screen=shoppingCart" type="submit"><img align="right" height="40" width="60" src="clusterdemo/wormqtl/shopping_cart_logo.png" alt="Shopping Cart"></a>-->
 	</tr>
 </table>
 

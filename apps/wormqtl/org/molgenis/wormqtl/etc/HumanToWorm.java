@@ -20,6 +20,7 @@ public class HumanToWorm
 	private LinkedHashMap<String, String> humanToWorm;
 	private LinkedHashMap<String, String> diseaseToProtein;
 	private LinkedHashMap<String, List<String>> wormToPhenotype;
+	private LinkedHashMap<String, String> wormToDisease;
 
 	public LinkedHashMap<String, List<String>> getDiseaseToHuman()
 	{
@@ -39,6 +40,16 @@ public class HumanToWorm
 	public LinkedHashMap<String, List<String>> getWormToPhenotype()
 	{
 		return wormToPhenotype;
+	}
+
+	public LinkedHashMap<String, String> getWormToDisease()
+	{
+		return wormToDisease;
+	}
+
+	public void setWormToDisease(LinkedHashMap<String, String> wormToDisease)
+	{
+		this.wormToDisease = wormToDisease;
 	}
 
 	/**
@@ -149,6 +160,7 @@ public class HumanToWorm
 				wormToPhenotype.get(disease).add(wormGene);
 			}
 		}
+
 	}
 
 	/**

@@ -21,38 +21,7 @@
 				</#if>
 			</#list>
 			
-			<style>
-			#browse	a {color:#13507A;}      
-			#browse a:visited {color:#13507A;}
-			#browse a:hover {color:#4682b4;}
-			#browse a:active {color:#0000FF;}
-			
-			#browse a.tip {
-   				text-decoration: none
-			}
-			
-			#browse a.tip:hover {
-			    position: relative
-			}
-			
-			#browse a.tip span {
-			    display: none
-			}
-			
-			#browse a.tip:hover span {
-			    border: #c0c0c0 1px dotted;
-			    padding: 5px 20px 5px 5px;
-			    display: block;
-			    z-index: 100;
-			    background: url(../images/status-info.png) #f0f0f0 no-repeat 100% 5%;
-			    left: 0px;
-			    margin: 10px;
-			    width: 250px;
-			    position: absolute;
-			    top: 10px;
-			    text-decoration: none
-			}
-			</style>
+			<@homepageStyle />
 			
 			<div align="center">
 				<table width="700px" id="browse">
@@ -95,7 +64,7 @@
 					<tr>
 						<td colspan="4" align="center">
 							<div align="left">
-								<h2>WormQTL - Public archive and analysis web portal for natural variation data in Caenorhabditis spp.</h2>
+								<h2>WormQTL<sup>HD</sup> - A comprehensive web-based toolset for linking human disease to natural variation data in C. elegans</h2>
 								WormQTL is an online scalable system for QTL exploration to service the worm community. WormQTL provides many publicly available datasets and welcomes submissions from other worm researchers.
 							</div>
 						</td>
@@ -186,4 +155,40 @@
 			</div>
 		</div>
 	</form>
+</#macro>
+
+
+<#macro homepageStyle>
+	<style>
+		#browse	a {color:#13507A;}      
+		#browse a:visited {color:#13507A;}
+		#browse a:hover {color:#4682b4;}
+		#browse a:active {color:#0000FF;}
+		
+		#browse a.tip {
+			text-decoration: none
+		}
+		
+		#browse a.tip:hover {
+		    position: relative
+		}
+		
+		#browse a.tip span {
+		    display: none
+		}
+		
+		#browse a.tip:hover span {
+		    border: #c0c0c0 1px dotted;
+		    padding: 5px 20px 5px 5px;
+		    display: block;
+		    z-index: 100;
+		    background: url(../images/status-info.png) #f0f0f0 no-repeat 100% 5%;
+		    left: 0px;
+		    margin: 10px;
+		    width: 250px;
+		    position: absolute;
+		    top: 10px;
+		    text-decoration: none
+		}
+	</style>
 </#macro>
