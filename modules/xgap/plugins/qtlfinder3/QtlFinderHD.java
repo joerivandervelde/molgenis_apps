@@ -74,6 +74,7 @@ public class QtlFinderHD extends QtlFinder2
 					if (action.equals("diseaseSearch"))
 					{
 						this.model.setDisease(request.getString("diseaseSelect"));
+						super.model.setScreenType("");
 
 						HumanDiseaseSearch hds = new HumanDiseaseSearch();
 						hds.diseaseSearch(model, db);
@@ -82,6 +83,7 @@ public class QtlFinderHD extends QtlFinder2
 					// Region search
 					if (action.equals("regionSearch"))
 					{
+						super.model.setScreenType("");
 						if (request.getString("regionStart") == null || request.getString("regionEnd") == null)
 						{
 							this.setMessages(new ScreenMessage("Please fill in a starting and ending point "
@@ -103,6 +105,7 @@ public class QtlFinderHD extends QtlFinder2
 					// QTL search
 					if (action.equals("QtlSearch"))
 					{
+						super.model.setScreenType("");
 						if (request.getInt("QtlRegionStart") == null || request.getInt("QtlRegionEnd") == null)
 						{
 							this.setMessages(new ScreenMessage("Please fill in a starting and ending point "
@@ -125,6 +128,7 @@ public class QtlFinderHD extends QtlFinder2
 					// QTL search per probe
 					if (action.equals("traitRegionSearch"))
 					{
+						super.model.setScreenType("");
 						if (request.getString("traitInput") == null)
 						{
 							this.setMessages(new ScreenMessage("Please fill in a trait in the form"
@@ -145,17 +149,16 @@ public class QtlFinderHD extends QtlFinder2
 					// Phenotype comparison
 					if (action.equals("comparePhenotypes"))
 					{
-						String humanPhenotype = request.getString("humanPhenotype");
-						String wormPhenotype = request.getString("wormPhenotype");
+						this.model.setSelectedWormPhenotype(request.getString("wormPhenotype"));
 
 						ComparePhenotypes cp = new ComparePhenotypes();
-						cp.comparePhenotypes(model, this.getModel(), humanPhenotype, wormPhenotype);
-
+						cp.comparePhenotypes(model, this.getModel(), this.model.getSelectedWormPhenotype());
 					}
 
 					// Ortholog Search
 					if (action.equals("humanGeneSearch"))
 					{
+						super.model.setScreenType("");
 						String[] humanGeneQuery = request.getString("enspIds").split(", ");
 						if (humanGeneQuery.length == 0)
 						{
@@ -201,6 +204,7 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.setProbeToGene(null);
 						this.model.setShowTable(false);
 						this.model.setShowResults(false);
+						this.model.setAllOverlaps(null);
 					}
 				}
 
@@ -292,11 +296,6 @@ public class QtlFinderHD extends QtlFinder2
 				this.model.setDataSet(this.model.getDataSets().get(0));
 			}
 
-			if (this.model.getPhenotype() == null)
-			{
-				this.model.setPhenotype(this.model.getHumanToWorm().getWormToPhenotype().keySet().iterator().next());
-			}
-
 			if (model.getShoppingCart() == null)
 			{
 				this.model.setShoppingCart(new HashMap<String, Entity>());
@@ -326,6 +325,13 @@ public class QtlFinderHD extends QtlFinder2
 			{
 				this.model.setScreenType("humanDisease");
 			}
+
+			if (this.model.getSelectedWormPhenotype() == null)
+			{
+				this.model.setSelectedWormPhenotype(this.model.getHumanToWorm().getWormToPhenotype().keySet()
+						.iterator().next());
+			}
+
 		}
 		catch (Exception e)
 		{

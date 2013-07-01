@@ -1,5 +1,5 @@
 <#macro overlapResult model screen>
-	<#-- RESULT SCREEN WHEN SELECTING WORM HUMAN PLOT 	-->
+	<#-- RESULT SCREEN WHEN SELECTING WORM HUMAN PLOT 
 	<div id="hyperTest" style= "float:left;">
 		<table >
 			<tr style="">
@@ -9,7 +9,7 @@
 			</tr>
 		</table>		
 	</div>	
-	
+		-->
 	<#-- RESULT TABLE -->
 	<table id="wormHumanTable"> 
 		<thead> 

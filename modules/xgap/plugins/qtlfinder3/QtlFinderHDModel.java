@@ -5,6 +5,7 @@ package plugins.qtlfinder3;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.molgenis.wormqtl.etc.HumanToWorm;
 import org.molgenis.wormqtl.etc.HypergeometricTest;
@@ -25,9 +26,6 @@ public class QtlFinderHDModel extends QtlFinderModel2
 
 	// The disease that is selected by the user
 	private String disease;
-
-	// The phenotype that is selected by the user
-	private String phenotype;
 
 	// List with data sets from the database that has Lod scores for QTLs
 	private List<String> dataSets;
@@ -54,10 +52,14 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	private Boolean showTable;
 
 	// Worm phenotype that is selected for phenotype comparison
-	private List<String> selectedWormPhenotype;
+	private String selectedWormPhenotype;
 
 	// List of genes that are coded by the probes, to show in the result table
 	private List<String> genes;
+
+	// Hash of human phenotypes and number of genes overlapping with the
+	// selected worm phenotype
+	private Map<String, Integer> allOverlaps;
 
 	public String getDataSet()
 	{
@@ -149,24 +151,14 @@ public class QtlFinderHDModel extends QtlFinderModel2
 		this.showTable = showTable;
 	}
 
-	public List<String> getSelectedWormPhenotype()
+	public String getSelectedWormPhenotype()
 	{
 		return selectedWormPhenotype;
 	}
 
-	public void setSelectedWormPhenotype(List<String> selectedWormPhenotype)
+	public void setSelectedWormPhenotype(String selectedWormPhenotype)
 	{
 		this.selectedWormPhenotype = selectedWormPhenotype;
-	}
-
-	public String getPhenotype()
-	{
-		return phenotype;
-	}
-
-	public void setPhenotype(String phenotype)
-	{
-		this.phenotype = phenotype;
 	}
 
 	public List<String> getGenes()
@@ -178,4 +170,15 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	{
 		this.genes = genes;
 	}
+
+	public Map<String, Integer> getAllOverlaps()
+	{
+		return allOverlaps;
+	}
+
+	public void setAllOverlaps(Map<String, Integer> allOverlaps)
+	{
+		this.allOverlaps = allOverlaps;
+	}
+
 }
