@@ -24,7 +24,7 @@
 
 /**shade header*/
 .shadeHeader,.leftNavigationSelected,.navigationSelected,.form_header, td.submenuitem:hover {
-	background: #13507A;
+	background: #182644;
 	color: #FFFFFF;
 }
 
@@ -35,7 +35,7 @@
 }
 
 .submenuitem{
-	h: expression(onmouseover=new Function("this.style.backgroundColor='#13507A'; this.style.color='#fff';"),
+	h: expression(onmouseover=new Function("this.style.backgroundColor='#182644'; this.style.color='#fff';"),
                        onmouseout=new Function("this.style.backgroundColor='#65A5D1'; this.style.color='black';"));	
 	/*ie hack for td.submenuitem:hover*/
 	
@@ -44,7 +44,7 @@
 /**shade borders*/
 .shadeBorder,.leftNavigationSelected,.navigationSelected,.formscreen,.form_new,.form_filter,.popup, .form_menu 
 {
-	border-color: #13507A;
+	border-color: #182644;
 	
 }
 
