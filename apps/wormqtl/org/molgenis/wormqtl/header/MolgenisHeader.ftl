@@ -8,7 +8,7 @@
 
 <div style="height:10px;">&nbsp;</div>
 
-<a href="molgenis.do?select=Home"><img src="clusterdemo/bg/banerHD.png" /></a>
+<a href="molgenis.do?select=Home"><img src="clusterdemo/bg/banerHD_noxqtl.png" /></a>
 
 <table style="width: 100%;">
 	<tr>
