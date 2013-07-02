@@ -40,7 +40,7 @@
 		</tr>
 		<tr>
 			<td colspan="3" height="10" align="center">
-				<br><span style="font-size:12px;">(<i>for example:</i> Probe = WSU2, LOD threshold = 4, data set = age1_qtl)<br>
+				<br><span style="font-size:12px;">(<i>for example:</i> Probe = WSU3456, LOD threshold = 1, data set = age1_qtl)<br>
 				Gene hits, for example on <a href="http://www.geneontology.org/">Geno Ontology</a> or anatomy terms, will show the probes that are located inside the region
 				that is showing a QTL above the given threshold. 
 				</span>

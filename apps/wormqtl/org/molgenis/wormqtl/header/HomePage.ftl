@@ -64,7 +64,7 @@
 					<tr>
 						<td colspan="4" align="center">
 							<div align="left">
-								<h2>WormQTL<sup>HD</sup> - A comprehensive web-based toolset for linking human disease to natural variation data in C. elegans</h2>
+								<h2>WormQTL<sup>HD</sup> - A comprehensive web database for linking human disease to natural variation data in C. elegans</h2>
 								WormQTL<sup>HD</sup> is an online scalable system for QTL exploration to service the worm community. WormQTL<sup>HD</sup> provides many publicly available datasets and welcomes submissions from other worm researchers.
 							</div>
 						</td>
@@ -75,6 +75,38 @@
 						</td>
 					</tr>
 				
+					<tr>	
+						<td colspan="4" align="center">
+							<div align="left">
+							<hr style="border-color:#13507A;border-width:thin;">
+								<h2>Human-worm linking study</h2>
+							</div>
+						</td>
+							
+					</tr>
+					
+					<tr>
+						<td align="center">
+							<a class="tip" href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease"><img height="100" width="100" src="clusterdemo/wormqtl/humanDisease.png" /><h3>Human Diseases</h3>
+							<span>Explore novel causal genes for a human phenotype (disease) of interest by using worm (e)QTL findings</span>
+							</a>
+						</td>	
+						<td align="center">		
+							<a class="tip" href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=genomicRegion"><img height="100" width="100" src="clusterdemo/wormqtl/genomicRegion.png" /><h3>Genomic region</h3>
+							<span>Select regions of the worm genome and link (e)QTLs to human disease phenotypes</span>
+							</a>
+						</td>	
+						<td align="center">	
+							<a class="tip" href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=qtlLoci"><img height="100" width="100" src="clusterdemo/wormqtl/QtlLoci.png" /><h3>QTL Loci</h3>
+							<span>Select specific (e)QTLs from the WormQTL<sup>HD</sup> database and find if any can be mapped to a human disease</span>
+							</a>
+						</td>	
+						<td align="center">
+							<a class="tip" href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=comparePhenotypes"><img height="100" width="100" src="clusterdemo/wormqtl/ComparePhenotypes.png" /><h3>Compare Phenotypes</h3>
+							<span>Compare human and worm phenotypes and look for evolutionary conserved gene networks</span></a>
+						</td>	
+					</tr>
+					
 					<tr>
 						<td colspan="4" align="center">
 							<div align="left">
@@ -105,37 +137,6 @@
 							<span>Go here for a more indepth explanation on all the different functions provided by WormQTL<sup>HD</sup></span>
 							</a>
 						</td>
-					</tr>
-					
-					<tr>	
-						<td colspan="4" align="center">
-							<div align="left">
-							<hr style="border-color:#13507A;border-width:thin;">
-								<h2>Human-worm linking study</h2>
-							</div>
-						</td>
-							
-					</tr>
-					<tr>
-						<td align="center">
-							<a class="tip" href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease"><img height="100" width="100" src="clusterdemo/wormqtl/humanDisease.png" /><h3>Human Diseases</h3>
-							<span>Explore novel causal genes for a human phenotype (disease) of interest by using worm (e)QTL findings</span>
-							</a>
-						</td>	
-						<td align="center">		
-							<a class="tip" href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=genomicRegion"><img height="100" width="100" src="clusterdemo/wormqtl/genomicRegion.png" /><h3>Genomic region</h3>
-							<span>Select regions of the worm genome and link (e)QTLs to human disease phenotypes</span>
-							</a>
-						</td>	
-						<td align="center">	
-							<a class="tip" href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=qtlLoci"><img height="100" width="100" src="clusterdemo/wormqtl/QtlLoci.png" /><h3>QTL Loci</h3>
-							<span>Select specific (e)QTLs from the WormQTL<sup>HD</sup> database and find if any can be mapped to a human disease</span>
-							</a>
-						</td>	
-						<td align="center">
-							<a class="tip" href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=comparePhenotypes"><img height="100" width="100" src="clusterdemo/wormqtl/ComparePhenotypes.png" /><h3>Compare Phenotypes</h3>
-							<span>Compare human and worm phenotypes and look for evolutionary conserved gene networks</span></a>
-						</td>	
 					</tr>
 					
 					<tr>
