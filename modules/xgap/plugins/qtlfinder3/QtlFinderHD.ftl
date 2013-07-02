@@ -57,6 +57,7 @@
 			<#import "../qtlfinder3/OverlapResults.ftl" as or>
 			<#import "../qtlfinder3/ShoppingCart.ftl" as sc>
 			<#import "../qtlfinder3/MultiPlot.ftl" as mp>
+			<#import "../qtlfinder3/CompareResults.ftl" as cr>
 			
 			<#-- macro's-->	
 			<@styleAndScript />
@@ -76,6 +77,7 @@
 			
 			<#if model.screenType == "comparePhenotypes">
 				<@cp.comparePhenotypes model = model screen = screen /> 
+				<@cr.compareResults model = model screen = screen />
 			</#if>
 		
 			<#if model.screenType == "shoppingCart">
@@ -83,6 +85,7 @@
 			</#if>
 			
 			<@rl.resultList model = model screen = screen/>
+			
 			
 			<#if model.multiplot??>
 				<@mp.multiPlot model=model screen=screen />

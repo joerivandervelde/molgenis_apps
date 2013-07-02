@@ -22,7 +22,7 @@
 			<td width="200" style="padding-left:25px;">
 				<select class=" ui-widget-content ui-corner-all" id="wormPhenotype" name="wormPhenotype"  style="width:500px;">
 					<#list model.humanToWorm.wormToPhenotype?keys as phenotype>
-						<option value="${phenotype}" <#if model.phenotype == phenotype>selected="selected"</#if>
+						<option value="${phenotype}" <#if model.selectedWormPhenotype == phenotype>selected="selected"</#if>
 						>${phenotype} </option>
 					</#list>	
 				</select>
