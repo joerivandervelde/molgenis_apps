@@ -21,24 +21,12 @@
 			</tr> 
 		</thead> 
 		<tbody> 
-			
-		
-			<#list model.humanToWorm.humanToWorm?keys as key>
-				<#list model.genes as gene>
-					<#list model.humanToWorm.linkToDisease(gene) as disease>
-						${disease}
-				
-						<#if gene == model.humanToWorm.humanToWorm[key]>
-							<tr>
-					  			<td>${gene}</td> 
-							    <td>${key}</td> 
-							    <td></td> 
-							    <td>NA</td>
-							</tr>		
-						</#if>	
-					</#list>	
-				</#list> 
-			</#list>
+			<tr>
+				<td>
+				<td>
+				<td>
+				<td>
+			<tr>	
 		</tbody> 
 	</table> 
 	

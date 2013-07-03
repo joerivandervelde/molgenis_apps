@@ -61,6 +61,10 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// selected worm phenotype
 	private Map<String, Integer> allOverlaps;
 
+	// Hash of human phenotype found and the p value after hyper testing
+	// (Compare phenotypes)
+	private Map<String, Double> allProbabilities;
+
 	public String getDataSet()
 	{
 		return dataSet;
@@ -179,6 +183,16 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	public void setAllOverlaps(Map<String, Integer> allOverlaps)
 	{
 		this.allOverlaps = allOverlaps;
+	}
+
+	public Map<String, Double> getAllProbabilities()
+	{
+		return allProbabilities;
+	}
+
+	public void setAllProbabilities(Map<String, Double> allProbabilities)
+	{
+		this.allProbabilities = allProbabilities;
 	}
 
 }
