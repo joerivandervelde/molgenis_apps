@@ -172,21 +172,11 @@ public class QtlFinderHD extends QtlFinder2
 
 					if (action.equals("plotOverlap"))
 					{
-						this.model.setGenes(new ArrayList<String>());
-
-						for (Entity h : this.model.getHits().values())
-						{
-							if (h.getValues().get("symbol").toString().startsWith("A_"))
-							{
-								this.model.getGenes().add(h.getValues().get("reportsFor_name").toString());
-							}
-							else
-							{
-								this.model.getGenes().add(h.getValues().get("symbol").toString());
-							}
-						}
+						PlotOverlap po = new PlotOverlap();
+						po.plotOverlap(model, db);
 
 						this.model.setScreenType("showOverlapTable");
+
 					}
 
 					// Reset

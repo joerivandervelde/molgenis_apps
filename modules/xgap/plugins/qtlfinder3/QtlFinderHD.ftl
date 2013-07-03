@@ -86,7 +86,6 @@
 			
 			<@rl.resultList model = model screen = screen/>
 			
-			
 			<#if model.multiplot??>
 				<@mp.multiPlot model=model screen=screen />
 			</#if>
@@ -102,7 +101,7 @@
 <#macro browseSearch>
 	<table align="center" id="browse">
 		<tr>
-			<td align="center">
+			<td align="center" style="padding-left:0px;">
 				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease"><b>Human Diseases</b></a>
 			</td>	
 			<td align="center">		
