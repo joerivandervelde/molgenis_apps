@@ -54,6 +54,9 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// Worm phenotype that is selected for phenotype comparison
 	private String selectedWormPhenotype;
 
+	// Human phenotype that is selected for phenotype comparison
+	private String selectedHumanPhenotype;
+
 	// List of genes that are coded by the probes, to show in the result table
 	private List<String> genes;
 
@@ -64,6 +67,8 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// Hash of human phenotype found and the p value after hyper testing
 	// (Compare phenotypes)
 	private Map<String, Double> allProbabilities;
+
+	private Boolean showWorm;
 
 	public String getDataSet()
 	{
@@ -193,6 +198,26 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	public void setAllProbabilities(Map<String, Double> allProbabilities)
 	{
 		this.allProbabilities = allProbabilities;
+	}
+
+	public String getSelectedHumanPhenotype()
+	{
+		return selectedHumanPhenotype;
+	}
+
+	public void setSelectedHumanPhenotype(String selectedHumanPhenotype)
+	{
+		this.selectedHumanPhenotype = selectedHumanPhenotype;
+	}
+
+	public Boolean getShowWorm()
+	{
+		return showWorm;
+	}
+
+	public void setShowWorm(Boolean showWorm)
+	{
+		this.showWorm = showWorm;
 	}
 
 }
