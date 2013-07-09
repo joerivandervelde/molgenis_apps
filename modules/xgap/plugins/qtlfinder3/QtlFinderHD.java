@@ -146,13 +146,24 @@ public class QtlFinderHD extends QtlFinder2
 						}
 					}
 
-					// Phenotype comparison
-					if (action.equals("comparePhenotypes"))
+					// Phenotype comparison with worm list selection
+					if (action.equals("comparePhenotypesWorm"))
 					{
 						this.model.setSelectedWormPhenotype(request.getString("wormPhenotype"));
 
 						ComparePhenotypes cp = new ComparePhenotypes();
-						cp.comparePhenotypes(model, this.getModel(), this.model.getSelectedWormPhenotype());
+						cp.comparePhenotypesWorm(model, this.getModel(), this.model.getSelectedWormPhenotype());
+						this.model.setShowWorm(true);
+					}
+
+					// Phenotype comparison with human list selection
+					if (action.equals("comparePhenotypesHuman"))
+					{
+						this.model.setSelectedHumanPhenotype(request.getString("humanPhenotype"));
+
+						ComparePhenotypes cp = new ComparePhenotypes();
+						cp.comparePhenotypesHuman(model, this.getModel(), this.model.getSelectedHumanPhenotype());
+						this.model.setShowWorm(false);
 					}
 
 					// Ortholog Search
@@ -319,6 +330,12 @@ public class QtlFinderHD extends QtlFinder2
 			if (this.model.getSelectedWormPhenotype() == null)
 			{
 				this.model.setSelectedWormPhenotype(this.model.getHumanToWorm().getWormToPhenotype().keySet()
+						.iterator().next());
+			}
+
+			if (this.model.getSelectedHumanPhenotype() == null)
+			{
+				this.model.setSelectedHumanPhenotype(this.model.getHumanToWorm().getDiseaseToHuman().keySet()
 						.iterator().next());
 			}
 
