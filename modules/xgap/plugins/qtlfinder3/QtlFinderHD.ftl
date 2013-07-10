@@ -147,7 +147,6 @@
 			background:#D8D8D8;
 		}
 		
-		
 		#browse td {padding-left:15px;padding-top:5px;}
 		#browse	a {color:#13507A;}      
 		#browse a:visited {color:#13507A;}
