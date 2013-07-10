@@ -42,6 +42,7 @@ import org.molgenis.xgap.Transcript;
 
 import plugins.qtlfinder.QTLInfo;
 import plugins.qtlfinder.QTLMultiPlotResult;
+import plugins.qtlfinder3.PlotOverlap;
 import plugins.qtlfinder3.QtlFinderHDModel;
 import plugins.reportbuilder.Report;
 import plugins.reportbuilder.ReportBuilder;
@@ -168,18 +169,23 @@ public class QtlFinder2 extends PluginModel<Entity>
 
 				if (action.equals("plotShoppingCart"))
 				{
+
 					plotFromShoppingCart(db);
+
+					PlotOverlap po = new PlotOverlap();
 
 					StringBuilder permaLink = new StringBuilder();
 					for (Entity e : this.model.getShoppingCart().values())
 					{
 						permaLink.append(e.get(ObservableFeature.ID) + ",");
 					}
-					permaLink.deleteCharAt(permaLink.length() - 1);
 
+					permaLink.deleteCharAt(permaLink.length() - 1);
 					this.model.setPermaLink(permaLink.toString());
 
-					this.model.setScreenType("");
+					po.plotOverlap(model, db);
+
+					model.setShowResults(false);
 				}
 
 				if (action.equals("emptyShoppingCart"))

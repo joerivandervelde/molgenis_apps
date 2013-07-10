@@ -19,7 +19,7 @@
 				<div class="buttons">
 					<button style="color:blue;" type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__diseaseSearch'; 
 					document.forms.${screen.name}.submit();"><img src="generated-res/img/recordview.png" alt=""/>Search</button>
-		 		</div>				
+		 		</div>			
 		 		
 				<div class="buttons">
 		 			<button type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__reset'; 

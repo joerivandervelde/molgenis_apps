@@ -60,7 +60,6 @@
 			<#import "../qtlfinder3/CompareResults.ftl" as cr>
 			
 			<#-- macro's-->	
-			<@styleAndScript />
 			<@browseSearch />	
 			
 			<#if model.screenType == "humanDisease">
@@ -86,15 +85,11 @@
 			
 			<@rl.resultList model = model screen = screen/>
 			
-			
 			<#if model.multiplot??>
 				<@mp.multiPlot model=model screen=screen />
 			</#if>
 			
-			<#if model.screenType == "showOverlapTable">
-				<@or.overlapResult model = model screen = screen />	
-			</#if>
-			
+			<@styleAndScript />
 		</div>
 	</form>
 </#macro>
@@ -102,7 +97,7 @@
 <#macro browseSearch>
 	<table align="center" id="browse">
 		<tr>
-			<td align="center">
+			<td align="center" style="padding-left:0px;">
 				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease"><b>Human Diseases</b></a>
 			</td>	
 			<td align="center">		
@@ -131,18 +126,7 @@
 			$("#diseaseSelect").chosen();
 			$("#humanPhenotype").chosen();
 			$("#wormPhenotype").chosen();
-		
-			<#-- QTL CHECK BOX -->
-			function allowQtlSearch()
-			{
-	  			if(document.getElementById('QtlCheckBox').checked){
-	    			var elem = document.getElementById("elem");
-					elem.style.display = "show";
-	  			}else{
-	    			elem.style.display = "none";
-	    		}	
-			}	
-		});
+		});		
 	</script>
 	
 	<#-- RESULT TABLE STYLE -->
@@ -162,7 +146,6 @@
 		table.dataTable tr.odd td.sorting_1 {
 			background:#D8D8D8;
 		}
-		
 		
 		#browse td {padding-left:15px;padding-top:5px;}
 		#browse	a {color:#13507A;}      

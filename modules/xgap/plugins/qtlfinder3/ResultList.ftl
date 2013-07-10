@@ -9,10 +9,7 @@
 					<#assign shopped = shopped+1>
 				</#if>
 			</#list>
-			<#if shopped gt 0 && shopped == model.hits?size>
-				<div class="buttons"><button type="submit" onclick="document.forms.${screen.name}.__action.value = 'gotoCart'; document.forms.${screen.name}.submit();"><img src="generated-res/img/listview.png" alt=""/> View cart (${model.shoppingCart?keys?size})</button></div>				
-				<br>
-			</#if>
+			
 			<div style="text-align:center;">
 				<h3>Found <#if model.hits?? && model.hits?size == 100>many<#else>${model.hits?size}</#if> hits.</h3>
 				
@@ -33,6 +30,22 @@
 				<#if shopped gt 0>
 					<#if shopped == model.hits?size>
 						<h4>All ${shopped} hits are currently in your cart.</h4>
+						
+						<div class="buttons">
+							<table align="center">
+								<tr>
+									<td>
+										<button type="submit" onclick="document.forms.${screen.name}.__action.value = 'gotoCart'; document.forms.${screen.name}.submit();"><img src="generated-res/img/listview.png" alt=""/> View cart (${model.shoppingCart?keys?size})</button>
+									</td>
+									<td>	
+										<div class="buttons"><button class="positive" type="submit" onclick="document.forms.${screen.name}.__action.value = 'plotShoppingCart'; document.forms.${screen.name}.submit();"><img src="clusterdemo/icons/icon_plaintext_plot.png" alt=""/> Plot cart now</button></div>
+									</td>
+									<td>	
+										<div class="buttons"><button class="positive" type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__plotOverlap'; document.forms.${screen.name}.submit();"><img src="clusterdemo/icons/icon_plaintext_plot.png" alt=""/> Plot Human Worm Overlap</button></div>
+									</td>	
+								</tr>
+							</table>	
+						</div>				
 					<#else>
 						<h4>Please note: ${shopped} hits are not shown because they are already in your cart.</h4>
 					</#if>

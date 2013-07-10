@@ -1,16 +1,7 @@
 <#macro overlapResult model screen>
-	<#-- RESULT SCREEN WHEN SELECTING WORM HUMAN PLOT 
-	<div id="hyperTest" style= "float:left;">
-		<table >
-			<tr style="">
-				<td style="padding-left:25px;padding-top:-15px">
-					<h4>Hypergeometric test results for <b>${model.disease}</b>: <u>${model.hyperTestProbability}</u></h4>
-				</td>
-			</tr>
-		</table>		
-	</div>	
-		-->
-	<#-- RESULT TABLE -->
+
+</body>
+</html>
 	<table id="wormHumanTable"> 
 		<thead> 
 			<tr> 
@@ -21,15 +12,54 @@
 			</tr> 
 		</thead> 
 		<tbody> 
-			<#list model.genes as gene>
-				<tr>
-				  	<td>${gene}</td> 
-				    <td></td> 
-				    <td></td> 
-				    <td>NA</td>
-				</tr> 
+			<#list model.humanToWorm.humanToWorm?keys as key>
+				<#list model.genes as gene>
+					<#if gene == model.humanToWorm.humanToWorm[key]>
+						<tr>
+				  			<td>${gene}</td> 
+						    <td><a href="http://www.ensembl.org/Homo_sapiens/Search/Results?species=Homo_sapiens;idx=;q=${key}" target="_blank">${key}</a></td> 
+						    <td>
+						    	<span style="font-size:16px;">
+						    		<#list model.humanToWorm.linkToDisease(gene) as a>
+							    		<#if a?starts_with("WBGene")>
+							    			<#--we do nothing, list has wbgene, disease, disease etc...-->
+							    		<#else>
+							    			<#if a == model.disease>
+							    				${a} 
+							    			</#if>	 
+							    		</#if>
+							    	</#list>
+							    </span>	
+							    
+							    <span id="showED${gene}" style="display:inline;">
+							    	<a style="color:blue;cursor:pointer;" onclick="extraDiseases${gene}.style.display = 'inline';showED${gene}.style.display = 'none'; hideED${gene}.style.display = 'inline'">more...</a>
+							    </span>
+							    <span id="hideED${gene}" style="display:none;">
+							    	<a style="color:blue;cursor:pointer;" onclick="extraDiseases${gene}.style.display = 'none';showED${gene}.style.display = 'inline'; hideED${gene}.style.display = 'none'">hide...</a>
+							    </span>
+							    <br>
+								<span id="extraDiseases${gene}" style="display:none;">
+									<#list  model.humanToWorm.linkToDisease(gene) as a>
+										<#if a == model.disease>
+											<#--we do nothing-->
+										<#elseif a?starts_with("WBGene")>
+											<#--we do nothing-->
+										<#else>
+											<#if a == model.humanToWorm.linkToDisease(gene)[model.humanToWorm.linkToDisease(gene)?size - 1]>
+												${a}
+											<#else>
+												${a},
+											</#if> 
+										</#if>
+									</#list>
+								</span>
+						    </td> 
+						    <td>NA</td>
+						</tr>		
+					</#if>	
+				</#list>
 			</#list>
 		</tbody> 
-	</table> 
-	
+	</table> 	
+	<br><br>
 </#macro>

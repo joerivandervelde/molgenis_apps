@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.molgenis.framework.ui.ScreenModel;
+import org.molgenis.wormqtl.etc.HypergeometricTest;
 
 public class ComparePhenotypes
 {
@@ -27,22 +28,26 @@ public class ComparePhenotypes
 	 * @param wormphenotype
 	 * @throws Exception
 	 * */
-	public void comparePhenotypes(QtlFinderHDModel model, ScreenModel screenModel, String wormPhenotype)
+	public void comparePhenotypesWorm(QtlFinderHDModel model, ScreenModel screenModel, String phenotype)
 			throws Exception
 	{
-		Integer wormPhenoGeneNumber = model.getHumanToWorm().getWormToPhenotype().get(wormPhenotype).size();
-		Integer numberOfOrthologs = 4988;
 		Integer numberOfOverlappingGenes;
 		Map<String, Integer> ao = new HashMap<String, Integer>();
+		Map<String, Double> dp = new HashMap<String, Double>();
 
-		List<String> wormGenesForThisWormPhenotype = model.getHumanToWorm().getWormToPhenotype().get(wormPhenotype);
+		List<String> wormGenesForThisWormPhenotype = model.getHumanToWorm().getWormToPhenotype().get(phenotype);
 		List<String> wormGenesForThisHumanPhenotype;
 
+		Integer wormPhenoGeneNumber = model.getHumanToWorm().getWormToPhenotype().get(phenotype).size();
+		Integer numberOfOrthologs = 30000;
+
+		HypergeometricTest hg = new HypergeometricTest();
+
 		// Go through all of the human disease phenotypes
-		for (String phenotype : model.getHumanToWorm().getDiseaseToHuman().keySet())
+		for (String thisPhenotype : model.getHumanToWorm().getDiseaseToHuman().keySet())
 		{
 			numberOfOverlappingGenes = 0;
-			wormGenesForThisHumanPhenotype = model.getHumanToWorm().convert(phenotype);
+			wormGenesForThisHumanPhenotype = model.getHumanToWorm().convert(thisPhenotype);
 
 			// Go through the list of genes associated with the human phenotype
 			// and keep count how many are overlapping with the genes associated
@@ -55,14 +60,58 @@ public class ComparePhenotypes
 				}
 			}
 
-			ao.put(phenotype, numberOfOverlappingGenes);
+			Double p = hg.hyperGeometricTest(numberOfOrthologs, wormPhenoGeneNumber,
+					model.getHumanToWorm().retrieve(thisPhenotype), numberOfOverlappingGenes);
+
+			ao.put(thisPhenotype, numberOfOverlappingGenes);
+			dp.put(thisPhenotype, p);
+
 		}
+
 		Map<String, Integer> sorted = sortByValues(ao);
-
-		System.out.println(ao);
-		System.out.println(sorted);
-
 		model.setAllOverlaps(sorted);
+		model.setAllProbabilities(dp);
+	}
+
+	public void comparePhenotypesHuman(QtlFinderHDModel model, ScreenModel screenModel, String phenotype)
+	{
+		Integer numberOfOverlappingGenes;
+		Map<String, Integer> ao = new HashMap<String, Integer>();
+		Map<String, Double> dp = new HashMap<String, Double>();
+
+		List<String> wormGenesForThisWormPhenotype;
+		List<String> wormGenesForThisHumanPhenotype = model.getHumanToWorm().getDiseaseToHuman().get(phenotype);
+
+		Integer humanPhenoGeneNumber = Integer.parseInt(model.getHumanToWorm().getDiseaseToProtein().get(phenotype));
+		Integer numberOfOrthologs = 30000;
+
+		HypergeometricTest hg = new HypergeometricTest();
+
+		for (String thisPhenotype : model.getHumanToWorm().getWormToPhenotype().keySet())
+		{
+			numberOfOverlappingGenes = 0;
+			wormGenesForThisWormPhenotype = model.getHumanToWorm().getWormToPhenotype().get(thisPhenotype);
+
+			for (String gene : wormGenesForThisHumanPhenotype)
+			{
+				if (wormGenesForThisWormPhenotype.contains(model.getHumanToWorm().getHumanToWorm().get(gene)))
+				{
+					numberOfOverlappingGenes++;
+				}
+			}
+
+			System.out.println(numberOfOverlappingGenes);
+
+			Double p = hg.hyperGeometricTest(numberOfOrthologs, wormGenesForThisWormPhenotype.size(),
+					humanPhenoGeneNumber, numberOfOverlappingGenes);
+
+			ao.put(thisPhenotype, numberOfOverlappingGenes);
+			dp.put(thisPhenotype, p);
+		}
+
+		Map<String, Integer> sorted = sortByValues(ao);
+		model.setAllOverlaps(sorted);
+		model.setAllProbabilities(dp);
 	}
 
 	public static <K extends Comparable, V extends Comparable> Map<K, V> sortByValues(Map<K, V> map)
