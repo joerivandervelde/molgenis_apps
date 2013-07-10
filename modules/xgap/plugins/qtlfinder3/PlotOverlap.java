@@ -12,7 +12,7 @@ public class PlotOverlap
 	{
 		Set<String> set = new HashSet<String>();
 
-		for (Entity h : model.getHits().values())
+		for (Entity h : model.getShoppingCart().values())
 		{
 			if (h.getValues().get("symbol").toString().startsWith("A_"))
 			{
