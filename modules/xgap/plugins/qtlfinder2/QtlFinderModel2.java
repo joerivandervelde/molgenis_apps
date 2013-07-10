@@ -3,6 +3,7 @@ package plugins.qtlfinder2;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.molgenis.util.Entity;
 import org.molgenis.xgap.Gene;
@@ -57,7 +58,7 @@ public class QtlFinderModel2
 	private String screenType;
 
 	// List of genes that are coded by the probes, to show in the result table
-	private List<String> genes;
+	private Set<String> genes;
 
 	public String getScreenType()
 	{
@@ -199,13 +200,13 @@ public class QtlFinderModel2
 		this.showResults = showResults;
 	}
 
-	public List<String> getGenes()
+	public Set<String> getGenes()
 	{
 		return genes;
 	}
 
-	public void setGenes(List<String> genes)
+	public void setGenes(Set<String> set)
 	{
-		this.genes = genes;
+		this.genes = set;
 	}
 }

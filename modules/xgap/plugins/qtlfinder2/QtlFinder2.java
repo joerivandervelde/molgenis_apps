@@ -169,20 +169,23 @@ public class QtlFinder2 extends PluginModel<Entity>
 
 				if (action.equals("plotShoppingCart"))
 				{
-					model.setShowResults(false);
+
 					plotFromShoppingCart(db);
 
 					PlotOverlap po = new PlotOverlap();
-					po.plotOverlap(model, db);
 
 					StringBuilder permaLink = new StringBuilder();
 					for (Entity e : this.model.getShoppingCart().values())
 					{
 						permaLink.append(e.get(ObservableFeature.ID) + ",");
 					}
-					permaLink.deleteCharAt(permaLink.length() - 1);
 
+					permaLink.deleteCharAt(permaLink.length() - 1);
 					this.model.setPermaLink(permaLink.toString());
+
+					po.plotOverlap(model, db);
+
+					model.setShowResults(false);
 				}
 
 				if (action.equals("emptyShoppingCart"))
