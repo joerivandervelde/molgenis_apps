@@ -33,10 +33,10 @@
 							    <br>	
 							    
 							    <span id="showED${gene}" style="display:inline;">
-							    	<a href="" onclick="extraDiseases${gene}.style.display = 'inline';showED${gene}.style.display = 'none'; hideED${gene}.style.display = 'inline'">more...</a>
+							    	<a style="color:blue;" onclick="extraDiseases${gene}.style.display = 'inline';showED${gene}.style.display = 'none'; hideED${gene}.style.display = 'inline'">more...</a>
 							    </span>
 							    <span id="hideED${gene}" style="display:none;">
-							    	<a href="" onclick="extraDiseases${gene}.style.display = 'none';showED${gene}.style.display = 'inline'; hideED${gene}.style.display = 'none'">hide...</a>
+							    	<a style="color:blue;" onclick="extraDiseases${gene}.style.display = 'none';showED${gene}.style.display = 'inline'; hideED${gene}.style.display = 'none'">hide...</a>
 							    </span>
 							    
 								<span id="extraDiseases${gene}" style="display:none;">
