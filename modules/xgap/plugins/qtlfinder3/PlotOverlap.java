@@ -21,7 +21,6 @@ public class PlotOverlap
 			{
 				model.getGenes().add(h.getValues().get("symbol").toString());
 			}
-
 		}
 	}
 }
