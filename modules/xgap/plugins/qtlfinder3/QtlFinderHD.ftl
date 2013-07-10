@@ -60,7 +60,6 @@
 			<#import "../qtlfinder3/CompareResults.ftl" as cr>
 			
 			<#-- macro's-->	
-			<@styleAndScript />
 			<@browseSearch />	
 			
 			<#if model.screenType == "humanDisease">
@@ -90,10 +89,7 @@
 				<@mp.multiPlot model=model screen=screen />
 			</#if>
 			
-			<#if model.screenType == "showOverlapTable">
-				<@or.overlapResult model = model screen = screen />	
-			</#if>
-			
+			<@styleAndScript />
 		</div>
 	</form>
 </#macro>
@@ -130,18 +126,16 @@
 			$("#diseaseSelect").chosen();
 			$("#humanPhenotype").chosen();
 			$("#wormPhenotype").chosen();
-		
-			<#-- QTL CHECK BOX -->
-			function allowQtlSearch()
-			{
-	  			if(document.getElementById('QtlCheckBox').checked){
-	    			var elem = document.getElementById("elem");
-					elem.style.display = "show";
-	  			}else{
-	    			elem.style.display = "none";
-	    		}	
-			}	
-		});
+			
+			function Toggle() {
+				var el = document.getElementById("ToggleTarget");
+				if (el.style.display == "block") {
+					el.style.display = "none";
+				}else {
+					el.style.display = "block";
+				}
+			}
+		});		
 	</script>
 	
 	<#-- RESULT TABLE STYLE -->
@@ -168,6 +162,8 @@
 		#browse a:visited {color:#13507A;}
 		#browse a:hover {color:#4682b4;}
 		#browse a:active {color:#0000FF;}
+		
+		#ToggleTarget {display: none;}
 		
 	</style>
 </#macro>

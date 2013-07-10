@@ -57,9 +57,6 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// Human phenotype that is selected for phenotype comparison
 	private String selectedHumanPhenotype;
 
-	// List of genes that are coded by the probes, to show in the result table
-	private List<String> genes;
-
 	// Hash of human phenotypes and number of genes overlapping with the
 	// selected worm phenotype
 	private Map<String, Integer> allOverlaps;
@@ -168,16 +165,6 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	public void setSelectedWormPhenotype(String selectedWormPhenotype)
 	{
 		this.selectedWormPhenotype = selectedWormPhenotype;
-	}
-
-	public List<String> getGenes()
-	{
-		return genes;
-	}
-
-	public void setGenes(List<String> genes)
-	{
-		this.genes = genes;
 	}
 
 	public Map<String, Integer> getAllOverlaps()

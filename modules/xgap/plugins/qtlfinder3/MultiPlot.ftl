@@ -17,6 +17,10 @@
 				<h3>(get a <a href="?__target=${screen.name}&select=${screen.name}&p=${model.permaLink}">permanent link to these results</a>)</h3>
 				
 				<br>
+	
+				<@or.overlapResult model = model screen = screen />	
+				
+				<br>
 				
 				<table>
 					<tr>

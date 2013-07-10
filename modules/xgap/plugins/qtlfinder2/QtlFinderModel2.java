@@ -56,6 +56,9 @@ public class QtlFinderModel2
 	// The type of screen that should be showed to the user
 	private String screenType;
 
+	// List of genes that are coded by the probes, to show in the result table
+	private List<String> genes;
+
 	public String getScreenType()
 	{
 		return screenType;
@@ -194,5 +197,15 @@ public class QtlFinderModel2
 	public void setShowResults(Boolean showResults)
 	{
 		this.showResults = showResults;
+	}
+
+	public List<String> getGenes()
+	{
+		return genes;
+	}
+
+	public void setGenes(List<String> genes)
+	{
+		this.genes = genes;
 	}
 }

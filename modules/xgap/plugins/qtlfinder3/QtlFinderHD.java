@@ -181,15 +181,6 @@ public class QtlFinderHD extends QtlFinder2
 						os.orthologSearch(humanGeneQuery, model, db);
 					}
 
-					if (action.equals("plotOverlap"))
-					{
-						PlotOverlap po = new PlotOverlap();
-						po.plotOverlap(model, db);
-
-						this.model.setScreenType("showOverlapTable");
-
-					}
-
 					// Reset
 					if (action.equals("reset"))
 					{
