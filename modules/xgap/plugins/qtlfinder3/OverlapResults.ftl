@@ -1,9 +1,5 @@
 <#macro overlapResult model screen>
 
-<p><a href="javascript:Toggle();">Toggle me...</a></p>
-
-<div id="ToggleTarget">All mimsy were the borogoves,<br />And the mome raths outgrabe.</div>
-
 </body>
 </html>
 	<table id="wormHumanTable"> 
@@ -23,17 +19,37 @@
 				  			<td>${gene}</td> 
 						    <td>${key}</td> 
 						    <td>
-						    	<#list model.humanToWorm.linkToDisease(gene) as a>
-						    		<#if a?starts_with("WBGene")>
-						    		<#--we do nothing, list has wbgene, disease, disease etc...-->
-						    		<#else>
-						    			<#if a == model.humanToWorm.linkToDisease(gene)[1]>
-						    				<span style="font-size:16px;"><i>${a}</i></span>,
-						    			<#else>
-						    				<span style="font-size:12px;">${a}</span>, 
-						    			</#if>	 
-						    		</#if>
-						    	</#list>
+						    	<span style="font-size:16px;">
+						    		<#list model.humanToWorm.linkToDisease(gene) as a>
+							    		<#if a?starts_with("WBGene")>
+							    			<#--we do nothing, list has wbgene, disease, disease etc...-->
+							    		<#else>
+							    			<#if a == model.humanToWorm.linkToDisease(gene)[1]>
+							    				${a} 
+							    			</#if>	 
+							    		</#if>
+							    	</#list>
+							    </span>
+							    <br>	
+							    
+							    <span id="showED${gene}" style="display:inline;">
+							    	<a href="" onclick="extraDiseases${gene}.style.display = 'inline';showED${gene}.style.display = 'none'; hideED${gene}.style.display = 'inline'">more...</a>
+							    </span>
+							    <span id="hideED${gene}" style="display:none;">
+							    	<a href="" onclick="extraDiseases${gene}.style.display = 'none';showED${gene}.style.display = 'inline'; hideED${gene}.style.display = 'none'">hide...</a>
+							    </span>
+							    
+								<span id="extraDiseases${gene}" style="display:none;">
+									<#list  model.humanToWorm.linkToDisease(gene) as a>
+										<#if a == model.humanToWorm.linkToDisease(gene)[1]>
+											<#--we do nothing-->
+										<#elseif a?starts_with("WBGene")>
+											<#--we do nothing-->
+										<#else>
+											${a}, 
+										</#if>
+									</#list>
+								</span>
 						    </td> 
 						    <td>NA</td>
 						</tr>		

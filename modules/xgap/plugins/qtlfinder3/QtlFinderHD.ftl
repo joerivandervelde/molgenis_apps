@@ -126,15 +126,6 @@
 			$("#diseaseSelect").chosen();
 			$("#humanPhenotype").chosen();
 			$("#wormPhenotype").chosen();
-			
-			function Toggle() {
-				var el = document.getElementById("ToggleTarget");
-				if (el.style.display == "block") {
-					el.style.display = "none";
-				}else {
-					el.style.display = "block";
-				}
-			}
 		});		
 	</script>
 	
@@ -162,8 +153,6 @@
 		#browse a:visited {color:#13507A;}
 		#browse a:hover {color:#4682b4;}
 		#browse a:active {color:#0000FF;}
-		
-		#ToggleTarget {display: none;}
 		
 	</style>
 </#macro>
