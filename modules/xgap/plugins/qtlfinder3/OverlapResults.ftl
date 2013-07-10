@@ -17,7 +17,7 @@
 					<#if gene == model.humanToWorm.humanToWorm[key]>
 						<tr>
 				  			<td>${gene}</td> 
-						    <td>${key}</td> 
+						    <td><a href="http://www.ensembl.org/Homo_sapiens/Search/Results?species=Homo_sapiens;idx=;q=${key}" target="_blank">${key}</a></td> 
 						    <td>
 						    	<span style="font-size:16px;">
 						    		<#list model.humanToWorm.linkToDisease(gene) as a>
@@ -46,7 +46,11 @@
 										<#elseif a?starts_with("WBGene")>
 											<#--we do nothing-->
 										<#else>
-											${a}, 
+											<#if a == model.humanToWorm.linkToDisease(gene)[model.humanToWorm.linkToDisease(gene)?size - 1]>
+												${a}
+											<#else>
+												${a},
+											</#if> 
 										</#if>
 									</#list>
 								</span>
