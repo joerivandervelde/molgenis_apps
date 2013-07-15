@@ -58,12 +58,16 @@
 			<#import "../qtlfinder3/ShoppingCart.ftl" as sc>
 			<#import "../qtlfinder3/MultiPlot.ftl" as mp>
 			<#import "../qtlfinder3/CompareResults.ftl" as cr>
+			<#import "../qtlfinder3/DiseaseReport.ftl" as dr>
 			
 			<#-- macro's-->	
-			<@browseSearch />	
+			<@diseaseMapping model = model screen = screen/>	
+			<@browseSearch />
+			
 			
 			<#if model.screenType == "humanDisease">
 				<@hd.humanDisease model = model screen = screen />
+				<@dr.diseaseReport model= model screen = screen />
 			</#if>
 			
 			<#if model.screenType == "genomicRegion">
@@ -92,6 +96,17 @@
 			<@styleAndScript />
 		</div>
 	</form>
+</#macro>
+
+<#macro diseaseMapping model screen>
+	<div style="position:relative;float:left;">
+		<select id="diseaseMapping" name="diseaseMapping">
+			<option value="OMIM" <#if model.diseaseMapping == "OMIM">selected="selected"</#if>>OMIM</option>
+			<option value="DGA" <#if model.diseaseMapping == "DGA">selected="selected"</#if>>DGA</option>
+		</select>
+
+		<button type="submit" id="search "onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();">Go</button>
+	</div>	
 </#macro>
 
 <#macro browseSearch>

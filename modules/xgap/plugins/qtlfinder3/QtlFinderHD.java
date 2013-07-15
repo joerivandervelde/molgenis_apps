@@ -73,10 +73,10 @@ public class QtlFinderHD extends QtlFinder2
 					// Human Disease search
 					if (action.equals("diseaseSearch"))
 					{
-						this.model.setDisease(request.getString("diseaseSelect"));
-						super.model.setScreenType("");
-
 						HumanDiseaseSearch hds = new HumanDiseaseSearch();
+						this.model.setDisease(request.getString("diseaseSelect"));
+						this.model.setDiseases(request.getList("diseaseSelect"));
+
 						hds.diseaseSearch(model, db);
 					}
 
@@ -153,7 +153,6 @@ public class QtlFinderHD extends QtlFinder2
 
 						ComparePhenotypes cp = new ComparePhenotypes();
 						cp.comparePhenotypesWorm(model, this.getModel(), this.model.getSelectedWormPhenotype());
-						this.model.setShowWorm(true);
 					}
 
 					// Phenotype comparison with human list selection
@@ -163,7 +162,6 @@ public class QtlFinderHD extends QtlFinder2
 
 						ComparePhenotypes cp = new ComparePhenotypes();
 						cp.comparePhenotypesHuman(model, this.getModel(), this.model.getSelectedHumanPhenotype());
-						this.model.setShowWorm(false);
 					}
 
 					// Ortholog Search
@@ -179,6 +177,27 @@ public class QtlFinderHD extends QtlFinder2
 
 						OrthologSearch os = new OrthologSearch();
 						os.orthologSearch(humanGeneQuery, model, db);
+					}
+
+					// Change disease mapping by reloading
+					if (action.equals("mappingChange"))
+					{
+						MolgenisFileHandler filehandle = new MolgenisFileHandler(db);
+						File storage = filehandle.getFileStorage(true, db);
+
+						if (request.getString("diseaseMapping") == this.model.getDiseaseMapping())
+						{
+							this.setMessages(new ScreenMessage("This disease mapping is already set.", false));
+						}
+
+						this.model.setDiseaseMapping(request.getString("diseaseMapping"));
+
+						// Format: ENSP ID \t disease
+						File diseaseMap = new File(storage, this.model.getDiseaseMapping() + "TransTable.csv");
+
+						this.model.getHumanToWorm().setDiseaseMap(diseaseMap);
+						this.model.setDisease(this.model.getHumanToWorm().getDiseaseToHuman().keySet().iterator()
+								.next());
 					}
 
 					// Reset
@@ -197,6 +216,7 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.setShowTable(false);
 						this.model.setShowResults(false);
 						this.model.setAllOverlaps(null);
+						this.model.setDiseases(null);
 					}
 				}
 
@@ -258,6 +278,11 @@ public class QtlFinderHD extends QtlFinder2
 				this.model.setDataSets(dataNames);
 			}
 
+			if (this.model.getDiseaseMapping() == null)
+			{
+				this.model.setDiseaseMapping("OMIM");
+			}
+
 			/**
 			 * @author Mark de Haan
 			 * 
@@ -270,15 +295,18 @@ public class QtlFinderHD extends QtlFinder2
 				File storage = filehandle.getFileStorage(true, db);
 
 				// Format: disease \t ENSP ID
-				File diseaseMap = new File(storage, "DGATransTable.csv");
+				File diseaseMap = new File(storage, "OMIMTransTable.csv");
 				// Format: ENSP ID \t WBGene ID
 				File orthologs = new File(storage, "speciesTransTable.csv");
 				// Format: Disease \t Number of proteins associated
 				File diseaseProteinCount = new File(storage, "diseaseProteinCount.csv");
 				// Format: Worm gene \t Worm phenotype
 				File wormToPhenotype = new File(storage, "classicalWormPhenotypes.csv");
+				// Format: Disease \t ENSP ID \t SNP(rs id) \t PUBMEDID \t
+				// Authors \t Year of publication \t Journal
+				File gwasData = new File(storage, "gwasAnnot.csv");
 
-				HumanToWorm h2w = new HumanToWorm(diseaseMap, orthologs, diseaseProteinCount, wormToPhenotype);
+				HumanToWorm h2w = new HumanToWorm(diseaseMap, orthologs, diseaseProteinCount, wormToPhenotype, gwasData);
 				this.model.setHumanToWorm(h2w);
 
 			}

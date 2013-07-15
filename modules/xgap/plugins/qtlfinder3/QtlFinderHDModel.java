@@ -27,6 +27,9 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// The disease that is selected by the user
 	private String disease;
 
+	// List of diseases selected when user uses OMIM
+	private List<String> diseases;
+
 	// List with data sets from the database that has Lod scores for QTLs
 	private List<String> dataSets;
 
@@ -65,7 +68,8 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// (Compare phenotypes)
 	private Map<String, Double> allProbabilities;
 
-	private Boolean showWorm;
+	// String that says if OMIM or DGA is set
+	private String diseaseMapping;
 
 	public String getDataSet()
 	{
@@ -197,14 +201,24 @@ public class QtlFinderHDModel extends QtlFinderModel2
 		this.selectedHumanPhenotype = selectedHumanPhenotype;
 	}
 
-	public Boolean getShowWorm()
+	public String getDiseaseMapping()
 	{
-		return showWorm;
+		return diseaseMapping;
 	}
 
-	public void setShowWorm(Boolean showWorm)
+	public void setDiseaseMapping(String diseaseMapping)
 	{
-		this.showWorm = showWorm;
+		this.diseaseMapping = diseaseMapping;
+	}
+
+	public List<String> getDiseases()
+	{
+		return diseases;
+	}
+
+	public void setDiseases(List<String> diseases)
+	{
+		this.diseases = diseases;
 	}
 
 }

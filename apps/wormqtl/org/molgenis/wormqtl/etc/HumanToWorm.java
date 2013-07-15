@@ -3,10 +3,12 @@ package org.molgenis.wormqtl.etc;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * @author Mark de Haan
@@ -21,6 +23,8 @@ public class HumanToWorm
 	private LinkedHashMap<String, String> diseaseToProtein;
 	private LinkedHashMap<String, List<String>> wormToPhenotype;
 	private LinkedHashMap<String, String> wormToDisease;
+	private LinkedHashMap<String, List<String>> gwasPheno;
+	private LinkedHashMap<String, Set<String>> gwasStudy;
 
 	public LinkedHashMap<String, List<String>> getDiseaseToHuman()
 	{
@@ -52,6 +56,26 @@ public class HumanToWorm
 		this.wormToDisease = wormToDisease;
 	}
 
+	public LinkedHashMap<String, List<String>> getGwasPheno()
+	{
+		return gwasPheno;
+	}
+
+	public void setGwasPheno(LinkedHashMap<String, List<String>> gwasPheno)
+	{
+		this.gwasPheno = gwasPheno;
+	}
+
+	public LinkedHashMap<String, Set<String>> getGwasStudy()
+	{
+		return gwasStudy;
+	}
+
+	public void setGwasStudy(LinkedHashMap<String, Set<String>> gwasStudy)
+	{
+		this.gwasStudy = gwasStudy;
+	}
+
 	/**
 	 * This method takes Omim / DGA disease map, an InParanoid custom WBGene -
 	 * ENSP map and a custom disease - protein count map to create three
@@ -61,10 +85,11 @@ public class HumanToWorm
 	 * @param diseaseMap
 	 * @param orthologs
 	 * @param diseaseProteinCount
+	 * @param gwasData
 	 * @throws FileNotFoundException
 	 */
-	public <diseaseToHuman> HumanToWorm(File diseaseMap, File orthologs, File diseaseProteinCount, File wormPhenotypes)
-			throws FileNotFoundException
+	public <diseaseToHuman> HumanToWorm(File diseaseMap, File orthologs, File diseaseProteinCount, File wormPhenotypes,
+			File gwasData) throws FileNotFoundException
 	{
 		System.out.println("> Building Hash maps....");
 
@@ -72,41 +97,17 @@ public class HumanToWorm
 		humanToWorm = new LinkedHashMap<String, String>();
 		diseaseToProtein = new LinkedHashMap<String, String>();
 		wormToPhenotype = new LinkedHashMap<String, List<String>>();
+		gwasPheno = new LinkedHashMap<String, List<String>>();
+		gwasStudy = new LinkedHashMap<String, Set<String>>();
 
-		Scanner dM = new Scanner(diseaseMap);
+		// Storing data in the database will make file reading obsolete
+		setDiseaseMap(diseaseMap);
 		Scanner h2w = new Scanner(orthologs);
 		Scanner dpc = new Scanner(diseaseProteinCount);
 		Scanner w2p = new Scanner(wormPhenotypes);
+		Scanner gwasScan = new Scanner(gwasData);
 
 		// Loop through OMIM file, skip the first line (header)
-		dM.nextLine();
-		while (dM.hasNext())
-		{
-			String line = dM.nextLine();
-			// String enpsID = line.split("\",\"")[1];
-			// String disease = line.split("\",\"")[2].split("  \"")[0];
-
-			String enpsID = line.split("\t")[0];
-			String disease = line.split("\t")[1];
-
-			// If disease is not in the hashmap yet
-			if (diseaseToHuman.get(disease) == null)
-			{
-				// Put the disease with its ENSP ids into the hashmap.
-				// Give a list in case multiple ENSP ids (genes) can cause the
-				// same disease
-				List<String> myList = new ArrayList<String>();
-				myList.add(enpsID);
-				diseaseToHuman.put(disease, myList);
-			}
-			// If the disease is in the hashmap
-			else
-			{
-				// This is not the first gene causing this disease, add another
-				// entry
-				diseaseToHuman.get(disease).add(enpsID);
-			}
-		}
 
 		// Loop through human WB link file, skip the first line (header)
 		h2w.nextLine();
@@ -161,6 +162,105 @@ public class HumanToWorm
 			}
 		}
 
+		// Loop through the gwas annotation files
+		gwasScan.nextLine();
+		while (gwasScan.hasNext())
+		{
+
+			// SNP(rs id) \t PUBMEDID \t
+			// Authors \t Year of publication \t Journal
+			String line = gwasScan.nextLine();
+			String disease = line.split("\t")[0];
+			String enpsID = line.split("\t")[1];
+			String snps = line.split("\t")[2];
+
+			String study = line.split("\t")[4] + " (" + line.split("\t")[5] + ") " + line.split("\t")[6] + " "
+					+ line.split("\t")[3];
+
+			// If disease is not in the hashmap yet
+			if (gwasPheno.get(disease) == null)
+			{
+				// Put the disease with its ENSP ids into the hashmap.
+				// Give a list in case multiple ENSP ids (genes) can cause the
+				// same disease
+				List<String> myList = new ArrayList<String>();
+
+				myList.add(enpsID);
+				gwasPheno.put(disease, myList);
+			}
+
+			// If the disease is in the hashmap
+			else
+			{
+				// This is not the first gene causing this disease, add another
+				// entry
+				gwasPheno.get(disease).add(enpsID);
+			}
+
+			// If disease is not in the hashmap yet
+			if (gwasStudy.get(disease) == null)
+			{
+				// Add study data to the hashmap set, set because no duplicate
+				// journal entries, also now different studies on same disease
+				// are traceable
+				Set<String> mySet = new HashSet();
+				mySet.add(snps);
+				mySet.add(study);
+
+				gwasStudy.put(disease, mySet);
+			}
+			else
+			{
+				// Not the first occurence of disease, add study information
+				gwasStudy.get(disease).add(snps);
+				gwasStudy.get(disease).add(study);
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * This method parses the disease map, omim or dga, into a hash with disease
+	 * - human protein list key value pairs
+	 * 
+	 * @author Mark de Haan
+	 * @param disease
+	 *            map file, e.g. OMIM or DGA
+	 * 
+	 * */
+	public void setDiseaseMap(File diseaseMap) throws FileNotFoundException
+	{
+		this.diseaseToHuman.clear();
+		Scanner dM = new Scanner(diseaseMap);
+
+		dM.nextLine();
+		while (dM.hasNext())
+		{
+			String line = dM.nextLine();
+
+			String enpsID = line.split("\t")[0];
+			String disease = line.split("\t")[1];
+
+			// If disease is not in the hashmap yet
+			if (this.diseaseToHuman.get(disease) == null)
+			{
+				// Put the disease with its ENSP ids into the hashmap.
+				// Give a list in case multiple ENSP ids (genes) can cause the
+				// same disease
+				List<String> myList = new ArrayList<String>();
+				myList.add(enpsID);
+				this.diseaseToHuman.put(disease, myList);
+			}
+			// If the disease is in the hashmap
+			else
+			{
+				// This is not the first gene causing this disease, add another
+				// entry
+				this.diseaseToHuman.get(disease).add(enpsID);
+			}
+		}
 	}
 
 	/**
@@ -172,8 +272,7 @@ public class HumanToWorm
 	 */
 	public List<String> convert(String disease)
 	{
-
-		List<String> humanGenes = diseaseToHuman.get(disease);
+		List<String> humanGenes = this.diseaseToHuman.get(disease);
 		List<String> wormGenes = new ArrayList<String>();
 
 		// For every human gene (ENSP id) that is linked to the entered disease
@@ -242,5 +341,35 @@ public class HumanToWorm
 	public Integer retrieve(String disease)
 	{
 		return Integer.parseInt(diseaseToProtein.get(disease));
+	}
+
+	/**
+	 * This method uses an enpsID to retrieve the diseases that are mapped to it
+	 * from the gwas Pheno hash map. This disease can be used to retrieve study
+	 * information.
+	 * 
+	 * @param enpsID
+	 * @return disease associated with enpsID
+	 * */
+	public String getGwasDisease(String enpsID)
+	{
+		String rt = "NO";
+
+		// Get DISEASE Key from ENPS value
+		for (Entry<String, List<String>> value : getGwasPheno().entrySet())
+		{
+			// System.out.println(value);
+			if (getGwasPheno().get(value.getKey()).contains(enpsID))
+			{
+				// System.out.println(value.getKey());
+			}
+			else
+			{
+				// System.out.println("No match in gwas data");
+			}
+		}
+
+		return rt;
+
 	}
 }
