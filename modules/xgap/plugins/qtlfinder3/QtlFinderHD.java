@@ -73,10 +73,17 @@ public class QtlFinderHD extends QtlFinder2
 					// Human Disease search
 					if (action.equals("diseaseSearch"))
 					{
-						HumanDiseaseSearch hds = new HumanDiseaseSearch();
-						this.model.setDisease(request.getString("diseaseSelect"));
-						this.model.setDiseases(request.getList("diseaseSelect"));
+						List<String> disease = request.getList("diseaseSelect");
+						if (disease.size() < 2)
+						{
+							this.model.setDisease(disease.get(0).toString());
+						}
+						else
+						{
+							this.model.setDiseases(disease);
+						}
 
+						HumanDiseaseSearch hds = new HumanDiseaseSearch();
 						hds.diseaseSearch(model, db);
 					}
 
@@ -182,10 +189,12 @@ public class QtlFinderHD extends QtlFinder2
 					// Change disease mapping by reloading
 					if (action.equals("mappingChange"))
 					{
+						System.out.println(this.model.getDisease());
+
 						MolgenisFileHandler filehandle = new MolgenisFileHandler(db);
 						File storage = filehandle.getFileStorage(true, db);
 
-						if (request.getString("diseaseMapping") == this.model.getDiseaseMapping())
+						if (request.getString("diseaseMapping").equals(this.model.getDiseaseMapping()))
 						{
 							this.setMessages(new ScreenMessage("This disease mapping is already set.", false));
 						}

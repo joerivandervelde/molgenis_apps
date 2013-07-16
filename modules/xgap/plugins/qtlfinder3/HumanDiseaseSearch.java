@@ -36,12 +36,11 @@ public class HumanDiseaseSearch
 		List<Probe> probesInRegion = new ArrayList<Probe>();
 		List<String> wormGenes = new ArrayList<String>();
 
-		if (model.getDiseaseMapping() == "DGA")
+		if (model.getDiseaseMapping().equals("DGA"))
 		{
 			// Call humanToWorm algorithm to convert disease
 			// into a list of one or more worm genes
 			wormGenes = model.getHumanToWorm().convert(model.getDisease());
-
 		}
 		else
 		{
