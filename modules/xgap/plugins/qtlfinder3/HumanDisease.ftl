@@ -23,6 +23,14 @@
 						</#list>
 					</select>
 				</td>
+			<#elseif model.diseaseMapping == "GWAS">
+				<td width="200" style="padding-left:25px;">
+					<select class=" ui-widget-content ui-corner-all" id="diseaseSelect" name="diseaseSelect"  style="width:500px;">
+						<#list model.humanToWorm.diseaseToHuman?keys as disease>
+							<option value="${disease}" <#if model.disease == disease>selected="selected"</#if>>${disease}</option> 
+						</#list>
+					</select>
+				</td>
 			</#if>
 			
 			<td width="290" style="padding-left:10px;">

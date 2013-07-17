@@ -74,13 +74,13 @@ public class QtlFinderHD extends QtlFinder2
 					if (action.equals("diseaseSearch"))
 					{
 						List<String> disease = request.getList("diseaseSelect");
-						if (disease.size() < 2)
+						if (this.model.getDiseaseMapping().equals("OMIM"))
 						{
-							this.model.setDisease(disease.get(0).toString());
+							this.model.setDiseases(disease);
 						}
 						else
 						{
-							this.model.setDiseases(disease);
+							this.model.setDisease(disease.get(0).toString());
 						}
 
 						HumanDiseaseSearch hds = new HumanDiseaseSearch();
@@ -157,6 +157,7 @@ public class QtlFinderHD extends QtlFinder2
 					if (action.equals("comparePhenotypesWorm"))
 					{
 						this.model.setSelectedWormPhenotype(request.getString("wormPhenotype"));
+						this.model.setShowWorm(true);
 
 						ComparePhenotypes cp = new ComparePhenotypes();
 						cp.comparePhenotypesWorm(model, this.getModel(), this.model.getSelectedWormPhenotype());
@@ -166,6 +167,7 @@ public class QtlFinderHD extends QtlFinder2
 					if (action.equals("comparePhenotypesHuman"))
 					{
 						this.model.setSelectedHumanPhenotype(request.getString("humanPhenotype"));
+						this.model.setShowWorm(false);
 
 						ComparePhenotypes cp = new ComparePhenotypes();
 						cp.comparePhenotypesHuman(model, this.getModel(), this.model.getSelectedHumanPhenotype());
@@ -189,24 +191,38 @@ public class QtlFinderHD extends QtlFinder2
 					// Change disease mapping by reloading
 					if (action.equals("mappingChange"))
 					{
-						System.out.println(this.model.getDisease());
-
-						MolgenisFileHandler filehandle = new MolgenisFileHandler(db);
-						File storage = filehandle.getFileStorage(true, db);
-
 						if (request.getString("diseaseMapping").equals(this.model.getDiseaseMapping()))
 						{
 							this.setMessages(new ScreenMessage("This disease mapping is already set.", false));
 						}
+						else
+						{
 
-						this.model.setDiseaseMapping(request.getString("diseaseMapping"));
+							this.model.getHumanToWorm().getDiseaseToHuman().clear();
 
-						// Format: ENSP ID \t disease
-						File diseaseMap = new File(storage, this.model.getDiseaseMapping() + "TransTable.csv");
+							this.model.setDiseaseMapping(request.getString("diseaseMapping"));
 
-						this.model.getHumanToWorm().setDiseaseMap(diseaseMap);
-						this.model.setDisease(this.model.getHumanToWorm().getDiseaseToHuman().keySet().iterator()
-								.next());
+							if (this.model.getDiseaseMapping().equals("OMIM"))
+							{
+								this.model.getHumanToWorm().getDiseaseToHuman()
+										.putAll(this.model.getHumanToWorm().getDiseaseToHumanOMIM());
+							}
+							if (this.model.getDiseaseMapping().equals("DGA"))
+							{
+								this.model.getHumanToWorm().getDiseaseToHuman()
+										.putAll(this.model.getHumanToWorm().getDiseaseToHumanDGA());
+							}
+							if (this.model.getDiseaseMapping().equals("GWAS"))
+							{
+								this.model.getHumanToWorm().getDiseaseToHuman()
+										.putAll(this.model.getHumanToWorm().getDiseaseToHumanGWAS());
+							}
+
+							System.out.println(this.model.getHumanToWorm().getDiseaseToHuman());
+
+							this.model.setDisease(this.model.getHumanToWorm().getDiseaseToHuman().keySet().iterator()
+									.next());
+						}
 					}
 
 					// Reset
@@ -293,10 +309,10 @@ public class QtlFinderHD extends QtlFinder2
 			}
 
 			/**
-			 * @author Mark de Haan
+			 * Pre-loads the hashmaps used by the HumanToWorm class by reading
+			 * in files
 			 * 
-			 *         Pre-loads the hashmaps used by the HumanToWorm class by
-			 *         reading in files
+			 * @author Mark de Haans
 			 */
 			if (model.getHumanToWorm() == null)
 			{
@@ -304,18 +320,21 @@ public class QtlFinderHD extends QtlFinder2
 				File storage = filehandle.getFileStorage(true, db);
 
 				// Format: disease \t ENSP ID
-				File diseaseMap = new File(storage, "OMIMTransTable.csv");
+				File diseaseMapOMIM = new File(storage, "OMIMTransTable.csv");
+				// Format: disease \t ENSP ID
+				File diseaseMapDGA = new File(storage, "DGATransTable.csv");
+				// Format: disease \t ENSP ID
+				File diseaseMapGWAS = new File(storage, "GWASTransTable.csv");
 				// Format: ENSP ID \t WBGene ID
 				File orthologs = new File(storage, "speciesTransTable.csv");
 				// Format: Disease \t Number of proteins associated
 				File diseaseProteinCount = new File(storage, "diseaseProteinCount.csv");
 				// Format: Worm gene \t Worm phenotype
 				File wormToPhenotype = new File(storage, "classicalWormPhenotypes.csv");
-				// Format: Disease \t ENSP ID \t SNP(rs id) \t PUBMEDID \t
-				// Authors \t Year of publication \t Journal
-				File gwasData = new File(storage, "gwasAnnot.csv");
 
-				HumanToWorm h2w = new HumanToWorm(diseaseMap, orthologs, diseaseProteinCount, wormToPhenotype, gwasData);
+				HumanToWorm h2w = new HumanToWorm(diseaseMapOMIM, diseaseMapDGA, diseaseMapGWAS, orthologs,
+						diseaseProteinCount, wormToPhenotype);
+
 				this.model.setHumanToWorm(h2w);
 
 			}
@@ -337,7 +356,7 @@ public class QtlFinderHD extends QtlFinder2
 
 			if (this.model.getDisease() == null)
 			{
-				this.model.setDisease(this.model.getHumanToWorm().getDiseaseToHuman().keySet().iterator().next());
+				this.model.setDisease(this.model.getHumanToWorm().getDiseaseToHumanOMIM().keySet().iterator().next());
 			}
 
 			if (this.model.getShowTable() == null)
@@ -355,6 +374,11 @@ public class QtlFinderHD extends QtlFinder2
 				this.model.setScreenType("humanDisease");
 			}
 
+			if (this.model.getShowWorm() == null)
+			{
+				this.model.setShowWorm(true);
+			}
+
 			if (this.model.getSelectedWormPhenotype() == null)
 			{
 				this.model.setSelectedWormPhenotype(this.model.getHumanToWorm().getWormToPhenotype().keySet()
@@ -363,7 +387,7 @@ public class QtlFinderHD extends QtlFinder2
 
 			if (this.model.getSelectedHumanPhenotype() == null)
 			{
-				this.model.setSelectedHumanPhenotype(this.model.getHumanToWorm().getDiseaseToHuman().keySet()
+				this.model.setSelectedHumanPhenotype(this.model.getHumanToWorm().getDiseaseToHumanOMIM().keySet()
 						.iterator().next());
 			}
 

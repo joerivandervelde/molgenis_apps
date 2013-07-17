@@ -71,6 +71,9 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// String that says if OMIM or DGA is set
 	private String diseaseMapping;
 
+	// Show human or worm phenotype comparison
+	private Boolean showWorm;
+
 	public String getDataSet()
 	{
 		return dataSet;
@@ -219,6 +222,16 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	public void setDiseases(List<String> diseases)
 	{
 		this.diseases = diseases;
+	}
+
+	public Boolean getShowWorm()
+	{
+		return showWorm;
+	}
+
+	public void setShowWorm(Boolean showWorm)
+	{
+		this.showWorm = showWorm;
 	}
 
 }

@@ -65,8 +65,7 @@
 				<td width="200" style="padding-left:25px;">
 					<select class=" ui-widget-content ui-corner-all" id="humanPhenotype" name="humanPhenotype"  style="width:500px;">
 						<#list model.humanToWorm.diseaseToHuman?keys as disease>
-							<option value="${disease}" <#if model.disease == disease>selected="selected"</#if>
-							>${disease} [ ${model.humanToWorm.diseaseToHuman[disease]?size} human protein(s) with ortholog ]</option> 
+							<option value="${disease}" <#if model.disease == disease>selected="selected"</#if>>${disease}</option> 
 						</#list>
 					</select>
 				</td>			
