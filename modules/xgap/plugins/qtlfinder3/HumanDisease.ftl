@@ -7,14 +7,32 @@
 			</td>
 		</tr>
 		<tr>
-			<td width="200" style="padding-left:25px;">
-				<select class=" ui-widget-content ui-corner-all" id="diseaseSelect" name="diseaseSelect"  style="width:500px;">
-					<#list model.humanToWorm.diseaseToHuman?keys as disease>
-						<option value="${disease}" <#if model.disease == disease>selected="selected"</#if>
-						>${disease} [ ${model.humanToWorm.diseaseToHuman[disease]?size} human protein(s) with ortholog ]</option> 
-					</#list>
-				</select>
-			</td>
+			<#if model.diseaseMapping == "OMIM">
+				<td width="200" style="padding-left:25px;">
+					<select multiple class=" ui-widget-content ui-corner-all" id="diseaseSelect" name="diseaseSelect"  style="width:500px;">
+						<#list model.humanToWorm.diseaseToHuman?keys as disease>
+							<option value="${disease}">${disease}</option> 
+						</#list>
+					</select>
+				</td>
+			<#elseif model.diseaseMapping == "DGA">
+				<td width="200" style="padding-left:25px;">
+					<select class=" ui-widget-content ui-corner-all" id="diseaseSelect" name="diseaseSelect"  style="width:500px;">
+						<#list model.humanToWorm.diseaseToHuman?keys as disease>
+							<option value="${disease}" <#if model.disease == disease>selected="selected"</#if>>${disease}</option> 
+						</#list>
+					</select>
+				</td>
+			<#elseif model.diseaseMapping == "GWAS">
+				<td width="200" style="padding-left:25px;">
+					<select class=" ui-widget-content ui-corner-all" id="diseaseSelect" name="diseaseSelect"  style="width:500px;">
+						<#list model.humanToWorm.diseaseToHuman?keys as disease>
+							<option value="${disease}" <#if model.disease == disease>selected="selected"</#if>>${disease}</option> 
+						</#list>
+					</select>
+				</td>
+			</#if>
+			
 			<td width="290" style="padding-left:10px;">
 				<div class="buttons">
 					<button style="color:blue;" type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__diseaseSearch'; 

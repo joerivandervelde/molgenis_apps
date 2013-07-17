@@ -60,7 +60,8 @@
 			<#import "../qtlfinder3/CompareResults.ftl" as cr>
 			
 			<#-- macro's-->	
-			<@browseSearch />	
+			<@diseaseMapping model = model screen = screen/>	
+			<@browseSearch />
 			
 			<#if model.screenType == "humanDisease">
 				<@hd.humanDisease model = model screen = screen />
@@ -92,6 +93,18 @@
 			<@styleAndScript />
 		</div>
 	</form>
+</#macro>
+
+<#macro diseaseMapping model screen>
+	<div style="position:relative;float:left;">
+		<select id="diseaseMapping" name="diseaseMapping">
+			<option value="OMIM" <#if model.diseaseMapping == "OMIM">selected="selected"</#if>>OMIM</option>
+			<option value="DGA" <#if model.diseaseMapping == "DGA">selected="selected"</#if>>DGA</option>
+			<option value="GWAS" <#if model.diseaseMapping == "GWAS">selected="selected"</#if>>GWAS</option>
+		</select>
+
+		<button type="submit" id="search "onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();">Go</button>
+	</div>	
 </#macro>
 
 <#macro browseSearch>
@@ -153,5 +166,35 @@
 		#browse a:hover {color:#4682b4;}
 		#browse a:active {color:#0000FF;}
 		
+		#probeReport a {color:#13507A;}      
+		#probeReport a:visited {color:#13507A;}
+		#probeReport a:hover {color:#4682b4;}
+		#probeReport a:active {color:#0000FF;}
+		
+		#probeReport a.tip {
+			text-decoration: none
+		}
+		
+		#probeReport a.tip:hover {
+		    position: relative
+		}
+		
+		#probeReport a.tip span {
+		    display: none
+		}
+		
+		#probeReport a.tip:hover span {
+		    border: #c0c0c0 1px dotted;
+		    padding: 5px 20px 5px 5px;
+		    display: block;
+		    z-index: 100;
+		    background: url(../images/status-info.png) #f0f0f0 no-repeat 100% 5%;
+		    left: 0px;
+		    margin: 10px;
+		    width: 400px;
+		    position: absolute;
+		    top: 10px;
+		    text-decoration: none
+		}
 	</style>
 </#macro>

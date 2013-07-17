@@ -19,15 +19,6 @@
 							    <td align="center">${model.allOverlaps[humanPhenotype]}</td>
 							    <td>${model.allProbabilities[humanPhenotype]}</td>  
 							</tr>					
-						<#--
-						<#else>	
-							<tr>
-							  	<td>${model.selectedWormPhenotype}</td> 
-							    <td>${humanPhenotype}</td> 
-							    <td align="center">No overlap</td>
-							    <td align="center">NA</td>   
-							</tr>
-						-->	
 						</#if>
 					</#list>
 				<#else>
@@ -39,15 +30,6 @@
 							    <td align="center">${model.allOverlaps[wormPhenotype]}</td>
 							    <td>${model.allProbabilities[wormPhenotype]}</td>  
 							</tr>	
-						<#--					
-						<#else>	
-							<tr>
-							  	<td>${wormPhenotype}</td> 
-							    <td>${model.selectedHumanPhenotype}</td> 
-							    <td align="center">No overlap</td>
-							    <td align="center">NA</td>   
-							</tr>
-						-->	
 						</#if>
 					</#list>
 				</#if>	

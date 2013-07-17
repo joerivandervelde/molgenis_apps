@@ -8,7 +8,6 @@ import org.molgenis.framework.db.Database;
 import org.molgenis.framework.db.QueryRule;
 import org.molgenis.framework.db.QueryRule.Operator;
 import org.molgenis.util.Entity;
-import org.molgenis.wormqtl.etc.HypergeometricTest;
 import org.molgenis.xgap.Gene;
 import org.molgenis.xgap.Probe;
 
@@ -35,16 +34,22 @@ public class HumanDiseaseSearch
 		model.setProbeToGene(new HashMap<String, Gene>());
 
 		List<Probe> probesInRegion = new ArrayList<Probe>();
-		HypergeometricTest hg = new HypergeometricTest();
+		List<String> wormGenes = new ArrayList<String>();
 
-		int proteinCount = model.getHumanToWorm().retrieve(model.getDisease());
-		int orthologSpecific = model.getHumanToWorm().getDiseaseToHuman().get(model.getDisease()).size();
-
-		model.setHyperTestProbability(hg.hyperGeometricTest(47361, 4988, proteinCount, orthologSpecific));
-
-		// Call humanToWorm algorithm to convert disease
-		// into a list of one or more worm genes
-		List<String> wormGenes = model.getHumanToWorm().convert(model.getDisease());
+		if (model.getDiseaseMapping().equals("OMIM"))
+		{
+			// For every disease that is selected add the wormgenes to the list
+			for (String disease : model.getDiseases())
+			{
+				wormGenes.addAll(model.getHumanToWorm().convert(disease));
+			}
+		}
+		else
+		{
+			// Call humanToWorm algorithm to convert disease
+			// into a list of one or more worm genes
+			wormGenes = model.getHumanToWorm().convert(model.getDisease());
+		}
 
 		// Call the database with the list of worm genes to
 		// get normal shopping cart view with probes to shop
