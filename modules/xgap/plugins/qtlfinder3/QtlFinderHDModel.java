@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.molgenis.wormqtl.etc.HumanToWorm;
+import org.molgenis.wormqtl.etc.HumanToWorm2;
 import org.molgenis.wormqtl.etc.HypergeometricTest;
 
 import plugins.qtlfinder2.QtlFinderModel2;
@@ -22,7 +22,7 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	public final String prefix = "__qtlfinderhd__";
 
 	// Class for building the translation table hashMaps
-	private HumanToWorm humanToWorm;
+	private HumanToWorm2 humanToWorm;
 
 	// The disease that is selected by the user
 	private String disease;
@@ -71,8 +71,24 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// String that says if OMIM or DGA is set
 	private String diseaseMapping;
 
+	// String that says which worm mapping is selected (datasource coupled to
+	// WormGene ID's)
+	// similar to private String diseaseMapping except it's on the worm side of
+	// things
+	private String phenotypeMapping;
+
 	// Show human or worm phenotype comparison
 	private Boolean showWorm;
+
+	public String getPhenotypeMapping()
+	{
+		return phenotypeMapping;
+	}
+
+	public void setPhenotypeMapping(String phenotypeMapping)
+	{
+		this.phenotypeMapping = phenotypeMapping;
+	}
 
 	public String getDataSet()
 	{
@@ -104,12 +120,12 @@ public class QtlFinderHDModel extends QtlFinderModel2
 		this.disease = disease;
 	}
 
-	public HumanToWorm getHumanToWorm()
+	public HumanToWorm2 getHumanToWorm()
 	{
 		return humanToWorm;
 	}
 
-	public void setHumanToWorm(HumanToWorm humanToWorm)
+	public void setHumanToWorm(HumanToWorm2 humanToWorm)
 	{
 		this.humanToWorm = humanToWorm;
 	}

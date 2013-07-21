@@ -38,12 +38,12 @@ public class OrthologSearch
 		model.setHumanGeneQuery(new ArrayList<String>());
 		for (String enpsID : enpsIDs)
 		{
-			if (model.getHumanToWorm().getHumanToWorm().get(enpsID) == null)
+			String ortholog = model.getHumanToWorm().getHumanGeneToWormGene(enpsID);
+			if (ortholog == null)
 			{
 				continue;
 			}
-
-			model.getHumanGeneQuery().add(model.getHumanToWorm().getHumanToWorm().get(enpsID));
+			model.getHumanGeneQuery().add(ortholog);
 		}
 
 		List<Probe> probes = db.find(Probe.class, new QueryRule(Probe.SYMBOL, Operator.IN, model.getHumanGeneQuery()));

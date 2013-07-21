@@ -36,20 +36,22 @@ public class HumanDiseaseSearch
 		List<Probe> probesInRegion = new ArrayList<Probe>();
 		List<String> wormGenes = new ArrayList<String>();
 
-		if (model.getDiseaseMapping().equals("OMIM"))
+		// if (model.getDiseaseMapping().equals("OMIM"))
+		// {
+
+		// For every disease that is selected add the wormgenes to the list
+		for (String disease : model.getDiseases())
 		{
-			// For every disease that is selected add the wormgenes to the list
-			for (String disease : model.getDiseases())
-			{
-				wormGenes.addAll(model.getHumanToWorm().convert(disease));
-			}
+			wormGenes.addAll(model.getHumanToWorm().getHumanDiseaseToWormGenes(disease, model.getDiseaseMapping()));
 		}
-		else
-		{
-			// Call humanToWorm algorithm to convert disease
-			// into a list of one or more worm genes
-			wormGenes = model.getHumanToWorm().convert(model.getDisease());
-		}
+
+		// }
+		// else
+		// {
+		// // Call humanToWorm algorithm to convert disease
+		// // into a list of one or more worm genes
+		// wormGenes = model.getHumanToWorm().convert(model.getDisease());
+		// }
 
 		// Call the database with the list of worm genes to
 		// get normal shopping cart view with probes to shop

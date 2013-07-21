@@ -35,19 +35,21 @@ public class ComparePhenotypes
 		Map<String, Integer> ao = new HashMap<String, Integer>();
 		Map<String, Double> dp = new HashMap<String, Double>();
 
-		List<String> wormGenesForThisWormPhenotype = model.getHumanToWorm().getWormToPhenotype().get(phenotype);
+		List<String> wormGenesForThisWormPhenotype = model.getHumanToWorm().getWormGeneToWormPhenotypes(phenotype,
+				model.getPhenotypeMapping());
 		List<String> wormGenesForThisHumanPhenotype;
 
-		Integer wormPhenoGeneNumber = model.getHumanToWorm().getWormToPhenotype().get(phenotype).size();
+		Integer wormPhenoGeneNumber = wormGenesForThisWormPhenotype.size();
 		Integer numberOfOrthologs = 30000;
 
 		HypergeometricTest hg = new HypergeometricTest();
 
 		// Go through all of the human disease phenotypes
-		for (String thisPhenotype : model.getHumanToWorm().getDiseaseToHuman().keySet())
+		for (String thisPhenotype : model.getHumanToWorm().getAllDiseases(model.getDiseaseMapping()))
 		{
 			numberOfOverlappingGenes = 0;
-			wormGenesForThisHumanPhenotype = model.getHumanToWorm().convert(thisPhenotype);
+			wormGenesForThisHumanPhenotype = model.getHumanToWorm().getHumanDiseaseToWormGenes(thisPhenotype,
+					model.getDiseaseMapping());
 
 			// Go through the list of genes associated with the human phenotype
 			// and keep count how many are overlapping with the genes associated
@@ -80,7 +82,8 @@ public class ComparePhenotypes
 		Map<String, Double> dp = new HashMap<String, Double>();
 
 		List<String> wormGenesForThisWormPhenotype;
-		List<String> wormGenesForThisHumanPhenotype = model.getHumanToWorm().getDiseaseToHuman().get(phenotype);
+		List<String> wormGenesForThisHumanPhenotype = model.getHumanToWorm().getHumanDiseaseToWormGenes(phenotype,
+				model.getDiseaseMapping());
 
 		Integer humanPhenoGeneNumber = Integer.parseInt(model.getHumanToWorm().getDiseaseToProtein().get(phenotype));
 		Integer numberOfOrthologs = 30000;
@@ -90,7 +93,8 @@ public class ComparePhenotypes
 		for (String thisPhenotype : model.getHumanToWorm().getWormToPhenotype().keySet())
 		{
 			numberOfOverlappingGenes = 0;
-			wormGenesForThisWormPhenotype = model.getHumanToWorm().getWormToPhenotype().get(thisPhenotype);
+			wormGenesForThisWormPhenotype = model.getHumanToWorm().getWormPhenotypeToWormGenes(thisPhenotype,
+					model.getDiseaseMapping());
 
 			for (String gene : wormGenesForThisHumanPhenotype)
 			{

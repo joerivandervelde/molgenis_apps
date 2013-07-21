@@ -17,7 +17,8 @@ import org.molgenis.framework.server.MolgenisRequest;
 import org.molgenis.framework.ui.ScreenController;
 import org.molgenis.framework.ui.ScreenMessage;
 import org.molgenis.util.Entity;
-import org.molgenis.wormqtl.etc.HumanToWorm;
+import org.molgenis.wormqtl.etc.GeneMappingDataSource;
+import org.molgenis.wormqtl.etc.HumanToWorm2;
 
 import plugins.qtlfinder2.QtlFinder2;
 import decorators.MolgenisFileHandler;
@@ -198,30 +199,38 @@ public class QtlFinderHD extends QtlFinder2
 						else
 						{
 
-							this.model.getHumanToWorm().getDiseaseToHuman().clear();
-
 							this.model.setDiseaseMapping(request.getString("diseaseMapping"));
 
-							if (this.model.getDiseaseMapping().equals("OMIM"))
-							{
-								this.model.getHumanToWorm().getDiseaseToHuman()
-										.putAll(this.model.getHumanToWorm().getDiseaseToHumanOMIM());
-							}
-							if (this.model.getDiseaseMapping().equals("DGA"))
-							{
-								this.model.getHumanToWorm().getDiseaseToHuman()
-										.putAll(this.model.getHumanToWorm().getDiseaseToHumanDGA());
-							}
-							if (this.model.getDiseaseMapping().equals("GWAS"))
-							{
-								this.model.getHumanToWorm().getDiseaseToHuman()
-										.putAll(this.model.getHumanToWorm().getDiseaseToHumanGWAS());
-							}
-
-							System.out.println(this.model.getHumanToWorm().getDiseaseToHuman());
-
-							this.model.setDisease(this.model.getHumanToWorm().getDiseaseToHuman().keySet().iterator()
-									.next());
+							// FIXME: the rest should NOT be needed anymore
+							// because we have the complete HumanToWorm object
+							// in memory
+							//
+							// this.model.getHumanToWorm().getDiseaseToHuman().clear();
+							//
+							// this.model.setDiseaseMapping(request.getString("diseaseMapping"));
+							//
+							// if
+							// (this.model.getDiseaseMapping().equals("OMIM"))
+							// {
+							// this.model.getHumanToWorm().getDiseaseToHuman()
+							// .putAll(this.model.getHumanToWorm().getDiseaseToHumanOMIM());
+							// }
+							// if (this.model.getDiseaseMapping().equals("DGA"))
+							// {
+							// this.model.getHumanToWorm().getDiseaseToHuman()
+							// .putAll(this.model.getHumanToWorm().getDiseaseToHumanDGA());
+							// }
+							// if
+							// (this.model.getDiseaseMapping().equals("GWAS"))
+							// {
+							// this.model.getHumanToWorm().getDiseaseToHuman()
+							// .putAll(this.model.getHumanToWorm().getDiseaseToHumanGWAS());
+							// }
+							//
+							// System.out.println(this.model.getHumanToWorm().getDiseaseToHuman());
+							//
+							// this.model.setDisease(this.model.getHumanToWorm().getDiseaseToHuman().keySet().iterator()
+							// .next());
 						}
 					}
 
@@ -319,23 +328,47 @@ public class QtlFinderHD extends QtlFinder2
 				MolgenisFileHandler filehandle = new MolgenisFileHandler(db);
 				File storage = filehandle.getFileStorage(true, db);
 
-				// Format: disease \t ENSP ID
-				File diseaseMapOMIM = new File(storage, "OMIMTransTable.csv");
-				// Format: disease \t ENSP ID
-				File diseaseMapDGA = new File(storage, "DGATransTable.csv");
-				// Format: disease \t ENSP ID
-				File diseaseMapGWAS = new File(storage, "GWASTransTable.csv");
-				// Format: ENSP ID \t WBGene ID
-				File orthologs = new File(storage, "speciesTransTable.csv");
-				// Format: Disease \t Number of proteins associated
-				File diseaseProteinCount = new File(storage, "diseaseProteinCount.csv");
-				// Format: Worm gene \t Worm phenotype
-				File wormToPhenotype = new File(storage, "classicalWormPhenotypes.csv");
+				/**
+				 * // Format: disease \t ENSP ID File diseaseMapOMIM = new
+				 * File(storage, "OMIMTransTable.csv"); // Format: disease \t
+				 * ENSP ID File diseaseMapDGA = new File(storage,
+				 * "DGATransTable.csv"); // Format: disease \t ENSP ID File
+				 * diseaseMapGWAS = new File(storage, "GWASTransTable.csv"); //
+				 * Format: ENSP ID \t WBGene ID File orthologs = new
+				 * File(storage, "speciesTransTable.csv"); // Format: Disease \t
+				 * Number of proteins associated File diseaseProteinCount = new
+				 * File(storage, "diseaseProteinCount.csv"); // Format: Worm
+				 * gene \t Worm phenotype File wormToPhenotype = new
+				 * File(storage, "classicalWormPhenotypes.csv");
+				 * 
+				 * HumanToWorm h2w = new HumanToWorm(diseaseMapOMIM,
+				 * diseaseMapDGA, diseaseMapGWAS, orthologs,
+				 * diseaseProteinCount, wormToPhenotype);
+				 **/
 
-				HumanToWorm h2w = new HumanToWorm(diseaseMapOMIM, diseaseMapDGA, diseaseMapGWAS, orthologs,
-						diseaseProteinCount, wormToPhenotype);
+				GeneMappingDataSource omim = new GeneMappingDataSource(new File(storage, "OMIMTransTable.csv"), "OMIM");
+				GeneMappingDataSource dga = new GeneMappingDataSource(new File(storage, "DGATransTable.csv"), "DGA");
+				GeneMappingDataSource gwascentral = new GeneMappingDataSource(new File(storage,
+						"GWASCentralTransTable.csv"), "GWAS Central");
+				GeneMappingDataSource gwascatalog = new GeneMappingDataSource(new File(storage, "GWASTransTable.csv"),
+						"GWAS Catalog");
+				GeneMappingDataSource wormPheno = new GeneMappingDataSource(new File(storage,
+						"classicalWormPhenotypes.csv"), "WormBase");
+				GeneMappingDataSource humanToWorm = new GeneMappingDataSource(
+						new File(storage, "speciesTransTable.csv"), "INPARANOID");
 
-				this.model.setHumanToWorm(h2w);
+				List<GeneMappingDataSource> humanSources = new ArrayList<GeneMappingDataSource>();
+				humanSources.add(omim);
+				humanSources.add(dga);
+				humanSources.add(gwascentral);
+				humanSources.add(gwascatalog);
+
+				List<GeneMappingDataSource> wormSources = new ArrayList<GeneMappingDataSource>();
+				wormSources.add(wormPheno);
+
+				HumanToWorm2 h2w2 = new HumanToWorm2(humanSources, wormSources, humanToWorm);
+
+				this.model.setHumanToWorm(h2w2);
 
 			}
 
@@ -354,10 +387,12 @@ public class QtlFinderHD extends QtlFinder2
 				this.model.setShowResults(false);
 			}
 
-			if (this.model.getDisease() == null)
-			{
-				this.model.setDisease(this.model.getHumanToWorm().getDiseaseToHumanOMIM().keySet().iterator().next());
-			}
+			// FIXME: don't do this here, let the FTL check for null itself
+			//
+			// if (this.model.getDisease() == null)
+			// {
+			// this.model.setDisease(this.model.getHumanToWorm().getDiseaseToHumanOMIM().keySet().iterator().next());
+			// }
 
 			if (this.model.getShowTable() == null)
 			{
@@ -379,17 +414,28 @@ public class QtlFinderHD extends QtlFinder2
 				this.model.setShowWorm(true);
 			}
 
-			if (this.model.getSelectedWormPhenotype() == null)
+			if (this.model.getPhenotypeMapping() == null)
 			{
-				this.model.setSelectedWormPhenotype(this.model.getHumanToWorm().getWormToPhenotype().keySet()
-						.iterator().next());
+				// at the moment, there is only one! therefore we don't show it
+				// in the GUI but code it here to keep the rest of the code
+				// consistent
+				// TODO
+				this.model.setPhenotypeMapping("WormBase");
 			}
 
-			if (this.model.getSelectedHumanPhenotype() == null)
-			{
-				this.model.setSelectedHumanPhenotype(this.model.getHumanToWorm().getDiseaseToHumanOMIM().keySet()
-						.iterator().next());
-			}
+			// FIXME: don't do this here, let the FTL check for null itself
+			//
+			// if (this.model.getSelectedWormPhenotype() == null)
+			// {
+			// this.model.setSelectedWormPhenotype(this.model.getHumanToWorm().getWormToPhenotype().keySet()
+			// .iterator().next());
+			// }
+			//
+			// if (this.model.getSelectedHumanPhenotype() == null)
+			// {
+			// this.model.setSelectedHumanPhenotype(this.model.getHumanToWorm().getDiseaseToHumanOMIM().keySet()
+			// .iterator().next());
+			// }
 
 		}
 		catch (Exception e)
