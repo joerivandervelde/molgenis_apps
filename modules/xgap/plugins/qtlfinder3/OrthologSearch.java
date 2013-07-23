@@ -38,7 +38,7 @@ public class OrthologSearch
 		model.setHumanGeneQuery(new ArrayList<String>());
 		for (String enpsID : enpsIDs)
 		{
-			String ortholog = model.getHumanToWorm().getHumanGeneToWormGene(enpsID);
+			String ortholog = model.getHumanToWorm().humanGeneToWormGene(enpsID);
 			if (ortholog == null)
 			{
 				continue;
