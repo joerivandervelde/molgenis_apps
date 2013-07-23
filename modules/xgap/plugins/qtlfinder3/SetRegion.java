@@ -61,12 +61,13 @@ public class SetRegion
 
 			if (p.getSymbol().contains("WBGene"))
 			{
-				myList = model.getHumanToWorm().getWormGeneToHumanDiseases(p.getSymbol(), model.getDiseaseMapping());
+				myList = model.getHumanToWorm().wormGeneToHumanDiseases(p.getSymbol(), model.getDiseaseMapping());
 				model.getGeneAssociatedDiseases().put(myList.get(0), myList.subList(1, myList.size()));
 			}
 			else
 			{
-				myList = model.getHumanToWorm().getWormGeneToHumanDiseases(p.getReportsFor_Name(), model.getDiseaseMapping());
+				myList = model.getHumanToWorm().wormGeneToHumanDiseases(p.getReportsFor_Name(),
+						model.getDiseaseMapping());
 				model.getGeneAssociatedDiseases().put(myList.get(0), myList.subList(1, myList.size()));
 			}
 		}

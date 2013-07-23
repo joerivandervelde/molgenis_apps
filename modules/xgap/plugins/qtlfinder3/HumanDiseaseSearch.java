@@ -42,7 +42,7 @@ public class HumanDiseaseSearch
 		// For every disease that is selected add the wormgenes to the list
 		for (String disease : model.getDiseases())
 		{
-			wormGenes.addAll(model.getHumanToWorm().getHumanDiseaseToWormGenes(disease, model.getDiseaseMapping()));
+			wormGenes.addAll(model.getHumanToWorm().humanDiseaseToWormGenes(disease, model.getDiseaseMapping()));
 		}
 
 		// }

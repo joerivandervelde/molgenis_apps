@@ -51,9 +51,70 @@ public class HumanToWorm2
 	 * @param dataSourceName
 	 * @return
 	 */
-	public Set<String> getAllDiseases(String dataSourceName)
+	public Set<String> allHumanDiseases(String dataSourceName)
 	{
 		return this.humanSources.get(dataSourceName).getAllMappings();
+	}
+
+	/**
+	 * Get all disease ('mapping') names for a given source
+	 * 
+	 * @param dataSourceName
+	 * @return
+	 */
+	public Set<String> allWormPhenotypes(String dataSourceName)
+	{
+		return this.humanSources.get(dataSourceName).getAllMappings();
+	}
+
+	/**
+	 * 
+	 * @param disease
+	 * @return
+	 */
+	public List<String> humanDiseaseToHumanGenes(String disease, String sourceName)
+	{
+		List<String> result = new ArrayList<String>();
+		// TODO: implement
+		return result;
+	}
+
+	/**
+	 * 
+	 * @param disease
+	 * @return
+	 */
+	public List<String> humanDiseaseToHumanGenesHavingWormOrtholog(String disease, String sourceName)
+	{
+		List<String> result = new ArrayList<String>();
+		// TODO: implement
+		return result;
+	}
+
+	/**
+	 * This method converts a human disease to a list of orthologous worm genes
+	 * 
+	 * TODO: can be made more efficient with a helper map? disease -> worm genes
+	 * 
+	 * @param disease
+	 * @return a list of worm genes that are ortholog for the disease that was
+	 *         put in
+	 * @throws Exception
+	 */
+	public List<String> humanDiseaseToWormGenes(String disease, String dataSource) throws Exception
+	{
+		List<String> humanGenes = this.humanSources.get(dataSource).getGenes(disease);
+		List<String> wormGenes = new ArrayList<String>();
+
+		// For every human gene (ENSP id) that is linked to the entered disease
+		// get the WBgene ID(s)
+		for (String humanGene : humanGenes)
+		{
+			String wormGene = humanGeneToWormGene(humanGene);
+			wormGenes.add(wormGene);
+		}
+
+		return wormGenes;
 	}
 
 	/**
@@ -64,7 +125,7 @@ public class HumanToWorm2
 	 * @return
 	 * @throws Exception
 	 */
-	public String getHumanGeneToWormGene(String humanGene) throws Exception
+	public String humanGeneToWormGene(String humanGene) throws Exception
 	{
 		List<String> wormGenes = humanToWormOrthologs.getMapping(humanGene);
 		if (wormGenes.size() > 1)
@@ -86,7 +147,7 @@ public class HumanToWorm2
 	 * @return
 	 * @throws Exception
 	 */
-	public String getWormGeneToHumanGene(String wormGene) throws Exception
+	public String wormGeneToHumanGene(String wormGene) throws Exception
 	{
 		List<String> humanGenes = humanToWormOrthologs.getGenes(wormGene);
 		if (humanGenes.size() > 1)
@@ -106,9 +167,9 @@ public class HumanToWorm2
 	 *         diseases associated with that gene
 	 * @throws Exception
 	 */
-	public List<String> getWormGeneToHumanDiseases(String wbGene, String dataSourceName) throws Exception
+	public List<String> wormGeneToHumanDiseases(String wbGene, String dataSourceName) throws Exception
 	{
-		String humanOrtholog = this.getWormGeneToHumanGene(wbGene);
+		String humanOrtholog = this.wormGeneToHumanGene(wbGene);
 		return this.humanSources.get(dataSourceName).getMapping(humanOrtholog);
 	}
 
@@ -119,7 +180,7 @@ public class HumanToWorm2
 	 * @param sourceName
 	 * @return
 	 */
-	public List<String> getWormGeneToWormPhenotypes(String gene, String sourceName)
+	public List<String> wormGeneToWormPhenotypes(String gene, String sourceName)
 	{
 		return wormSources.get(sourceName).getMapping(gene);
 	}
@@ -131,35 +192,21 @@ public class HumanToWorm2
 	 * @param sourceName
 	 * @return
 	 */
-	public List<String> getWormPhenotypeToWormGenes(String phenotype, String sourceName)
+	public List<String> wormPhenotypeToWormGenes(String phenotype, String sourceName)
 	{
 		return wormSources.get(sourceName).getGenes(phenotype);
 	}
 
 	/**
-	 * This method converts a human disease to a list of orthologous worm genes
-	 * 
-	 * TODO: can be made more efficient with a helper map? disease -> worm genes
 	 * 
 	 * @param disease
-	 * @return a list of worm genes that are ortholog for the disease that was
-	 *         put in
-	 * @throws Exception
+	 * @return
 	 */
-	public List<String> getHumanDiseaseToWormGenes(String disease, String dataSource) throws Exception
+	public List<String> wormPhenotypeToWormGenesHavingHumanOrtholog(String disease, String sourceName)
 	{
-		List<String> humanGenes = this.humanSources.get(dataSource).getGenes(disease);
-		List<String> wormGenes = new ArrayList<String>();
-
-		// For every human gene (ENSP id) that is linked to the entered disease
-		// get the WBgene ID(s)
-		for (String humanGene : humanGenes)
-		{
-			String wormGene = getHumanGeneToWormGene(humanGene);
-			wormGenes.add(wormGene);
-		}
-
-		return wormGenes;
+		List<String> result = new ArrayList<String>();
+		// TODO: implement
+		return result;
 	}
 
 }

@@ -131,7 +131,8 @@ public class QtlSearch
 
 					wbGene = t.get("symbol").toString();
 
-					List<String> myList = model.getHumanToWorm().getWormGeneToHumanDiseases(wbGene, model.getDiseaseMapping());
+					List<String> myList = model.getHumanToWorm().wormGeneToHumanDiseases(wbGene,
+							model.getDiseaseMapping());
 
 					model.getGeneAssociatedDiseases().put(myList.get(0), myList.subList(1, myList.size()));
 				}
