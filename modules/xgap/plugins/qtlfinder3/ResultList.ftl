@@ -97,37 +97,24 @@
 									</#if>
 									<br />
 									Human protein ortholog:
-									<#list model.humanToWorm.humanToWorm?keys as key>
-										<#if model.hits[name].get('ReportsFor_name')?? && model.hits[name].get('ReportsFor_name')?is_string && model.hits[name].get('ReportsFor_name')?length gt 0>
-											<#if model.humanToWorm.humanToWorm[key] == model.hits[name].reportsFor_name><#assign hprotein = key/>${key}</#if>
-										<#elseif model.hits[name].symbol?? && model.hits[name].symbol?length gt 0>
-											<#if model.humanToWorm.humanToWorm[key] == model.hits[name].symbol><#assign hprotein = key/>${key}</#if>
-										</#if>
-									</#list>
+									<#if model.hits[name].get('ReportsFor_name')?? && model.hits[name].get('ReportsFor_name')?is_string && model.hits[name].get('ReportsFor_name')?length gt 0>
+										<#assign humanOrtho = model.humanToWorm.wormGeneToHumanGene(model.hits[name].reportsFor_name)>
+										<#if humanOrtho??>${humanOrtho}</#if>
+									<#elseif model.hits[name].symbol?? && model.hits[name].symbol?length gt 0>
+										<#assign humanOrtho = model.humanToWorm.wormGeneToHumanGene(model.hits[name].symbol)>
+										<#if humanOrtho??>${humanOrtho}</#if>
+									</#if>
 								</span>
 							</a>
 							<div style="font-size:80%">
-							<#if model.hits[name].get('ReportsFor_name')?? && model.hits[name].get('ReportsFor_name')?is_string && model.hits[name].get('ReportsFor_name')?length gt 0>	
-										<#if model.humanToWorm.linkToDisease(model.hits[name].reportsFor_name, 'OMIM')[1] == "No ortholog available">
-										<#else>OMIM: ${model.humanToWorm.linkToDisease(model.hits[name].reportsFor_name, 'OMIM')[1]}<br />
-										</#if>	
-										<#if model.humanToWorm.linkToDisease(model.hits[name].reportsFor_name, 'DGA')[1] == "No ortholog available">
-										<#else>DGA: ${model.humanToWorm.linkToDisease(model.hits[name].reportsFor_name, 'DGA')[1]}<br />
-										</#if>		
-										<#if model.humanToWorm.linkToDisease(model.hits[name].reportsFor_name, 'GWAS')[1] == "No ortholog available">
-										<#else>GWAS: ${model.humanToWorm.linkToDisease(model.hits[name].reportsFor_name, 'GWAS')[1]}	
-										</#if>
-									<#elseif model.hits[name].symbol?? && model.hits[name].symbol?length gt 0>
-										<#if model.humanToWorm.linkToDisease(model.hits[name].symbol, 'OMIM')[1] == "No ortholog available">
-										<#else>OMIM: ${model.humanToWorm.linkToDisease(model.hits[name].symbol, 'OMIM')[1]}<br />
-										</#if>
-										<#if model.humanToWorm.linkToDisease(model.hits[name].symbol, 'DGA')[1] == "No ortholog available">
-										<#else>DGA: ${model.humanToWorm.linkToDisease(model.hits[name].symbol, 'DGA')[1]}<br />	
-										</#if>
-										<#if model.humanToWorm.linkToDisease(model.hits[name].symbol, 'GWAS')[1] == "No ortholog available">
-										<#else>GWAS: ${model.humanToWorm.linkToDisease(model.hits[name].symbol, 'GWAS')[1]}
-										</#if>
-									</#if>
+							
+							<#list model.humanToWorm.wormProbeToDataSourceToHumanDiseases(model.hits[name].name)?keys as source>
+								${source}:
+								<#list model.humanToWorm.wormProbeToDataSourceToHumanDiseases(model.hits[name].name)[source] as disease>
+									${disease}
+								</#list>
+							</#list>
+
 							</div>	
 						</div>
 		

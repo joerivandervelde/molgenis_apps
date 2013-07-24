@@ -369,7 +369,7 @@ public class QtlFinderHD extends QtlFinder2
 				List<GeneMappingDataSource> wormSources = new ArrayList<GeneMappingDataSource>();
 				wormSources.add(wormPheno);
 
-				HumanToWorm2 h2w2 = new HumanToWorm2(humanSources, wormSources, humanToWorm);
+				HumanToWorm2 h2w2 = new HumanToWorm2(humanSources, wormSources, humanToWorm, db);
 
 				this.model.setHumanToWorm(h2w2);
 
