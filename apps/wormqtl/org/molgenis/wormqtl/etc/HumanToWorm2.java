@@ -45,6 +45,11 @@ public class HumanToWorm2
 
 	}
 
+	public Set<String> humanSourceNames()
+	{
+		return this.humanSources.keySet();
+	}
+
 	/**
 	 * Get all disease ('mapping') names for a given source
 	 * 
@@ -128,6 +133,10 @@ public class HumanToWorm2
 	public String humanGeneToWormGene(String humanGene) throws Exception
 	{
 		List<String> wormGenes = humanToWormOrthologs.getMapping(humanGene);
+		if (wormGenes == null)
+		{
+			return null;
+		}
 		if (wormGenes.size() > 1)
 		{
 			throw new Exception("There are multiple mappings in worm for human gene '" + humanGene + "'");

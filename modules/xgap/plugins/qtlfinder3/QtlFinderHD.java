@@ -346,22 +346,25 @@ public class QtlFinderHD extends QtlFinder2
 				 * diseaseProteinCount, wormToPhenotype);
 				 **/
 
-				GeneMappingDataSource omim = new GeneMappingDataSource(new File(storage, "OMIMTransTable.csv"), "OMIM");
-				GeneMappingDataSource dga = new GeneMappingDataSource(new File(storage, "DGATransTable.csv"), "DGA");
+				GeneMappingDataSource omim = new GeneMappingDataSource(new File(storage, "human_disease_OMIM.csv"),
+						"OMIM");
+				// GeneMappingDataSource dga = new GeneMappingDataSource(new
+				// File(storage, "DGATransTable.csv"), "DGA");
 				GeneMappingDataSource gwascentral = new GeneMappingDataSource(new File(storage,
-						"GWASCentralTransTable.csv"), "GWAS Central");
-				GeneMappingDataSource gwascatalog = new GeneMappingDataSource(new File(storage, "GWASTransTable.csv"),
-						"GWAS Catalog");
-				GeneMappingDataSource wormPheno = new GeneMappingDataSource(new File(storage,
-						"classicalWormPhenotypes.csv"), "WormBase");
-				GeneMappingDataSource humanToWorm = new GeneMappingDataSource(
-						new File(storage, "speciesTransTable.csv"), "INPARANOID");
+						"human_disease_GWASCENTRAL.csv"), "GWAS Central");
+				// GeneMappingDataSource gwascatalog = new
+				// GeneMappingDataSource(new File(storage,
+				// "GWASTransTable.csv"), "GWAS Catalog");
+				GeneMappingDataSource wormPheno = new GeneMappingDataSource(new File(storage, "worm_disease.csv"),
+						"WormBase");
+				GeneMappingDataSource humanToWorm = new GeneMappingDataSource(new File(storage, "orthologs.csv"),
+						"INPARANOID");
 
 				List<GeneMappingDataSource> humanSources = new ArrayList<GeneMappingDataSource>();
 				humanSources.add(omim);
-				humanSources.add(dga);
+				// humanSources.add(dga);
 				humanSources.add(gwascentral);
-				humanSources.add(gwascatalog);
+				// humanSources.add(gwascatalog);
 
 				List<GeneMappingDataSource> wormSources = new ArrayList<GeneMappingDataSource>();
 				wormSources.add(wormPheno);

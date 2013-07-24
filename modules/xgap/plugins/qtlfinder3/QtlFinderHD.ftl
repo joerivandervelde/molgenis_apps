@@ -98,9 +98,9 @@
 <#macro diseaseMapping model screen>
 	<div style="position:relative;float:left;">
 		<select id="diseaseMapping" name="diseaseMapping">
-			<option value="OMIM" <#if model.diseaseMapping == "OMIM">selected="selected"</#if>>OMIM</option>
-			<option value="DGA" <#if model.diseaseMapping == "DGA">selected="selected"</#if>>DGA</option>
-			<option value="GWAS" <#if model.diseaseMapping == "GWAS">selected="selected"</#if>>GWAS</option>
+			<#list model.humanToWorm.humanSourceNames() as source>
+			<option value="OMIM" <#if model.diseaseMapping == "${source}">selected="selected"</#if>>${source}</option>
+			</#list>
 		</select>
 
 		<button type="submit" id="search "onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();">Go</button>
