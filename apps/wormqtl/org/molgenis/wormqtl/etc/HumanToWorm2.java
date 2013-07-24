@@ -1,6 +1,7 @@
 package org.molgenis.wormqtl.etc;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,9 +24,10 @@ public class HumanToWorm2
 	 * @param humanSources
 	 * @param wormSources
 	 * @param humanToWormOrthologs
+	 * @throws Exception
 	 */
 	public HumanToWorm2(List<GeneMappingDataSource> humanSources, List<GeneMappingDataSource> wormSources,
-			GeneMappingDataSource humanToWormOrthologs)
+			GeneMappingDataSource humanToWormOrthologs) throws Exception
 	{
 		Map<String, GeneMappingDataSource> humanSourcesMap = new HashMap<String, GeneMappingDataSource>();
 		for (GeneMappingDataSource g : humanSources)
@@ -42,6 +44,22 @@ public class HumanToWorm2
 		this.wormSources = wormSourcesMap;
 
 		this.humanToWormOrthologs = humanToWormOrthologs;
+
+		// find out for which human diseases have genes for which there is at
+		// least 1 worm ortholog
+		Set<String> allHumanGenesWithOrtholog = this.humanToWormOrthologs.geneToMapping.keySet();
+		for (String source : this.humanSources.keySet())
+		{
+			for (String disease : this.humanSources.get(source).getAllMappings())
+			{
+				List<String> humanGenes = this.humanSources.get(source).getGenes(disease);
+
+				if (Collections.disjoint(humanGenes, allHumanGenesWithOrtholog))
+				{
+					throw new Exception("Human disease '" + disease + "' has no worm orthologs!");
+				}
+			}
+		}
 
 	}
 
@@ -60,6 +78,19 @@ public class HumanToWorm2
 	{
 		return this.humanSources.get(dataSourceName).getAllMappings();
 	}
+
+	/**
+	 * Get all disease ('mapping') names for a given source for which at least 1
+	 * of the genes have a worm ortholog
+	 * 
+	 * @param dataSourceName
+	 * @return
+	 */
+	// public Set<String> allHumanDiseasesHavingWormOrtholog(String
+	// dataSourceName)
+	// {
+	// //
+	// }
 
 	/**
 	 * Get all disease ('mapping') names for a given source
