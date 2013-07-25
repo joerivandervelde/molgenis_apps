@@ -51,7 +51,6 @@ public class HumanToWorm2
 	 * @param dataSourceName
 	 * @return
 	 */
-
 	public Set<String> allHumanDiseases(String dataSourceName)
 	{
 		return this.humanSources.get(dataSourceName).getAllMappings();
@@ -210,8 +209,4 @@ public class HumanToWorm2
 		return result;
 	}
 
-	public Set<String> getAllWormDiseases()
-	{
-		return this.wormSources.keySet();
-	}
 }

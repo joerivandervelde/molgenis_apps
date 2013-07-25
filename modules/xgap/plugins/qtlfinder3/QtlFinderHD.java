@@ -171,8 +171,7 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.setShowWorm(false);
 
 						ComparePhenotypes cp = new ComparePhenotypes();
-						// cp.comparePhenotypesHuman(model, this.getModel(),
-						// this.model.getSelectedHumanPhenotype());
+						cp.comparePhenotypesHuman(model, this.getModel(), this.model.getSelectedHumanPhenotype());
 					}
 
 					// Ortholog Search
@@ -199,7 +198,39 @@ public class QtlFinderHD extends QtlFinder2
 						}
 						else
 						{
+
 							this.model.setDiseaseMapping(request.getString("diseaseMapping"));
+
+							// FIXME: the rest should NOT be needed anymore
+							// because we have the complete HumanToWorm object
+							// in memory
+							//
+							// this.model.getHumanToWorm().getDiseaseToHuman().clear();
+							//
+							// this.model.setDiseaseMapping(request.getString("diseaseMapping"));
+							//
+							// if
+							// (this.model.getDiseaseMapping().equals("OMIM"))
+							// {
+							// this.model.getHumanToWorm().getDiseaseToHuman()
+							// .putAll(this.model.getHumanToWorm().getDiseaseToHumanOMIM());
+							// }
+							// if (this.model.getDiseaseMapping().equals("DGA"))
+							// {
+							// this.model.getHumanToWorm().getDiseaseToHuman()
+							// .putAll(this.model.getHumanToWorm().getDiseaseToHumanDGA());
+							// }
+							// if
+							// (this.model.getDiseaseMapping().equals("GWAS"))
+							// {
+							// this.model.getHumanToWorm().getDiseaseToHuman()
+							// .putAll(this.model.getHumanToWorm().getDiseaseToHumanGWAS());
+							// }
+							//
+							// System.out.println(this.model.getHumanToWorm().getDiseaseToHuman());
+							//
+							// this.model.setDisease(this.model.getHumanToWorm().getDiseaseToHuman().keySet().iterator()
+							// .next());
 						}
 					}
 
@@ -296,6 +327,24 @@ public class QtlFinderHD extends QtlFinder2
 			{
 				MolgenisFileHandler filehandle = new MolgenisFileHandler(db);
 				File storage = filehandle.getFileStorage(true, db);
+
+				/**
+				 * // Format: disease \t ENSP ID File diseaseMapOMIM = new
+				 * File(storage, "OMIMTransTable.csv"); // Format: disease \t
+				 * ENSP ID File diseaseMapDGA = new File(storage,
+				 * "DGATransTable.csv"); // Format: disease \t ENSP ID File
+				 * diseaseMapGWAS = new File(storage, "GWASTransTable.csv"); //
+				 * Format: ENSP ID \t WBGene ID File orthologs = new
+				 * File(storage, "speciesTransTable.csv"); // Format: Disease \t
+				 * Number of proteins associated File diseaseProteinCount = new
+				 * File(storage, "diseaseProteinCount.csv"); // Format: Worm
+				 * gene \t Worm phenotype File wormToPhenotype = new
+				 * File(storage, "classicalWormPhenotypes.csv");
+				 * 
+				 * HumanToWorm h2w = new HumanToWorm(diseaseMapOMIM,
+				 * diseaseMapDGA, diseaseMapGWAS, orthologs,
+				 * diseaseProteinCount, wormToPhenotype);
+				 **/
 
 				GeneMappingDataSource omim = new GeneMappingDataSource(new File(storage, "OMIMTransTable.csv"), "OMIM");
 				GeneMappingDataSource dga = new GeneMappingDataSource(new File(storage, "DGATransTable.csv"), "DGA");
