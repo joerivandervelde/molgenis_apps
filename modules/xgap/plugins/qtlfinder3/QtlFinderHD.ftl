@@ -99,7 +99,7 @@
 	<div style="position:relative;float:left;">
 		<select id="diseaseMapping" name="diseaseMapping">
 			<#list model.humanToWorm.humanSourceNames() as source>
-			<option value="OMIM" <#if model.diseaseMapping == "${source}">selected="selected"</#if>>${source}</option>
+			<option value="${source}" <#if model.diseaseMapping == "${source}">selected="selected"</#if>>${source}</option>
 			</#list>
 		</select>
 

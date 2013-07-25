@@ -9,7 +9,7 @@
 		<tr>
 			<td width="200" style="padding-left:25px;">
 				<select multiple class=" ui-widget-content ui-corner-all" id="diseaseSelect" name="diseaseSelect"  style="width:500px;">
-					<#list model.humanToWorm.allHumanDiseases(model.diseaseMapping) as disease>
+					<#list model.humanToWorm.humanDiseasesWithOrthology(model.diseaseMapping) as disease>
 						<option value="${disease}">${disease}</option> 
 					</#list>
 				</select>

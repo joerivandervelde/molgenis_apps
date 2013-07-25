@@ -75,15 +75,7 @@ public class QtlFinderHD extends QtlFinder2
 					if (action.equals("diseaseSearch"))
 					{
 						List<String> disease = request.getList("diseaseSelect");
-						if (this.model.getDiseaseMapping().equals("OMIM"))
-						{
-							this.model.setDiseases(disease);
-						}
-						else
-						{
-							this.model.setDisease(disease.get(0).toString());
-						}
-
+						this.model.setDiseases(disease);
 						HumanDiseaseSearch hds = new HumanDiseaseSearch();
 						hds.diseaseSearch(model, db);
 					}
@@ -200,37 +192,6 @@ public class QtlFinderHD extends QtlFinder2
 						{
 
 							this.model.setDiseaseMapping(request.getString("diseaseMapping"));
-
-							// FIXME: the rest should NOT be needed anymore
-							// because we have the complete HumanToWorm object
-							// in memory
-							//
-							// this.model.getHumanToWorm().getDiseaseToHuman().clear();
-							//
-							// this.model.setDiseaseMapping(request.getString("diseaseMapping"));
-							//
-							// if
-							// (this.model.getDiseaseMapping().equals("OMIM"))
-							// {
-							// this.model.getHumanToWorm().getDiseaseToHuman()
-							// .putAll(this.model.getHumanToWorm().getDiseaseToHumanOMIM());
-							// }
-							// if (this.model.getDiseaseMapping().equals("DGA"))
-							// {
-							// this.model.getHumanToWorm().getDiseaseToHuman()
-							// .putAll(this.model.getHumanToWorm().getDiseaseToHumanDGA());
-							// }
-							// if
-							// (this.model.getDiseaseMapping().equals("GWAS"))
-							// {
-							// this.model.getHumanToWorm().getDiseaseToHuman()
-							// .putAll(this.model.getHumanToWorm().getDiseaseToHumanGWAS());
-							// }
-							//
-							// System.out.println(this.model.getHumanToWorm().getDiseaseToHuman());
-							//
-							// this.model.setDisease(this.model.getHumanToWorm().getDiseaseToHuman().keySet().iterator()
-							// .next());
 						}
 					}
 
@@ -348,13 +309,11 @@ public class QtlFinderHD extends QtlFinder2
 
 				GeneMappingDataSource omim = new GeneMappingDataSource(new File(storage, "human_disease_OMIM.csv"),
 						"OMIM");
-				// GeneMappingDataSource dga = new GeneMappingDataSource(new
-				// File(storage, "DGATransTable.csv"), "DGA");
+				GeneMappingDataSource dga = new GeneMappingDataSource(new File(storage, "human_disease_DGA.csv"), "DGA");
 				GeneMappingDataSource gwascentral = new GeneMappingDataSource(new File(storage,
 						"human_disease_GWASCENTRAL.csv"), "GWAS Central");
-				// GeneMappingDataSource gwascatalog = new
-				// GeneMappingDataSource(new File(storage,
-				// "GWASTransTable.csv"), "GWAS Catalog");
+				GeneMappingDataSource gwascatalog = new GeneMappingDataSource(new File(storage,
+						"human_disease_GWASCATALOG.csv"), "GWAS Catalog");
 				GeneMappingDataSource wormPheno = new GeneMappingDataSource(new File(storage, "worm_disease.csv"),
 						"WormBase");
 				GeneMappingDataSource humanToWorm = new GeneMappingDataSource(new File(storage, "orthologs.csv"),
@@ -362,9 +321,9 @@ public class QtlFinderHD extends QtlFinder2
 
 				List<GeneMappingDataSource> humanSources = new ArrayList<GeneMappingDataSource>();
 				humanSources.add(omim);
-				// humanSources.add(dga);
+				humanSources.add(dga);
 				humanSources.add(gwascentral);
-				// humanSources.add(gwascatalog);
+				humanSources.add(gwascatalog);
 
 				List<GeneMappingDataSource> wormSources = new ArrayList<GeneMappingDataSource>();
 				wormSources.add(wormPheno);

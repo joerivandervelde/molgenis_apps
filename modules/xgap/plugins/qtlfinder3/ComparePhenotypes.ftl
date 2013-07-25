@@ -21,8 +21,8 @@
 			<tr>
 				<td width="200" style="padding-left:25px;">
 					<select class=" ui-widget-content ui-corner-all" id="wormPhenotype" name="wormPhenotype"  style="width:500px;">
-						<#list model.humanToWorm.wormToPhenotype?keys as phenotype>
-							<option value="${phenotype}" <#if model.selectedWormPhenotype == phenotype>selected="selected"</#if>
+						<#list model.humanToWorm.wormPhenotypesWithOrthology(model.phenotypeMapping) as phenotype>
+							<option value="${phenotype}" <#if model.selectedWormPhenotype?? && model.selectedWormPhenotype == phenotype>selected="selected"</#if>
 							>${phenotype} </option>
 						</#list>	
 					</select>
@@ -64,8 +64,8 @@
 			<tr>
 				<td width="200" style="padding-left:25px;">
 					<select class=" ui-widget-content ui-corner-all" id="humanPhenotype" name="humanPhenotype"  style="width:500px;">
-						<#list model.humanToWorm.diseaseToHuman?keys as disease>
-							<option value="${disease}" <#if model.disease == disease>selected="selected"</#if>>${disease}</option> 
+						<#list model.humanToWorm.humanDiseasesWithOrthology(model.diseaseMapping) as disease>
+							<option value="${disease}" <#if model.disease?? && model.disease == disease>selected="selected"</#if>>${disease}</option> 
 						</#list>
 					</select>
 				</td>			

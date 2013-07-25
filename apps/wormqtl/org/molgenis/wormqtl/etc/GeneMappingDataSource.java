@@ -43,6 +43,8 @@ public class GeneMappingDataSource
 		String[] split = null;
 		String geneID, mapping, details = null;
 
+		s.nextLine(); // skip header
+
 		while (s.hasNext())
 		{
 			String line = s.nextLine();
@@ -142,6 +144,16 @@ public class GeneMappingDataSource
 	public Set<String> getAllMappings()
 	{
 		return mappingToGenes.keySet();
+	}
+
+	/**
+	 * Get available genes
+	 * 
+	 * @return
+	 */
+	public Set<String> getAllGenes()
+	{
+		return geneToMapping.keySet();
 	}
 
 	/**
