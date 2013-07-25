@@ -99,11 +99,12 @@
 	<div style="position:relative;float:left;">
 		<select id="diseaseMapping" name="diseaseMapping">
 			<#list model.humanToWorm.humanSourceNames() as source>
-			<option value="${source}" <#if model.diseaseMapping == "${source}">selected="selected"</#if>>${source}</option>
+			<option onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();" value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Human: ${source}</option>
+			</#list>
+			<#list model.humanToWorm.wormSourceNames() as source>
+			<option onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();" value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Worm: ${source}</option>
 			</#list>
 		</select>
-
-		<button type="submit" id="search "onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();">Go</button>
 	</div>	
 </#macro>
 
@@ -137,8 +138,7 @@
 			
 			<#-- DROPDOWN WIDGET -->
 			$("#diseaseSelect").chosen();
-			$("#humanPhenotype").chosen();
-			$("#wormPhenotype").chosen();
+			$("#comparePheno").chosen();
 		});		
 	</script>
 	

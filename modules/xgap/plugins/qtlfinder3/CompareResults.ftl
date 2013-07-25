@@ -5,34 +5,26 @@
 				<tr> 
 		    		<th>Worm phenotype</th> 
 				    <th>Human Phenotype</th> 
+					<th>Source</th>
 				    <th>Number of genes overlapping</th> 
 				    <th>P-value</th>
 				</tr> 
 			</thead> 
 			<tbody>
-				<#if model.showWorm> 
-					<#list model.allOverlaps?keys as humanPhenotype>
-						<#if model.allOverlaps[humanPhenotype] gt 0>
-							<tr>
-							  	<td>${model.selectedWormPhenotype}</td> 
-							    <td>${humanPhenotype}</td> 
-							    <td align="center">${model.allOverlaps[humanPhenotype]}</td>
-							    <td>${model.allProbabilities[humanPhenotype]}</td>  
-							</tr>					
-						</#if>
-					</#list>
-				<#else>
-					<#list model.allOverlaps?keys as wormPhenotype>
-						<#if model.allOverlaps[wormPhenotype] gt 0>
-							<tr>
-							  	<td>${wormPhenotype}</td> 
-							    <td>${model.selectedHumanPhenotype}</td> 
-							    <td align="center">${model.allOverlaps[wormPhenotype]}</td>
-							    <td>${model.allProbabilities[wormPhenotype]}</td>  
-							</tr>	
-						</#if>
-					</#list>
-				</#if>	
+				<#list model.allOverlaps?keys as source>
+					
+						<#list model.allOverlaps[source]?keys as disease>
+						
+						<tr>
+						  	<td>[TODO: LIST OF SELECTED PHENOTYPES]</td> 
+						    <td>${disease}</td>
+						    <td>${source}</td> 
+						    <td align="center">${model.getAllOverlaps()[source][disease]}</td>
+						    <td>${model.getAllProbabilities()[source][disease]}</td>  
+						</tr>
+						</#list>				
+				
+				</#list>
 			</tbody> 
 		</table>
 	</#if>	

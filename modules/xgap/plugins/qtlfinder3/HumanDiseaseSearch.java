@@ -40,11 +40,22 @@ public class HumanDiseaseSearch
 		// {
 
 		// For every disease that is selected add the wormgenes to the list
-		for (String disease : model.getDiseases())
+		if (model.getHumanToWorm().humanSourceNames().contains(model.getDiseaseMapping()))
 		{
-			wormGenes.addAll(model.getHumanToWorm().humanDiseaseToWormGenes(disease, model.getDiseaseMapping()));
+			for (String disease : model.getDiseases())
+			{
+				wormGenes.addAll(model.getHumanToWorm().humanDiseaseToWormGenes(disease, model.getDiseaseMapping()));
+			}
 		}
-
+		else
+		{
+			for (String disease : model.getDiseases())
+			{
+				System.out.println("diease: " + disease);
+				wormGenes.addAll(model.getHumanToWorm().wormPhenotypeToWormGenes(disease, model.getDiseaseMapping()));
+				System.out.println("genes size: " + wormGenes.size());
+			}
+		}
 		// }
 		// else
 		// {

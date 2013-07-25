@@ -96,12 +96,20 @@
 										${model.hits[name].symbol}
 									</#if>
 									<br />
-									Human protein ortholog:
+									Human gene ortholog:
 									<#if model.hits[name].get('ReportsFor_name')?? && model.hits[name].get('ReportsFor_name')?is_string && model.hits[name].get('ReportsFor_name')?length gt 0>
-										<#assign humanOrtho = model.humanToWorm.wormGeneToHumanGene(model.hits[name].reportsFor_name)>
+										<#if model.humanToWorm.wormGeneToHumanGene(model.hits[name].reportsFor_name)??>
+											<#assign humanOrtho = model.humanToWorm.wormGeneToHumanGene(model.hits[name].reportsFor_name)>
+										<#else>
+											<#assign humanOrtho = "No ortholog available">
+										</#if>
 										<#if humanOrtho??>${humanOrtho}</#if>
 									<#elseif model.hits[name].symbol?? && model.hits[name].symbol?length gt 0>
-										<#assign humanOrtho = model.humanToWorm.wormGeneToHumanGene(model.hits[name].symbol)>
+										<#if model.humanToWorm.wormGeneToHumanGene(model.hits[name].symbol)??>
+											<#assign humanOrtho = model.humanToWorm.wormGeneToHumanGene(model.hits[name].symbol)>
+										<#else>
+											<#assign humanOrtho = "No ortholog available">
+										</#if>
 										<#if humanOrtho??>${humanOrtho}</#if>
 									</#if>
 								</span>
@@ -109,7 +117,7 @@
 							<div style="font-size:80%">
 							
 							<#list model.humanToWorm.wormProbeToDataSourceToHumanDiseases(model.hits[name].name)?keys as source>
-								${source}:
+								<b>${source}</b>:
 								<#list model.humanToWorm.wormProbeToDataSourceToHumanDiseases(model.hits[name].name)[source] as disease>
 									${disease}
 								</#list>

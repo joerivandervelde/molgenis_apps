@@ -147,23 +147,21 @@ public class QtlFinderHD extends QtlFinder2
 					}
 
 					// Phenotype comparison with worm list selection
-					if (action.equals("comparePhenotypesWorm"))
+					if (action.equals("comparePhenotypes"))
 					{
-						this.model.setSelectedWormPhenotype(request.getString("wormPhenotype"));
-						this.model.setShowWorm(true);
+						List<String> phenoDiseases = request.getList("comparePheno");
 
 						ComparePhenotypes cp = new ComparePhenotypes();
-						cp.comparePhenotypesWorm(model, this.getModel(), this.model.getSelectedWormPhenotype());
-					}
 
-					// Phenotype comparison with human list selection
-					if (action.equals("comparePhenotypesHuman"))
-					{
-						this.model.setSelectedHumanPhenotype(request.getString("humanPhenotype"));
-						this.model.setShowWorm(false);
+						if (this.model.getHumanToWorm().humanSourceNames().contains(this.model.getDiseaseMapping()))
+						{
+							cp.comparePhenotypesHuman(model, this.getModel(), phenoDiseases);
+						}
+						else
+						{
+							cp.comparePhenotypesWorm(model, this.getModel(), phenoDiseases);
+						}
 
-						ComparePhenotypes cp = new ComparePhenotypes();
-						cp.comparePhenotypesHuman(model, this.getModel(), this.model.getSelectedHumanPhenotype());
 					}
 
 					// Ortholog Search
@@ -184,14 +182,16 @@ public class QtlFinderHD extends QtlFinder2
 					// Change disease mapping by reloading
 					if (action.equals("mappingChange"))
 					{
-						if (request.getString("diseaseMapping").equals(this.model.getDiseaseMapping()))
+						String diseaseMapping = request.getString("diseaseMapping");
+
+						if (diseaseMapping.equals(this.model.getDiseaseMapping()))
 						{
-							this.setMessages(new ScreenMessage("This disease mapping is already set.", false));
+							this.setMessages(new ScreenMessage("Already selected: '" + diseaseMapping + "'.", true));
 						}
 						else
 						{
-
-							this.model.setDiseaseMapping(request.getString("diseaseMapping"));
+							this.model.setDiseaseMapping(diseaseMapping);
+							this.setMessages(new ScreenMessage("Selected '" + diseaseMapping + "'.", true));
 						}
 					}
 
@@ -273,11 +273,6 @@ public class QtlFinderHD extends QtlFinder2
 				this.model.setDataSets(dataNames);
 			}
 
-			if (this.model.getDiseaseMapping() == null)
-			{
-				this.model.setDiseaseMapping("OMIM");
-			}
-
 			/**
 			 * Pre-loads the hashmaps used by the HumanToWorm class by reading
 			 * in files
@@ -288,24 +283,6 @@ public class QtlFinderHD extends QtlFinder2
 			{
 				MolgenisFileHandler filehandle = new MolgenisFileHandler(db);
 				File storage = filehandle.getFileStorage(true, db);
-
-				/**
-				 * // Format: disease \t ENSP ID File diseaseMapOMIM = new
-				 * File(storage, "OMIMTransTable.csv"); // Format: disease \t
-				 * ENSP ID File diseaseMapDGA = new File(storage,
-				 * "DGATransTable.csv"); // Format: disease \t ENSP ID File
-				 * diseaseMapGWAS = new File(storage, "GWASTransTable.csv"); //
-				 * Format: ENSP ID \t WBGene ID File orthologs = new
-				 * File(storage, "speciesTransTable.csv"); // Format: Disease \t
-				 * Number of proteins associated File diseaseProteinCount = new
-				 * File(storage, "diseaseProteinCount.csv"); // Format: Worm
-				 * gene \t Worm phenotype File wormToPhenotype = new
-				 * File(storage, "classicalWormPhenotypes.csv");
-				 * 
-				 * HumanToWorm h2w = new HumanToWorm(diseaseMapOMIM,
-				 * diseaseMapDGA, diseaseMapGWAS, orthologs,
-				 * diseaseProteinCount, wormToPhenotype);
-				 **/
 
 				GeneMappingDataSource omim = new GeneMappingDataSource(new File(storage, "human_disease_OMIM.csv"),
 						"OMIM");
@@ -332,6 +309,11 @@ public class QtlFinderHD extends QtlFinder2
 
 				this.model.setHumanToWorm(h2w2);
 
+			}
+
+			if (this.model.getDiseaseMapping() == null)
+			{
+				this.model.setDiseaseMapping(this.model.getHumanToWorm().humanSourceNames().toArray()[0].toString());
 			}
 
 			if (this.model.getDataSet() == null)
@@ -376,14 +358,15 @@ public class QtlFinderHD extends QtlFinder2
 				this.model.setShowWorm(true);
 			}
 
-			if (this.model.getPhenotypeMapping() == null)
-			{
-				// at the moment, there is only one! therefore we don't show it
-				// in the GUI but code it here to keep the rest of the code
-				// consistent
-				// TODO
-				this.model.setPhenotypeMapping("WormBase");
-			}
+			// if (this.model.getPhenotypeMapping() == null)
+			// {
+			// at the moment, there is only one! therefore we don't show it
+			// in the GUI but code it here to keep the rest of the code
+			// consistent
+			// TODO
+
+			// this.model.setPhenotypeMapping("WormBase");
+			// }
 
 			// FIXME: don't do this here, let the FTL check for null itself
 			//

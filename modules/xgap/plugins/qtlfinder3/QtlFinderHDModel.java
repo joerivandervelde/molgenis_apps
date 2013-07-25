@@ -62,11 +62,11 @@ public class QtlFinderHDModel extends QtlFinderModel2
 
 	// Hash of human phenotypes and number of genes overlapping with the
 	// selected worm phenotype
-	private Map<String, Integer> allOverlaps;
+	private Map<String, Map<String, Integer>> allOverlaps;
 
 	// Hash of human phenotype found and the p value after hyper testing
 	// (Compare phenotypes)
-	private Map<String, Double> allProbabilities;
+	private Map<String, Map<String, Double>> allProbabilities;
 
 	// String that says if OMIM or DGA is set
 	private String diseaseMapping;
@@ -80,15 +80,15 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// Show human or worm phenotype comparison
 	private Boolean showWorm;
 
-	public String getPhenotypeMapping()
-	{
-		return phenotypeMapping;
-	}
-
-	public void setPhenotypeMapping(String phenotypeMapping)
-	{
-		this.phenotypeMapping = phenotypeMapping;
-	}
+	// public String getPhenotypeMapping()
+	// {
+	// return phenotypeMapping;
+	// }
+	//
+	// public void setPhenotypeMapping(String phenotypeMapping)
+	// {
+	// this.phenotypeMapping = phenotypeMapping;
+	// }
 
 	public String getDataSet()
 	{
@@ -180,7 +180,7 @@ public class QtlFinderHDModel extends QtlFinderModel2
 		this.showTable = showTable;
 	}
 
-	public String getSelectedWormPhenotype()
+	public String getSelectedPhenotype()
 	{
 		return selectedWormPhenotype;
 	}
@@ -190,24 +190,24 @@ public class QtlFinderHDModel extends QtlFinderModel2
 		this.selectedWormPhenotype = selectedWormPhenotype;
 	}
 
-	public Map<String, Integer> getAllOverlaps()
+	public Map<String, Map<String, Integer>> getAllOverlaps()
 	{
 		return allOverlaps;
 	}
 
-	public void setAllOverlaps(Map<String, Integer> allOverlaps)
+	public void setAllOverlaps(Map<String, Map<String, Integer>> overlapPerDiseasePerSource)
 	{
-		this.allOverlaps = allOverlaps;
+		this.allOverlaps = overlapPerDiseasePerSource;
 	}
 
-	public Map<String, Double> getAllProbabilities()
+	public Map<String, Map<String, Double>> getAllProbabilities()
 	{
 		return allProbabilities;
 	}
 
-	public void setAllProbabilities(Map<String, Double> allProbabilities)
+	public void setAllProbabilities(Map<String, Map<String, Double>> pvalsPerDiseasePerSource)
 	{
-		this.allProbabilities = allProbabilities;
+		this.allProbabilities = pvalsPerDiseasePerSource;
 	}
 
 	public String getSelectedHumanPhenotype()

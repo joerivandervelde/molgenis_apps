@@ -181,7 +181,9 @@ public class HumanToWorm2
 				{
 					// FIXME: enable when data is curated to check for unwanted
 					// disease entries
-					System.out.println("Source '" + source + "', human disease '" + disease + "' has worm orthologs!");
+					// System.out.println("Source '" + source +
+					// "', human disease '" + disease +
+					// "' has worm orthologs!");
 					// TODO: allow diseases with no orthologs, ie. useless ones?
 				}
 			}
@@ -202,6 +204,11 @@ public class HumanToWorm2
 	public Set<String> humanSourceNames()
 	{
 		return this.humanSources.keySet();
+	}
+
+	public Set<String> wormSourceNames()
+	{
+		return this.wormSources.keySet();
 	}
 
 	/**
@@ -246,9 +253,7 @@ public class HumanToWorm2
 	 */
 	public List<String> humanDiseaseToHumanGenes(String disease, String sourceName)
 	{
-		List<String> result = new ArrayList<String>();
-		// TODO: implement
-		return result;
+		return humanSources.get(sourceName).getGenes(disease);
 	}
 
 	/**
@@ -437,9 +442,7 @@ public class HumanToWorm2
 	 */
 	public List<String> wormPhenotypeToWormGenesHavingHumanOrtholog(String disease, String sourceName)
 	{
-		List<String> result = new ArrayList<String>();
-		// TODO: implement
-		return result;
+		return humanSources.get(sourceName).getGenes(disease);
 	}
 
 	/**
