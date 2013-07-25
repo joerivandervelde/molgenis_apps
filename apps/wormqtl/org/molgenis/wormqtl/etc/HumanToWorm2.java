@@ -53,6 +53,38 @@ public class HumanToWorm2
 		this.wormSources = wormSourcesMap;
 
 		// save ortholog mapping
+		// validate that there all relations are 1-to-1
+		List<String> humanGenesInOrthologs = new ArrayList<String>();
+		List<String> wormGenesInOrthologs = new ArrayList<String>();
+		for (String humanGene : humanToWormOrthologs.getAllGenes())
+		{
+			if (humanGenesInOrthologs.contains(humanGene))
+			{
+				// throw new
+				// Exception("Duplicate human gene in ortholog mapping: " +
+				// humanGene);
+				// TODO: allow multiple mappings?
+			}
+			humanGenesInOrthologs.add(humanGene);
+
+			List<String> wormGene = humanToWormOrthologs.getMapping(humanGene);
+			if (wormGene.size() != 1)
+			{
+				// throw new
+				// Exception("There is not exactly 1 mapping for human gene: " +
+				// humanGene);
+				// TODO: allow multiple mappings?
+			}
+
+			if (wormGenesInOrthologs.contains(wormGene))
+			{
+				// throw new
+				// Exception("Duplicate worm gene in ortholog mapping: " +
+				// wormGene);
+				// TODO: allow multiple mappings?
+			}
+			wormGenesInOrthologs.add(wormGene.get(0));
+		}
 		this.humanToWormOrthologs = humanToWormOrthologs;
 
 		// create humanDiseasesHavingOrthologyPerSource
@@ -145,16 +177,26 @@ public class HumanToWorm2
 			{
 				List<String> humanGenes = this.humanSources.get(source).getGenes(disease);
 
-				if (Collections.disjoint(humanGenes, allHumanGenesWithOrtholog))
+				if (!Collections.disjoint(humanGenes, allHumanGenesWithOrtholog))
 				{
 					// FIXME: enable when data is curated to check for unwanted
 					// disease entries
-					// throw new Exception("Human disease '" + disease +
-					// "' has no worm orthologs!");
+					System.out.println("Source '" + source + "', human disease '" + disease + "' has worm orthologs!");
+					// TODO: allow diseases with no orthologs, ie. useless ones?
 				}
 			}
 		}
 
+	}
+
+	/**
+	 * total number of ortholog mappings
+	 * 
+	 * @return
+	 */
+	public int numberOfOrthologsBetweenHumanAndWorm()
+	{
+		return this.humanToWormOrthologs.getAllGenes().size();
 	}
 
 	public Set<String> humanSourceNames()
@@ -268,6 +310,20 @@ public class HumanToWorm2
 		return wormGenes;
 	}
 
+	public List<String> wormPhenotypeToHumanGenes(String phenotype, String dataSource) throws Exception
+	{
+		List<String> wormGenes = this.wormSources.get(dataSource).getGenes(phenotype);
+		List<String> humanGenes = new ArrayList<String>();
+
+		for (String wormGene : wormGenes)
+		{
+			String humanGene = wormGeneToHumanGene(wormGene);
+			humanGenes.add(humanGene);
+		}
+
+		return humanGenes;
+	}
+
 	/**
 	 * Helper function to get the worm orthologs. We don't allow direct access
 	 * to the hashmap so we can do some additional checks here.
@@ -285,7 +341,10 @@ public class HumanToWorm2
 		}
 		if (wormGenes.size() > 1)
 		{
-			throw new Exception("There are multiple mappings in worm for human gene '" + humanGene + "'");
+			// throw new
+			// Exception("There are multiple mappings in worm for human gene '"
+			// + humanGene + "'");
+			// TODO: allow multiple mappings?
 		}
 		return wormGenes.get(0);
 	}
@@ -323,7 +382,10 @@ public class HumanToWorm2
 		}
 		if (humanGenes.size() > 1)
 		{
-			throw new Exception("There are multiple mappings in human for worm gene '" + wormGene + "'");
+			// throw new
+			// Exception("There are multiple mappings in human for worm gene '"
+			// + wormGene + "'");
+			// TODO: allow multiple mappings?
 		}
 		return humanGenes.get(0);
 	}
