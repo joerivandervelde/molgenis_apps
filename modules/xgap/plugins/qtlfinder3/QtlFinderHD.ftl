@@ -97,7 +97,7 @@
 
 <#macro diseaseMapping model screen>
 	<div style="position:relative;float:left;">
-		<select id="diseaseMapping" name="diseaseMapping">
+		<select id="diseaseMapping" name="diseaseMapping" style="width:200px;">
 			<#list model.humanToWorm.humanSourceNames() as source>
 			<option onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();" value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Human: ${source}</option>
 			</#list>
@@ -139,6 +139,7 @@
 			<#-- DROPDOWN WIDGET -->
 			$("#diseaseSelect").chosen();
 			$("#comparePheno").chosen();
+			$("#diseaseMapping").chosen();
 		});		
 	</script>
 	
