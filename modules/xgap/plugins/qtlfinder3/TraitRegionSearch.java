@@ -62,7 +62,7 @@ public class TraitRegionSearch
 		Integer chromosome = chromosomes.get(0).getOrderNr();
 
 		SetRegion sr = new SetRegion();
-		sr.setRegion(start, end, chromosome, db, 0, model);
+		sr.setRegion(start, end, chromosome, db, false, model);
 	}
 
 }

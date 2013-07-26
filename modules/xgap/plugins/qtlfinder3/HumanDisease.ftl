@@ -9,9 +9,15 @@
 		<tr>
 			<td width="200" style="padding-left:25px;">
 				<select multiple class=" ui-widget-content ui-corner-all" id="diseaseSelect" name="diseaseSelect"  style="width:500px;">
-					<#list model.humanToWorm.humanDiseasesWithOrthology(model.diseaseMapping) as disease>
-						<option value="${disease}">${disease}</option> 
-					</#list>
+					<#if model.humanToWorm.humanSourceNames()?seq_contains(model.diseaseMapping)>
+						<#list model.humanToWorm.humanDiseasesWithOrthology(model.diseaseMapping) as disease>
+							<option value="${disease}">${disease}</option> 
+						</#list>
+					<#else>
+						<#list model.humanToWorm.wormPhenotypesWithOrthology(model.diseaseMapping) as disease>
+							<option value="${disease}">${disease}</option> 
+						</#list>
+					</#if>
 				</select>
 			</td>
 			<td width="290" style="padding-left:10px;">
