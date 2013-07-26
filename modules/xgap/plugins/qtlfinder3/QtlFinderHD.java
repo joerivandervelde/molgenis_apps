@@ -75,15 +75,7 @@ public class QtlFinderHD extends QtlFinder2
 					if (action.equals("diseaseSearch"))
 					{
 						List<String> disease = request.getList("diseaseSelect");
-						if (this.model.getDiseaseMapping().equals("OMIM"))
-						{
-							this.model.setDiseases(disease);
-						}
-						else
-						{
-							this.model.setDisease(disease.get(0).toString());
-						}
-
+						this.model.setDiseases(disease);
 						HumanDiseaseSearch hds = new HumanDiseaseSearch();
 						hds.diseaseSearch(model, db);
 					}
@@ -171,7 +163,8 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.setShowWorm(false);
 
 						ComparePhenotypes cp = new ComparePhenotypes();
-						cp.comparePhenotypesHuman(model, this.getModel(), this.model.getSelectedHumanPhenotype());
+						// cp.comparePhenotypesHuman(model, this.getModel(),
+						// this.model.getSelectedHumanPhenotype());
 					}
 
 					// Ortholog Search
@@ -198,39 +191,7 @@ public class QtlFinderHD extends QtlFinder2
 						}
 						else
 						{
-
 							this.model.setDiseaseMapping(request.getString("diseaseMapping"));
-
-							// FIXME: the rest should NOT be needed anymore
-							// because we have the complete HumanToWorm object
-							// in memory
-							//
-							// this.model.getHumanToWorm().getDiseaseToHuman().clear();
-							//
-							// this.model.setDiseaseMapping(request.getString("diseaseMapping"));
-							//
-							// if
-							// (this.model.getDiseaseMapping().equals("OMIM"))
-							// {
-							// this.model.getHumanToWorm().getDiseaseToHuman()
-							// .putAll(this.model.getHumanToWorm().getDiseaseToHumanOMIM());
-							// }
-							// if (this.model.getDiseaseMapping().equals("DGA"))
-							// {
-							// this.model.getHumanToWorm().getDiseaseToHuman()
-							// .putAll(this.model.getHumanToWorm().getDiseaseToHumanDGA());
-							// }
-							// if
-							// (this.model.getDiseaseMapping().equals("GWAS"))
-							// {
-							// this.model.getHumanToWorm().getDiseaseToHuman()
-							// .putAll(this.model.getHumanToWorm().getDiseaseToHumanGWAS());
-							// }
-							//
-							// System.out.println(this.model.getHumanToWorm().getDiseaseToHuman());
-							//
-							// this.model.setDisease(this.model.getHumanToWorm().getDiseaseToHuman().keySet().iterator()
-							// .next());
 						}
 					}
 
@@ -328,34 +289,18 @@ public class QtlFinderHD extends QtlFinder2
 				MolgenisFileHandler filehandle = new MolgenisFileHandler(db);
 				File storage = filehandle.getFileStorage(true, db);
 
-				/**
-				 * // Format: disease \t ENSP ID File diseaseMapOMIM = new
-				 * File(storage, "OMIMTransTable.csv"); // Format: disease \t
-				 * ENSP ID File diseaseMapDGA = new File(storage,
-				 * "DGATransTable.csv"); // Format: disease \t ENSP ID File
-				 * diseaseMapGWAS = new File(storage, "GWASTransTable.csv"); //
-				 * Format: ENSP ID \t WBGene ID File orthologs = new
-				 * File(storage, "speciesTransTable.csv"); // Format: Disease \t
-				 * Number of proteins associated File diseaseProteinCount = new
-				 * File(storage, "diseaseProteinCount.csv"); // Format: Worm
-				 * gene \t Worm phenotype File wormToPhenotype = new
-				 * File(storage, "classicalWormPhenotypes.csv");
-				 * 
-				 * HumanToWorm h2w = new HumanToWorm(diseaseMapOMIM,
-				 * diseaseMapDGA, diseaseMapGWAS, orthologs,
-				 * diseaseProteinCount, wormToPhenotype);
-				 **/
+				GeneMappingDataSource omim = new GeneMappingDataSource(new File(storage, "human_disease_OMIM.csv"),
+						"OMIM");
+				GeneMappingDataSource dga = new GeneMappingDataSource(new File(storage, "human_disease_DGA.csv"), "DGA");
 
-				GeneMappingDataSource omim = new GeneMappingDataSource(new File(storage, "OMIMTransTable.csv"), "OMIM");
-				GeneMappingDataSource dga = new GeneMappingDataSource(new File(storage, "DGATransTable.csv"), "DGA");
 				GeneMappingDataSource gwascentral = new GeneMappingDataSource(new File(storage,
-						"GWASCentralTransTable.csv"), "GWAS Central");
-				GeneMappingDataSource gwascatalog = new GeneMappingDataSource(new File(storage, "GWASTransTable.csv"),
-						"GWAS Catalog");
-				GeneMappingDataSource wormPheno = new GeneMappingDataSource(new File(storage,
-						"classicalWormPhenotypes.csv"), "WormBase");
-				GeneMappingDataSource humanToWorm = new GeneMappingDataSource(
-						new File(storage, "speciesTransTable.csv"), "INPARANOID");
+						"human_disease_GWASCENTRAL.csv"), "GWAS Central");
+				GeneMappingDataSource gwascatalog = new GeneMappingDataSource(new File(storage,
+						"human_disease_GWASCATALOG.csv"), "GWAS Catalog");
+				GeneMappingDataSource wormPheno = new GeneMappingDataSource(new File(storage, "worm_disease.csv"),
+						"WormBase");
+				GeneMappingDataSource humanToWorm = new GeneMappingDataSource(new File(storage, "orthologs.csv"),
+						"INPARANOID");
 
 				List<GeneMappingDataSource> humanSources = new ArrayList<GeneMappingDataSource>();
 				humanSources.add(omim);
@@ -366,7 +311,7 @@ public class QtlFinderHD extends QtlFinder2
 				List<GeneMappingDataSource> wormSources = new ArrayList<GeneMappingDataSource>();
 				wormSources.add(wormPheno);
 
-				HumanToWorm2 h2w2 = new HumanToWorm2(humanSources, wormSources, humanToWorm);
+				HumanToWorm2 h2w2 = new HumanToWorm2(humanSources, wormSources, humanToWorm, db);
 
 				this.model.setHumanToWorm(h2w2);
 

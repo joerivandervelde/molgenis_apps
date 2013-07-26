@@ -14,12 +14,11 @@ import java.util.Set;
 public class GeneMappingDataSource
 {
 	String dataSourceName;
-	List<String> genes; // really needed?
-	Map<String, List<String>> geneToMapping; // useful?
-	Map<String, List<String>> geneToDetails; // useful?
-	Map<String, List<String>> mappingToGenes; // useful?
+	Map<String, List<String>> geneToMapping;
+	Map<String, List<String>> geneToDetails;
+	Map<String, List<String>> mappingToGenes;
 
-	// more ?
+	// obviously missing, but not needed? : mappingToDetails
 
 	/**
 	 * Wraps WormQTL-HD data files for human gene to disease, worm gene to
@@ -27,23 +26,28 @@ public class GeneMappingDataSource
 	 * 
 	 * Required format: GeneID [tab] SomeMapping [tab] Details
 	 * 
+	 * This class is essentially a many-to-many HashMap with some extras
+	 * 
 	 * 
 	 * @param csvTable
 	 * @throws Exception
 	 */
 	public GeneMappingDataSource(File csvTable, String dataSourceName) throws Exception
 	{
-		Map<String, List<String>> geneToDisease = new HashMap<String, List<String>>();
+		Map<String, List<String>> geneToMapping = new HashMap<String, List<String>>();
 		Map<String, List<String>> geneToDetails = new HashMap<String, List<String>>();
+		Map<String, List<String>> mappingToGenes = new HashMap<String, List<String>>();
 
 		Scanner s = new Scanner(csvTable);
+
+		String[] split = null;
+		String geneID, mapping, details = null;
+
+		s.nextLine(); // skip header
 
 		while (s.hasNext())
 		{
 			String line = s.nextLine();
-
-			String[] split = null;
-			String geneID, mapping, details = null;
 
 			try
 			{
@@ -58,28 +62,42 @@ public class GeneMappingDataSource
 				throw e;
 			}
 
-			if (genes.contains(geneID))
+			// add to 'genes -> mapping' map
+			if (geneToMapping.keySet().contains(geneID))
 			{
-				geneToDisease.get(geneID).add(mapping);
+				geneToMapping.get(geneID).add(mapping);
 				geneToDetails.get(geneID).add(details);
 			}
 			else
 			{
-				genes.add(geneID);
 				List<String> mappingList = new ArrayList<String>();
 				List<String> detailsList = new ArrayList<String>();
 				mappingList.add(mapping);
 				detailsList.add(details);
-				geneToDisease.put(geneID, mappingList);
+				geneToMapping.put(geneID, mappingList);
 				geneToDetails.put(geneID, detailsList);
 			}
+
+			// add to 'mapping -> genes' map
+			if (mappingToGenes.keySet().contains(mapping))
+			{
+				mappingToGenes.get(mapping).add(geneID);
+			}
+			else
+			{
+				List<String> geneList = new ArrayList<String>();
+				geneList.add(geneID);
+				mappingToGenes.put(mapping, geneList);
+			}
+
 		}
 
 		s.close();
 
 		this.dataSourceName = dataSourceName;
-		this.geneToMapping = geneToDisease;
+		this.geneToMapping = geneToMapping;
 		this.geneToDetails = geneToDetails;
+		this.mappingToGenes = mappingToGenes;
 	}
 
 	/**
@@ -124,6 +142,16 @@ public class GeneMappingDataSource
 	 * @return
 	 */
 	public Set<String> getAllMappings()
+	{
+		return mappingToGenes.keySet();
+	}
+
+	/**
+	 * Get available genes
+	 * 
+	 * @return
+	 */
+	public Set<String> getAllGenes()
 	{
 		return geneToMapping.keySet();
 	}

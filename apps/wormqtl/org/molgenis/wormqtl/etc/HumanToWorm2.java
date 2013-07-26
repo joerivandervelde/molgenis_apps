@@ -1,10 +1,14 @@
 package org.molgenis.wormqtl.etc;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.molgenis.framework.db.Database;
+import org.molgenis.xgap.Probe;
 
 public class HumanToWorm2
 {
@@ -12,6 +16,10 @@ public class HumanToWorm2
 	Map<String, GeneMappingDataSource> humanSources;
 	Map<String, GeneMappingDataSource> wormSources;
 	GeneMappingDataSource humanToWormOrthologs;
+
+	Map<String, Map<String, List<String>>> probeToSourceToDisease;
+	Map<String, List<String>> humanDiseasesHavingOrthologyPerSource;
+	Map<String, List<String>> wormPhenotypeHavingOrthologyPerSource;
 
 	/**
 	 * Create HumanToWorm object which takes care of all the mapping between
@@ -23,10 +31,12 @@ public class HumanToWorm2
 	 * @param humanSources
 	 * @param wormSources
 	 * @param humanToWormOrthologs
+	 * @throws Exception
 	 */
 	public HumanToWorm2(List<GeneMappingDataSource> humanSources, List<GeneMappingDataSource> wormSources,
-			GeneMappingDataSource humanToWormOrthologs)
+			GeneMappingDataSource humanToWormOrthologs, Database db) throws Exception
 	{
+		// put all human disease sources in a map
 		Map<String, GeneMappingDataSource> humanSourcesMap = new HashMap<String, GeneMappingDataSource>();
 		for (GeneMappingDataSource g : humanSources)
 		{
@@ -34,6 +44,7 @@ public class HumanToWorm2
 		}
 		this.humanSources = humanSourcesMap;
 
+		// put all worm phenotype sources in a map
 		Map<String, GeneMappingDataSource> wormSourcesMap = new HashMap<String, GeneMappingDataSource>();
 		for (GeneMappingDataSource g : wormSources)
 		{
@@ -41,8 +52,114 @@ public class HumanToWorm2
 		}
 		this.wormSources = wormSourcesMap;
 
+		// save ortholog mapping
 		this.humanToWormOrthologs = humanToWormOrthologs;
 
+		// create humanDiseasesHavingOrthologyPerSource
+		Map<String, List<String>> humanDiseasesHavingOrthologyPerSource = new HashMap<String, List<String>>();
+		for (String source : this.humanSources.keySet())
+		{
+			List<String> diseasesWithOrthology = new ArrayList<String>();
+			for (String disease : this.humanSources.get(source).getAllMappings())
+			{
+				if (!(Collections.disjoint(this.humanSources.get(source).getGenes(disease),
+						this.humanToWormOrthologs.getAllGenes())))
+				{
+					diseasesWithOrthology.add(disease);
+				}
+			}
+			humanDiseasesHavingOrthologyPerSource.put(source, diseasesWithOrthology);
+		}
+		this.humanDiseasesHavingOrthologyPerSource = humanDiseasesHavingOrthologyPerSource;
+
+		// create wormPhenotypeHavingOrthologyPerSource
+		Map<String, List<String>> wormPhenotypeHavingOrthologyPerSource = new HashMap<String, List<String>>();
+		for (String source : this.wormSources.keySet())
+		{
+			List<String> phenotypesWithOrthology = new ArrayList<String>();
+			for (String phenotype : this.wormSources.get(source).getAllMappings())
+			{
+				if (!(Collections.disjoint(this.wormSources.get(source).getGenes(phenotype),
+						this.humanToWormOrthologs.getAllMappings())))
+				{
+					phenotypesWithOrthology.add(phenotype);
+				}
+			}
+			wormPhenotypeHavingOrthologyPerSource.put(source, phenotypesWithOrthology);
+		}
+		this.wormPhenotypeHavingOrthologyPerSource = wormPhenotypeHavingOrthologyPerSource;
+
+		// preload complex probe-disease mapping
+		Map<String, Map<String, List<String>>> probeToSourceToDisease = new HashMap<String, Map<String, List<String>>>();
+		for (Probe p : db.find(Probe.class))
+		{
+			String geneName = null;
+			if (p.getReportsFor_Name() != null && p.getReportsFor_Name().length() > 0)
+			{
+				geneName = p.getReportsFor_Name();
+			}
+			else if (p.getSymbol() != null && p.getSymbol().length() > 0)
+			{
+				geneName = p.getSymbol();
+			}
+
+			if (geneName == null)
+			{
+				continue;
+			}
+
+			String humanOrtholog = wormGeneToHumanGene(geneName);
+
+			if (humanOrtholog == null)
+			{
+				continue;
+			}
+
+			for (String source : humanSourceNames())
+			{
+				List<String> diseases = humanGeneToHumanDisease(humanOrtholog, source);
+				if (diseases != null && diseases.size() > 0)
+				{
+					if (probeToSourceToDisease.keySet().contains(p.getName()))
+					{
+						probeToSourceToDisease.get(p.getName()).put(source, diseases);
+					}
+					else
+					{
+						Map<String, List<String>> sourceToDiseases = new HashMap<String, List<String>>();
+						sourceToDiseases.put(source, diseases);
+						probeToSourceToDisease.put(p.getName(), sourceToDiseases);
+					}
+				}
+			}
+		}
+
+		this.probeToSourceToDisease = probeToSourceToDisease;
+
+		// find out for which human diseases have genes for which there is at
+		// least 1 worm ortholog
+		Set<String> allHumanGenesWithOrtholog = this.humanToWormOrthologs.geneToMapping.keySet();
+		for (String source : this.humanSources.keySet())
+		{
+			for (String disease : this.humanSources.get(source).getAllMappings())
+			{
+				List<String> humanGenes = this.humanSources.get(source).getGenes(disease);
+
+				if (Collections.disjoint(humanGenes, allHumanGenesWithOrtholog))
+				{
+					// FIXME: enable when data is curated to check for unwanted
+					// disease entries
+					// throw new Exception("Human disease '" + disease +
+					// "' has no worm orthologs!");
+				}
+			}
+		}
+
+	}
+
+	public Set<String> humanSourceNames()
+	{
+		return this.humanSources.keySet();
 	}
 
 	/**
@@ -51,10 +168,24 @@ public class HumanToWorm2
 	 * @param dataSourceName
 	 * @return
 	 */
+
 	public Set<String> allHumanDiseases(String dataSourceName)
 	{
 		return this.humanSources.get(dataSourceName).getAllMappings();
 	}
+
+	/**
+	 * Get all disease ('mapping') names for a given source for which at least 1
+	 * of the genes have a worm ortholog
+	 * 
+	 * @param dataSourceName
+	 * @return
+	 */
+	// public Set<String> allHumanDiseasesHavingWormOrtholog(String
+	// dataSourceName)
+	// {
+	// //
+	// }
 
 	/**
 	 * Get all disease ('mapping') names for a given source
@@ -84,11 +215,32 @@ public class HumanToWorm2
 	 * @param disease
 	 * @return
 	 */
-	public List<String> humanDiseaseToHumanGenesHavingWormOrtholog(String disease, String sourceName)
+	// public List<String> humanDiseaseToHumanGenesHavingWormOrtholog(String
+	// disease, String sourceName)
+	// {
+	// List<String> result = new ArrayList<String>();
+	// // TODO: implement
+	// return result;
+	// }
+
+	/**
+	 * 
+	 * @param dataSource
+	 * @return
+	 */
+	public List<String> humanDiseasesWithOrthology(String dataSource)
 	{
-		List<String> result = new ArrayList<String>();
-		// TODO: implement
-		return result;
+		return this.humanDiseasesHavingOrthologyPerSource.get(dataSource);
+	}
+
+	/**
+	 * 
+	 * @param dataSource
+	 * @return
+	 */
+	public List<String> wormPhenotypesWithOrthology(String dataSource)
+	{
+		return this.wormPhenotypeHavingOrthologyPerSource.get(dataSource);
 	}
 
 	/**
@@ -128,11 +280,27 @@ public class HumanToWorm2
 	public String humanGeneToWormGene(String humanGene) throws Exception
 	{
 		List<String> wormGenes = humanToWormOrthologs.getMapping(humanGene);
+		if (wormGenes == null)
+		{
+			return null;
+		}
 		if (wormGenes.size() > 1)
 		{
 			throw new Exception("There are multiple mappings in worm for human gene '" + humanGene + "'");
 		}
 		return wormGenes.get(0);
+	}
+
+	/**
+	 * Get all disease related to a human gene, from a specific data source
+	 * (right now: only "WormBase")
+	 * 
+	 * @param sourceName
+	 * @return
+	 */
+	public List<String> humanGeneToHumanDisease(String gene, String sourceName)
+	{
+		return humanSources.get(sourceName).getMapping(gene);
 	}
 
 	/**
@@ -150,6 +318,10 @@ public class HumanToWorm2
 	public String wormGeneToHumanGene(String wormGene) throws Exception
 	{
 		List<String> humanGenes = humanToWormOrthologs.getGenes(wormGene);
+		if (humanGenes == null)
+		{
+			return null;
+		}
 		if (humanGenes.size() > 1)
 		{
 			throw new Exception("There are multiple mappings in human for worm gene '" + wormGene + "'");
@@ -209,4 +381,22 @@ public class HumanToWorm2
 		return result;
 	}
 
+	/**
+	 * From a worm probe, get all human disease, for each data source. This is
+	 * preloaded because its a complicated mapping
+	 * (probe-wbgene-humangene-humandisease/source)
+	 * 
+	 * @param probe
+	 * @param dataSource
+	 * @return
+	 */
+	public Map<String, List<String>> wormProbeToDataSourceToHumanDiseases(String probe)
+	{
+		Map<String, List<String>> dataSourceToDiseases = probeToSourceToDisease.get(probe);
+		if (dataSourceToDiseases == null)
+		{
+			return new HashMap<String, List<String>>();
+		}
+		return probeToSourceToDisease.get(probe);
+	}
 }

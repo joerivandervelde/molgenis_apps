@@ -55,8 +55,10 @@ public class HumanDiseaseSearch
 
 		// Call the database with the list of worm genes to
 		// get normal shopping cart view with probes to shop
-		probesInRegion = db.find(Probe.class, new QueryRule(Probe.SYMBOL, Operator.IN, wormGenes));
-		probesInRegion.addAll(db.find(Probe.class, new QueryRule(Probe.REPORTSFOR_NAME, Operator.IN, wormGenes)));
+		probesInRegion = db.find(Probe.class, new QueryRule(Probe.SYMBOL, Operator.IN, wormGenes), new QueryRule(
+				Operator.OR), new QueryRule(Probe.REPORTSFOR_NAME, Operator.IN, wormGenes));
+		// probesInRegion.addAll(db.find(Probe.class, new
+		// QueryRule(Probe.REPORTSFOR_NAME, Operator.IN, wormGenes)));
 
 		for (Probe p : probesInRegion)
 		{
