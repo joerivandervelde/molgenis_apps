@@ -3,7 +3,6 @@
  */
 package plugins.qtlfinder3;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,8 +23,13 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// Class for building the translation table hashMaps
 	private HumanToWorm2 humanToWorm;
 
-	// The disease that is selected by the user
-	private String disease;
+	// Class for calculating the significance of a disease - worm gene
+	// association
+	private HypergeometricTest hyperGeometric;
+
+	// If true, the user can see multiplot, shoppingcart, cartview, overlap
+	// table
+	private Boolean showAnyResultToUser;
 
 	// List of diseases selected when user uses OMIM
 	private List<String> diseases;
@@ -42,29 +46,11 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// A double containing the result of the hyper geometric test
 	private double hyperTestProbability;
 
-	// Class for calculating the significance of a disease - worm gene
-	// association
-	private HypergeometricTest hyperGeometric;
-
-	// List with diseases that are linked to the probes found in the
-	// qtl hotspot (QTL region search)
-	private LinkedHashMap<String, List<String>> geneAssociatedDiseases;
-
-	// If true, then result screen will show a table with genes in the region +
-	// diseases mapped to them
-	private Boolean showTable;
-
-	// Worm phenotype that is selected for phenotype comparison
-	private String selectedWormPhenotype;
-
-	// Human phenotype that is selected for phenotype comparison
-	private String selectedHumanPhenotype;
-
 	// Hash of human phenotypes and number of genes overlapping with the
 	// selected worm phenotype
 	private Map<String, Map<String, Integer>> allOverlaps;
 
-	// Hash of human phenotype found and the p value after hyper testing
+	// Hash of disease phenotype found and the p value after hyper testing
 	// (Compare phenotypes)
 	private Map<String, Map<String, Double>> allProbabilities;
 
@@ -76,9 +62,6 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// similar to private String diseaseMapping except it's on the worm side of
 	// things
 	private String phenotypeMapping;
-
-	// Show human or worm phenotype comparison
-	private Boolean showWorm;
 
 	// public String getPhenotypeMapping()
 	// {
@@ -108,16 +91,6 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	public void setDataSets(List<String> dataSets)
 	{
 		this.dataSets = dataSets;
-	}
-
-	public String getDisease()
-	{
-		return disease;
-	}
-
-	public void setDisease(String disease)
-	{
-		this.disease = disease;
 	}
 
 	public HumanToWorm2 getHumanToWorm()
@@ -160,36 +133,6 @@ public class QtlFinderHDModel extends QtlFinderModel2
 		this.hyperGeometric = hyperGeometric;
 	}
 
-	public LinkedHashMap<String, List<String>> getGeneAssociatedDiseases()
-	{
-		return geneAssociatedDiseases;
-	}
-
-	public void setGeneAssociatedDiseases(LinkedHashMap<String, List<String>> geneAssociatedDiseases)
-	{
-		this.geneAssociatedDiseases = geneAssociatedDiseases;
-	}
-
-	public Boolean getShowTable()
-	{
-		return showTable;
-	}
-
-	public void setShowTable(Boolean showTable)
-	{
-		this.showTable = showTable;
-	}
-
-	public String getSelectedPhenotype()
-	{
-		return selectedWormPhenotype;
-	}
-
-	public void setSelectedWormPhenotype(String selectedWormPhenotype)
-	{
-		this.selectedWormPhenotype = selectedWormPhenotype;
-	}
-
 	public Map<String, Map<String, Integer>> getAllOverlaps()
 	{
 		return allOverlaps;
@@ -208,16 +151,6 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	public void setAllProbabilities(Map<String, Map<String, Double>> pvalsPerDiseasePerSource)
 	{
 		this.allProbabilities = pvalsPerDiseasePerSource;
-	}
-
-	public String getSelectedHumanPhenotype()
-	{
-		return selectedHumanPhenotype;
-	}
-
-	public void setSelectedHumanPhenotype(String selectedHumanPhenotype)
-	{
-		this.selectedHumanPhenotype = selectedHumanPhenotype;
 	}
 
 	public String getDiseaseMapping()
@@ -240,14 +173,13 @@ public class QtlFinderHDModel extends QtlFinderModel2
 		this.diseases = diseases;
 	}
 
-	public Boolean getShowWorm()
+	public Boolean getShowAnyResultToUser()
 	{
-		return showWorm;
+		return showAnyResultToUser;
 	}
 
-	public void setShowWorm(Boolean showWorm)
+	public void setShowAnyResultToUser(Boolean showAnyResultToUser)
 	{
-		this.showWorm = showWorm;
+		this.showAnyResultToUser = showAnyResultToUser;
 	}
-
 }

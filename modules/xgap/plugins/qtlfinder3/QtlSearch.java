@@ -118,23 +118,9 @@ public class QtlSearch
 				List<? extends Entity> traits = db.find(traitClass, new QueryRule(ObservationElement.NAME, Operator.IN,
 						rowNames));
 
-				String wbGene;
-
 				for (Entity t : traits)
 				{
 					model.getHits().put(t.get(ObservationElement.NAME).toString(), t);
-
-					if (t.get("symbol") == null)
-					{
-						continue;
-					}
-
-					wbGene = t.get("symbol").toString();
-
-					List<String> myList = model.getHumanToWorm().wormGeneToHumanDiseases(wbGene,
-							model.getDiseaseMapping());
-
-					model.getGeneAssociatedDiseases().put(myList.get(0), myList.subList(1, myList.size()));
 				}
 
 				model.setShowResults(true);

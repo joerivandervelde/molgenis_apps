@@ -18,7 +18,7 @@
 		<#-- this shows a title and border -->
 		<div class="formscreen">
 			<div class="form_header" id="${screen.getName()}">
-			${screen.label}
+				${screen.label}
 			</div>
 			
 			<#--optional: mechanism to show messages-->
@@ -72,19 +72,19 @@
 			
 			<#if model.screenType == "genomicRegion">
 				<@rs.regionSearch model = model screen = screen />
-				<@cr.compareResults model = model screen = screen />
 			</#if>
 			
 			<#if model.screenType == "qtlLoci">
 				<@ql.qtlLoci model = model screen = screen />
 			</#if>
 			
-			<#if model.screenType == "comparePhenotypes">
-				<@cp.comparePhenotypes model = model screen = screen /> 
-				<@cr.compareResults model = model screen = screen />
+			<#if model.showAnyResultToUser>
+				<@report.reportScreen model = model screen = screen />
 			</#if>
 			
-			<@report.reportScreen model = model screen = screen />
+			<#if model.screenType == "comparePhenotypes">
+				<@cp.comparePhenotypes model = model screen = screen /> 				
+			</#if>
 			
 			<#if model.multiplot??>
 				<@mp.multiPlot model=model screen=screen />
@@ -112,16 +112,16 @@
 	<table align="center" id="browse">
 		<tr>
 			<td align="center" style="padding-left:0px;">
-				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease"><b>Human Diseases</b></a>
+				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>Human Diseases</b></a>
 			</td>	
 			<td align="center">		
-				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=genomicRegion"><b>Genomic region</b></a>
+				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=genomicRegion" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>Genomic region</b></a>
 			</td>	
 			<td align="center">	
-				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=qtlLoci"><b>QTL Loci</b></a>
+				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=qtlLoci" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>QTL Loci</b></a>
 			</td>	
 			<td align="center">
-				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=comparePhenotypes"><b>Compare Phenotypes</b></a>
+				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=comparePhenotypes" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>Compare Phenotypes</b></a>
 			</td>	
 		</tr>	
 	</table>

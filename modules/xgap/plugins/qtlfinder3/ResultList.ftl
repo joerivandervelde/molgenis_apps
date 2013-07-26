@@ -28,9 +28,7 @@
 		
 		<#if shopped gt 0>
 			<#if shopped == model.hits?size>
-				<h4>All ${shopped} hits are currently in your cart.</h4>
-				
-					
+				<h4>All ${shopped} hits are currently in your cart.</h4>	
 			<#else>
 				<h4>Please note: ${shopped} hits are not shown because they are already in your cart.</h4>
 			</#if>

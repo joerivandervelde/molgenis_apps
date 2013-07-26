@@ -6,7 +6,6 @@ package plugins.qtlfinder3;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.molgenis.cluster.DataValue;
@@ -74,6 +73,8 @@ public class QtlFinderHD extends QtlFinder2
 					// Human Disease search
 					if (action.equals("diseaseSearch"))
 					{
+						this.model.setShowAnyResultToUser(true);
+
 						List<String> disease = request.getList("diseaseSelect");
 						this.model.setDiseases(disease);
 						HumanDiseaseSearch hds = new HumanDiseaseSearch();
@@ -91,6 +92,8 @@ public class QtlFinderHD extends QtlFinder2
 						}
 						else
 						{
+							this.model.setShowAnyResultToUser(true);
+
 							Integer start = request.getInt("regionStart");
 							Integer end = request.getInt("regionEnd");
 							Integer chromosome = request.getInt("regionChr");
@@ -111,6 +114,8 @@ public class QtlFinderHD extends QtlFinder2
 						}
 						else
 						{
+							this.model.setShowAnyResultToUser(true);
+
 							String dataset = request.getString("dataSetSelect");
 							Integer start = request.getInt("QtlRegionStart");
 							Integer end = request.getInt("QtlRegionEnd");
@@ -132,6 +137,8 @@ public class QtlFinderHD extends QtlFinder2
 						}
 						else
 						{
+							this.model.setShowAnyResultToUser(true);
+
 							String trait = request.getString("traitInput");
 							String dataset = request.getString("regionDataSetSelect");
 							double threshold = request.getInt("lodThreshold");
@@ -144,6 +151,9 @@ public class QtlFinderHD extends QtlFinder2
 
 					if (action.equals("plotOverlap"))
 					{
+						this.model.setCartView(false);
+						this.model.setShowResults(false);
+
 						List<Entity> cart = new ArrayList<Entity>(this.model.getShoppingCart().values());
 						new ComparePhenotypes().compareGenesWorm(model, this.getModel(), cart);
 					}
@@ -151,6 +161,8 @@ public class QtlFinderHD extends QtlFinder2
 					// Phenotype comparison with worm list selection
 					if (action.equals("comparePhenotypes"))
 					{
+						this.model.setShowAnyResultToUser(true);
+
 						List<String> phenoDiseases = request.getList("comparePheno");
 
 						ComparePhenotypes cp = new ComparePhenotypes();
@@ -182,6 +194,8 @@ public class QtlFinderHD extends QtlFinder2
 					// Change disease mapping by reloading
 					if (action.equals("mappingChange"))
 					{
+						this.model.setShowAnyResultToUser(false);
+
 						String diseaseMapping = request.getString("diseaseMapping");
 
 						if (diseaseMapping.equals(this.model.getDiseaseMapping()))
@@ -194,6 +208,11 @@ public class QtlFinderHD extends QtlFinder2
 							this.model.setDiseaseMapping(diseaseMapping);
 							this.setMessages(new ScreenMessage("Selected '" + diseaseMapping + "'.", true));
 						}
+					}
+
+					if (action.equals("searchChange"))
+					{
+						this.model.setShowAnyResultToUser(false);
 					}
 
 					// Reset
@@ -209,7 +228,6 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.setQtls(null);
 						this.model.setCartView(false);
 						this.model.setProbeToGene(null);
-						this.model.setShowTable(false);
 						this.model.setShowResults(false);
 						this.model.setAllOverlaps(null);
 						this.model.setDiseases(null);
@@ -313,6 +331,11 @@ public class QtlFinderHD extends QtlFinder2
 
 			}
 
+			if (this.model.getShowAnyResultToUser() == null)
+			{
+				this.model.setShowAnyResultToUser(false);
+			}
+
 			if (this.model.getDiseaseMapping() == null)
 			{
 				this.model.setDiseaseMapping(this.model.getHumanToWorm().humanSourceNames().toArray()[0].toString());
@@ -333,31 +356,14 @@ public class QtlFinderHD extends QtlFinder2
 				this.model.setShowResults(false);
 			}
 
-			// FIXME: don't do this here, let the FTL check for null itself
-			//
-			// if (this.model.getDisease() == null)
-			// {
-			// this.model.setDisease(this.model.getHumanToWorm().getDiseaseToHumanOMIM().keySet().iterator().next());
-			// }
-
-			if (this.model.getShowTable() == null)
-			{
-				this.model.setShowTable(false);
-			}
-
-			if (this.model.getGeneAssociatedDiseases() == null)
-			{
-				this.model.setGeneAssociatedDiseases(new LinkedHashMap<String, List<String>>());
-			}
-
 			if (this.model.getScreenType() == null || this.model.getScreenType() == "")
 			{
 				this.model.setScreenType("humanDisease");
 			}
 
-			if (this.model.getShowWorm() == null)
+			if (this.model.getCartView() == null)
 			{
-				this.model.setShowWorm(true);
+				this.model.setCartView(false);
 			}
 
 			// if (this.model.getPhenotypeMapping() == null)
@@ -369,21 +375,6 @@ public class QtlFinderHD extends QtlFinder2
 
 			// this.model.setPhenotypeMapping("WormBase");
 			// }
-
-			// FIXME: don't do this here, let the FTL check for null itself
-			//
-			// if (this.model.getSelectedWormPhenotype() == null)
-			// {
-			// this.model.setSelectedWormPhenotype(this.model.getHumanToWorm().getWormToPhenotype().keySet()
-			// .iterator().next());
-			// }
-			//
-			// if (this.model.getSelectedHumanPhenotype() == null)
-			// {
-			// this.model.setSelectedHumanPhenotype(this.model.getHumanToWorm().getDiseaseToHumanOMIM().keySet()
-			// .iterator().next());
-			// }
-
 		}
 		catch (Exception e)
 		{
