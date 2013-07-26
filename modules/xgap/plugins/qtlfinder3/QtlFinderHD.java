@@ -97,7 +97,7 @@ public class QtlFinderHD extends QtlFinder2
 							Integer chromosome = request.getInt("regionChr");
 
 							SetRegion sr = new SetRegion();
-							sr.setRegion(start, end, chromosome, db, 1, model);
+							sr.setRegion(start, end, chromosome, db, true, model);
 
 						}
 					}
@@ -144,6 +144,12 @@ public class QtlFinderHD extends QtlFinder2
 
 							trs.traitRegionSearch(trait, dataset, threshold, model, db, this.getModel());
 						}
+					}
+
+					if (action.equals("plotOverlap"))
+					{
+						List<Entity> cart = new ArrayList<Entity>(this.model.getShoppingCart().values());
+						new ComparePhenotypes().compareGenesWorm(model, this.getModel(), cart);
 					}
 
 					// Phenotype comparison with worm list selection

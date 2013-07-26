@@ -1,9 +1,11 @@
 package plugins.qtlfinder3;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.molgenis.framework.db.Database;
+import org.molgenis.framework.ui.ScreenModel;
 import org.molgenis.util.Entity;
 
 public class PlotOverlap
@@ -25,5 +27,10 @@ public class PlotOverlap
 		}
 
 		model.setGenes(set);
+	}
+
+	public void plotOverlap(QtlFinderHDModel model, ScreenModel screenModel, List<Entity> cart) throws Exception
+	{
+
 	}
 }

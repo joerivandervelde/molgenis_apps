@@ -69,6 +69,7 @@
 			
 			<#if model.screenType == "genomicRegion">
 				<@rs.regionSearch model = model screen = screen />
+				<@cr.compareResults model = model screen = screen />
 			</#if>
 			
 			<#if model.screenType == "qtlLoci">

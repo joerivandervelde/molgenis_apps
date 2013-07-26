@@ -12,10 +12,41 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.molgenis.framework.ui.ScreenModel;
+import org.molgenis.util.Entity;
 import org.molgenis.wormqtl.etc.HypergeometricTest;
+import org.molgenis.xgap.Probe;
 
 public class ComparePhenotypes
 {
+
+	/**
+	 * compare a custom list of worm probes (e.g. as result from a region
+	 * select) vs. human diseases
+	 * 
+	 * @param model
+	 * @param screenModel
+	 * @param phenotypes
+	 * @throws Exception
+	 */
+	public void compareGenesWorm(QtlFinderHDModel model, ScreenModel screenModel, List<Entity> probes) throws Exception
+	{
+		Set<String> wormGenes = new HashSet<String>();
+
+		for (Entity e : probes)
+		{
+			Probe p = (Probe) e;
+			if (p.getReportsFor_Name() != null && p.getReportsFor_Name().startsWith("WBGene"))
+			{
+				wormGenes.add(((Probe) p).getReportsFor_Name());
+			}
+			else if (p.getSymbol() != null && p.getSymbol().startsWith("WBGene"))
+			{
+				wormGenes.add(((Probe) p).getSymbol());
+			}
+		}
+
+		compareWorm(model, screenModel, wormGenes);
+	}
 
 	/**
 	 * Compare Phenotypes
@@ -34,21 +65,34 @@ public class ComparePhenotypes
 	public void comparePhenotypesWorm(QtlFinderHDModel model, ScreenModel screenModel, List<String> phenotypes)
 			throws Exception
 	{
-		Integer numberOfOverlappingGenes;
-
-		Map<String, Map<String, Integer>> overlapPerDiseasePerSource = new HashMap<String, Map<String, Integer>>();
-		Map<String, Map<String, Double>> pvalsPerDiseasePerSource = new HashMap<String, Map<String, Double>>();
-
 		Set<String> wormGenesForThisWormPhenotype = new HashSet<String>();
 		for (String p : phenotypes)
 		{
 			wormGenesForThisWormPhenotype.addAll(model.getHumanToWorm().wormPhenotypeToWormGenes(p,
 					model.getDiseaseMapping()));
 		}
+		compareWorm(model, screenModel, wormGenesForThisWormPhenotype);
+	}
+
+	/**
+	 * generic function that takes a set of worm genes and compares vs human
+	 * diseases
+	 * 
+	 * @param model
+	 * @param screenModel
+	 * @param phenotypes
+	 * @throws Exception
+	 */
+	public void compareWorm(QtlFinderHDModel model, ScreenModel screenModel, Set<String> wormGenes) throws Exception
+	{
+		Integer numberOfOverlappingGenes;
+
+		Map<String, Map<String, Integer>> overlapPerDiseasePerSource = new HashMap<String, Map<String, Integer>>();
+		Map<String, Map<String, Double>> pvalsPerDiseasePerSource = new HashMap<String, Map<String, Double>>();
 
 		List<String> wormGenesForThisHumanDisease;
 
-		Integer numberOfGenesForWormPhenotype = wormGenesForThisWormPhenotype.size();
+		Integer numberOfGenesForWormPhenotype = wormGenes.size();
 		Integer numberOfOrthologs = model.getHumanToWorm().numberOfOrthologsBetweenHumanAndWorm();
 
 		HypergeometricTest hg = new HypergeometricTest();
@@ -72,7 +116,7 @@ public class ComparePhenotypes
 				// with the worm phenotype
 
 				Set<String> intersection = new HashSet<String>(wormGenesForThisHumanDisease);
-				intersection.retainAll(wormGenesForThisWormPhenotype);
+				intersection.retainAll(wormGenes);
 				numberOfOverlappingGenes = intersection.size();
 
 				int allHumanGenesForDisease = model.getHumanToWorm().humanDiseaseToHumanGenes(thisPhenotype, source)
@@ -81,8 +125,11 @@ public class ComparePhenotypes
 				Double p = hg.hyperGeometricTest(numberOfOrthologs, numberOfGenesForWormPhenotype,
 						allHumanGenesForDisease, numberOfOverlappingGenes);
 
-				ao.put(thisPhenotype, numberOfOverlappingGenes);
-				dp.put(thisPhenotype, p);
+				if (numberOfOverlappingGenes > 0)
+				{
+					ao.put(thisPhenotype, numberOfOverlappingGenes);
+					dp.put(thisPhenotype, p);
+				}
 
 			}
 			Map<String, Integer> sorted = sortByValues(ao);
@@ -145,8 +192,11 @@ public class ComparePhenotypes
 				Double p = hg.hyperGeometricTest(numberOfOrthologs, numberOfGenesForHumanDisease,
 						allWormGenesForPhenotype, numberOfOverlappingGenes);
 
-				ao.put(thisPhenotype, numberOfOverlappingGenes);
-				dp.put(thisPhenotype, p);
+				if (numberOfOverlappingGenes > 0)
+				{
+					ao.put(thisPhenotype, numberOfOverlappingGenes);
+					dp.put(thisPhenotype, p);
+				}
 
 			}
 			Map<String, Integer> sorted = sortByValues(ao);

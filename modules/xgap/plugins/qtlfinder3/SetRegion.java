@@ -31,7 +31,7 @@ public class SetRegion
 	 * @throws Exception
 	 */
 
-	public void setRegion(Integer start, Integer end, Integer chromosome, Database db, Integer search,
+	public void setRegion(Integer start, Integer end, Integer chromosome, Database db, boolean search,
 			QtlFinderHDModel model) throws Exception
 	{
 		model.setHits(new HashMap<String, Entity>());
@@ -42,7 +42,7 @@ public class SetRegion
 		List<Chromosome> chrNeeded = db.find(Chromosome.class, new QueryRule(Chromosome.ORDERNR, Operator.LESS,
 				chromosome));
 
-		if (search == 1)
+		if (search)
 		{
 			for (Chromosome chr : chrNeeded)
 			{
@@ -51,25 +51,21 @@ public class SetRegion
 			}
 		}
 
-		probesInRegion = db.find(Probe.class, new QueryRule(Probe.BPSTART, Operator.GREATER, start), new QueryRule(
-				Probe.BPSTART, Operator.LESS, end));
+		probesInRegion = db.find(Probe.class, new QueryRule(Probe.BPSTART, Operator.GREATER_EQUAL, start),
+				new QueryRule(Probe.BPSTART, Operator.LESS_EQUAL, end));
 
 		List<String> myList;
 		for (Probe p : probesInRegion)
 		{
 			model.getHits().put(p.getName(), p);
+			// myList =
+			// model.getHumanToWorm().wormGeneToHumanDiseases(p.getSymbol(),
+			// model.getDiseaseMapping());
+			// myList =
+			// model.getHumanToWorm().wormProbeToDataSourceToHumanDiseases(p.getName());
+			// model.getGeneAssociatedDiseases().put(myList.get(0),
+			// myList.subList(1, myList.size()));
 
-			if (p.getSymbol().contains("WBGene"))
-			{
-				myList = model.getHumanToWorm().wormGeneToHumanDiseases(p.getSymbol(), model.getDiseaseMapping());
-				model.getGeneAssociatedDiseases().put(myList.get(0), myList.subList(1, myList.size()));
-			}
-			else
-			{
-				myList = model.getHumanToWorm().wormGeneToHumanDiseases(p.getReportsFor_Name(),
-						model.getDiseaseMapping());
-				model.getGeneAssociatedDiseases().put(myList.get(0), myList.subList(1, myList.size()));
-			}
 		}
 	}
 }
