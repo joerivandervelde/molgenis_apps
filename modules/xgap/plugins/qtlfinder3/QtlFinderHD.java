@@ -83,7 +83,6 @@ public class QtlFinderHD extends QtlFinder2
 					// Region search
 					if (action.equals("regionSearch"))
 					{
-						super.model.setScreenType("");
 						if (request.getString("regionStart") == null || request.getString("regionEnd") == null)
 						{
 							this.setMessages(new ScreenMessage("Please fill in a starting and ending point "
@@ -98,14 +97,12 @@ public class QtlFinderHD extends QtlFinder2
 
 							SetRegion sr = new SetRegion();
 							sr.setRegion(start, end, chromosome, db, true, model);
-
 						}
 					}
 
 					// QTL search
 					if (action.equals("QtlSearch"))
 					{
-						super.model.setScreenType("");
 						if (request.getInt("QtlRegionStart") == null || request.getInt("QtlRegionEnd") == null)
 						{
 							this.setMessages(new ScreenMessage("Please fill in a starting and ending point "
@@ -128,7 +125,6 @@ public class QtlFinderHD extends QtlFinder2
 					// QTL search per probe
 					if (action.equals("traitRegionSearch"))
 					{
-						super.model.setScreenType("");
 						if (request.getString("traitInput") == null)
 						{
 							this.setMessages(new ScreenMessage("Please fill in a trait in the form"
@@ -172,7 +168,6 @@ public class QtlFinderHD extends QtlFinder2
 					// Ortholog Search
 					if (action.equals("humanGeneSearch"))
 					{
-						super.model.setScreenType("");
 						String[] humanGeneQuery = request.getString("enspIds").split(", ");
 						if (humanGeneQuery.length == 0)
 						{
@@ -198,7 +193,6 @@ public class QtlFinderHD extends QtlFinder2
 
 							this.model.setDiseaseMapping(diseaseMapping);
 							this.setMessages(new ScreenMessage("Selected '" + diseaseMapping + "'.", true));
-
 						}
 					}
 

@@ -58,6 +58,7 @@
 			<#import "../qtlfinder3/ShoppingCart.ftl" as sc>
 			<#import "../qtlfinder3/MultiPlot.ftl" as mp>
 			<#import "../qtlfinder3/CompareResults.ftl" as cr>
+			<#import "../qtlfinder3/ReportScreen.ftl" as report>
 			
 			<#-- macro's-->	
 			<@diseaseMapping model = model screen = screen/>	
@@ -80,12 +81,8 @@
 				<@cp.comparePhenotypes model = model screen = screen /> 
 				<@cr.compareResults model = model screen = screen />
 			</#if>
-		
-			<#if model.screenType == "shoppingCart">
-				<@sc.shoppingCart model = model screen = screen />
-			</#if>
 			
-			<@rl.resultList model = model screen = screen/>
+			<@report.reportScreen model = model screen = screen />
 			
 			<#if model.multiplot??>
 				<@mp.multiPlot model=model screen=screen />

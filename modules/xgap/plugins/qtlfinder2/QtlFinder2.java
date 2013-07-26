@@ -131,7 +131,6 @@ public class QtlFinder2 extends PluginModel<Entity>
 
 				if (action.equals("gotoCart"))
 				{
-					this.model.setScreenType("shoppingCart");
 					this.model.setShowResults(false);
 					this.model.setCartView(true);
 					this.model.setQuery(null);
