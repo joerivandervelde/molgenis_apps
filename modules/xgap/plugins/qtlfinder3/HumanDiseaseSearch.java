@@ -27,19 +27,12 @@ public class HumanDiseaseSearch
 	 */
 	public void diseaseSearch(QtlFinderHDModel model, Database db) throws Exception
 	{
-		model.setCartView(false);
-		model.setShowResults(true);
-
 		model.setHits(new HashMap<String, Entity>());
 		model.setProbeToGene(new HashMap<String, Gene>());
 
 		List<Probe> probesInRegion = new ArrayList<Probe>();
 		List<String> wormGenes = new ArrayList<String>();
 
-		// if (model.getDiseaseMapping().equals("OMIM"))
-		// {
-
-		// For every disease that is selected add the wormgenes to the list
 		if (model.getHumanToWorm().humanSourceNames().contains(model.getDiseaseMapping()))
 		{
 			for (String disease : model.getDiseases())
@@ -56,20 +49,9 @@ public class HumanDiseaseSearch
 				System.out.println("genes size: " + wormGenes.size());
 			}
 		}
-		// }
-		// else
-		// {
-		// // Call humanToWorm algorithm to convert disease
-		// // into a list of one or more worm genes
-		// wormGenes = model.getHumanToWorm().convert(model.getDisease());
-		// }
 
-		// Call the database with the list of worm genes to
-		// get normal shopping cart view with probes to shop
 		probesInRegion = db.find(Probe.class, new QueryRule(Probe.SYMBOL, Operator.IN, wormGenes), new QueryRule(
 				Operator.OR), new QueryRule(Probe.REPORTSFOR_NAME, Operator.IN, wormGenes));
-		// probesInRegion.addAll(db.find(Probe.class, new
-		// QueryRule(Probe.REPORTSFOR_NAME, Operator.IN, wormGenes)));
 
 		for (Probe p : probesInRegion)
 		{

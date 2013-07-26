@@ -28,9 +28,7 @@
 				<#else>
 					<p class="errormessage">${message.text}</p>
 				</#if>
-			</#list>
-			
-			<div id="imageSpace" align="center" style="display:none"><img src="clusterdemo/icons/spinner.gif" width="200px" height="200px"/></div> 
+			</#list>		 
 			
 			<#--====================================-->
 			<#if screen.myModel?exists>
@@ -77,11 +75,9 @@
 			<#if model.screenType == "qtlLoci">
 				<@ql.qtlLoci model = model screen = screen />
 			</#if>
-			
-			<#if model.showAnyResultToUser>
-				<@report.reportScreen model = model screen = screen />
-			</#if>
-			
+	
+			<@report.reportScreen model = model screen = screen />
+		
 			<#if model.screenType == "comparePhenotypes">
 				<@cp.comparePhenotypes model = model screen = screen /> 				
 			</#if>

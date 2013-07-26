@@ -73,7 +73,7 @@ public class QtlFinderHD extends QtlFinder2
 					// Human Disease search
 					if (action.equals("diseaseSearch"))
 					{
-						this.model.setShowAnyResultToUser(true);
+						this.model.setShowAnyResultToUser("show");
 						this.model.setShowResults(true);
 						this.model.setCartView(false);
 
@@ -94,7 +94,7 @@ public class QtlFinderHD extends QtlFinder2
 						}
 						else
 						{
-							this.model.setShowAnyResultToUser(true);
+							this.model.setShowAnyResultToUser("show");
 							this.model.setShowResults(true);
 
 							Integer start = request.getInt("regionStart");
@@ -117,7 +117,7 @@ public class QtlFinderHD extends QtlFinder2
 						}
 						else
 						{
-							this.model.setShowAnyResultToUser(true);
+							this.model.setShowAnyResultToUser("show");
 							this.model.setShowResults(true);
 							this.model.setCartView(false);
 
@@ -142,7 +142,7 @@ public class QtlFinderHD extends QtlFinder2
 						}
 						else
 						{
-							this.model.setShowAnyResultToUser(true);
+							this.model.setShowAnyResultToUser("show");
 							this.model.setShowResults(true);
 							this.model.setCartView(false);
 
@@ -168,7 +168,7 @@ public class QtlFinderHD extends QtlFinder2
 					// Phenotype comparison with worm list selection
 					if (action.equals("comparePhenotypes"))
 					{
-						this.model.setShowAnyResultToUser(true);
+						this.model.setShowAnyResultToUser("show");
 
 						List<String> phenoDiseases = request.getList("comparePheno");
 
@@ -201,7 +201,7 @@ public class QtlFinderHD extends QtlFinder2
 					// Change disease mapping by reloading
 					if (action.equals("mappingChange"))
 					{
-						this.model.setShowAnyResultToUser(false);
+						this.model.setShowAnyResultToUser(null);
 
 						String diseaseMapping = request.getString("diseaseMapping");
 
@@ -219,7 +219,12 @@ public class QtlFinderHD extends QtlFinder2
 
 					if (action.equals("searchChange"))
 					{
-						this.model.setShowAnyResultToUser(false);
+						System.out.println("Go change the bloody search, and set stuff"
+								+ this.model.getShowAnyResultToUser());
+
+						this.model.setShowAnyResultToUser(null);
+
+						System.out.println("Changed it bloody, and set stuff" + this.model.getShowAnyResultToUser());
 					}
 
 					// Reset
@@ -238,6 +243,7 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.setShowResults(false);
 						this.model.setAllOverlaps(null);
 						this.model.setDiseases(null);
+						this.model.setShowAnyResultToUser(null);
 					}
 				}
 
@@ -336,11 +342,6 @@ public class QtlFinderHD extends QtlFinder2
 
 				this.model.setHumanToWorm(h2w2);
 
-			}
-
-			if (this.model.getShowAnyResultToUser() == null)
-			{
-				this.model.setShowAnyResultToUser(false);
 			}
 
 			if (this.model.getDiseaseMapping() == null)

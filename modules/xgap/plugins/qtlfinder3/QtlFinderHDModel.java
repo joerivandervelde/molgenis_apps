@@ -29,7 +29,7 @@ public class QtlFinderHDModel extends QtlFinderModel2
 
 	// If true, the user can see multiplot, shoppingcart, cartview, overlap
 	// table
-	private Boolean showAnyResultToUser;
+	private String showAnyResultToUser;
 
 	// List of diseases selected when user uses OMIM
 	private List<String> diseases;
@@ -173,12 +173,12 @@ public class QtlFinderHDModel extends QtlFinderModel2
 		this.diseases = diseases;
 	}
 
-	public Boolean getShowAnyResultToUser()
+	public String getShowAnyResultToUser()
 	{
 		return showAnyResultToUser;
 	}
 
-	public void setShowAnyResultToUser(Boolean showAnyResultToUser)
+	public void setShowAnyResultToUser(String showAnyResultToUser)
 	{
 		this.showAnyResultToUser = showAnyResultToUser;
 	}
