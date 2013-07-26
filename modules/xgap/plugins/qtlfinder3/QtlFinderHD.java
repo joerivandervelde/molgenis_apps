@@ -74,6 +74,8 @@ public class QtlFinderHD extends QtlFinder2
 					if (action.equals("diseaseSearch"))
 					{
 						this.model.setShowAnyResultToUser(true);
+						this.model.setShowResults(true);
+						this.model.setCartView(false);
 
 						List<String> disease = request.getList("diseaseSelect");
 						this.model.setDiseases(disease);
@@ -93,6 +95,7 @@ public class QtlFinderHD extends QtlFinder2
 						else
 						{
 							this.model.setShowAnyResultToUser(true);
+							this.model.setShowResults(true);
 
 							Integer start = request.getInt("regionStart");
 							Integer end = request.getInt("regionEnd");
@@ -115,6 +118,8 @@ public class QtlFinderHD extends QtlFinder2
 						else
 						{
 							this.model.setShowAnyResultToUser(true);
+							this.model.setShowResults(true);
+							this.model.setCartView(false);
 
 							String dataset = request.getString("dataSetSelect");
 							Integer start = request.getInt("QtlRegionStart");
@@ -138,6 +143,8 @@ public class QtlFinderHD extends QtlFinder2
 						else
 						{
 							this.model.setShowAnyResultToUser(true);
+							this.model.setShowResults(true);
+							this.model.setCartView(false);
 
 							String trait = request.getString("traitInput");
 							String dataset = request.getString("regionDataSetSelect");

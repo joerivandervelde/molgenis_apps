@@ -36,7 +36,6 @@ public class SetRegion
 	{
 		model.setHits(new HashMap<String, Entity>());
 		model.setProbeToGene(new HashMap<String, Gene>());
-		model.setShowResults(true);
 
 		List<Probe> probesInRegion = new ArrayList<Probe>();
 		List<Chromosome> chrNeeded = db.find(Chromosome.class, new QueryRule(Chromosome.ORDERNR, Operator.LESS,
@@ -54,18 +53,9 @@ public class SetRegion
 		probesInRegion = db.find(Probe.class, new QueryRule(Probe.BPSTART, Operator.GREATER_EQUAL, start),
 				new QueryRule(Probe.BPSTART, Operator.LESS_EQUAL, end));
 
-		List<String> myList;
 		for (Probe p : probesInRegion)
 		{
 			model.getHits().put(p.getName(), p);
-			// myList =
-			// model.getHumanToWorm().wormGeneToHumanDiseases(p.getSymbol(),
-			// model.getDiseaseMapping());
-			// myList =
-			// model.getHumanToWorm().wormProbeToDataSourceToHumanDiseases(p.getName());
-			// model.getGeneAssociatedDiseases().put(myList.get(0),
-			// myList.subList(1, myList.size()));
-
 		}
 	}
 }
