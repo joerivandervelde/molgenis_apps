@@ -30,6 +30,8 @@
 				</#if>
 			</#list>
 			
+			<div id="imageSpace" align="center" style="display:none"><img src="clusterdemo/icons/spinner.gif" width="200px" height="200px"/></div> 
+			
 			<#--====================================-->
 			<#if screen.myModel?exists>
 				<#assign modelExists = true>

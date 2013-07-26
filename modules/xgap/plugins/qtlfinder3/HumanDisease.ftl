@@ -22,7 +22,7 @@
 			</td>
 			<td width="290" style="padding-left:10px;">
 				<div class="buttons">
-					<button style="color:blue;" type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__diseaseSearch'; 
+					<button style="color:blue;" type="submit" id="search" onclick="document.getElementById('imageSpace').style.display = 'block'; document.forms.${screen.name}.__action.value = '__qtlfinderhd__diseaseSearch'; 
 					document.forms.${screen.name}.submit();"><img src="generated-res/img/recordview.png" alt=""/>Search</button>
 		 		</div>			
 		 		
