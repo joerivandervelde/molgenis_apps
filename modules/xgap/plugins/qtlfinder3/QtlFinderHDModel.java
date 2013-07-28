@@ -6,10 +6,13 @@ package plugins.qtlfinder3;
 import java.util.List;
 import java.util.Map;
 
-import org.molgenis.wormqtl.etc.HumanToWorm2;
-import org.molgenis.wormqtl.etc.HypergeometricTest;
-
 import plugins.qtlfinder2.QtlFinderModel2;
+import plugins.qtlfinder3.inputstate.DiseaseSearchInputState;
+import plugins.qtlfinder3.inputstate.PhenoCompareInputState;
+import plugins.qtlfinder3.inputstate.QtlSearchInputState;
+import plugins.qtlfinder3.inputstate.RegionSearchInputState;
+import plugins.qtlfinder3.methods.HypergeometricTest;
+import plugins.qtlfinder3.resources.HumanToWorm;
 
 /**
  * @author mark
@@ -17,11 +20,45 @@ import plugins.qtlfinder2.QtlFinderModel2;
  */
 public class QtlFinderHDModel extends QtlFinderModel2
 {
+
+	private RegionSearchInputState regionSearchInputState;
+	private QtlSearchInputState qtlSearchInputState;
+	private DiseaseSearchInputState diseaseSearchInputState;
+	private PhenoCompareInputState phenoCompareInputState;
+
+	public QtlFinderHDModel()
+	{
+		this.regionSearchInputState = new RegionSearchInputState();
+		this.qtlSearchInputState = new QtlSearchInputState();
+		this.diseaseSearchInputState = new DiseaseSearchInputState();
+		this.phenoCompareInputState = new PhenoCompareInputState();
+	}
+
+	public DiseaseSearchInputState getDiseaseSearchInputState()
+	{
+		return diseaseSearchInputState;
+	}
+
+	public PhenoCompareInputState getPhenoCompareInputState()
+	{
+		return phenoCompareInputState;
+	}
+
+	public RegionSearchInputState getRegionSearchInputState()
+	{
+		return regionSearchInputState;
+	}
+
+	public QtlSearchInputState getQtlSearchInputState()
+	{
+		return qtlSearchInputState;
+	}
+
 	// Prefix for actions coming from the human worm association form
 	public final String prefix = "__qtlfinderhd__";
 
 	// Class for building the translation table hashMaps
-	private HumanToWorm2 humanToWorm;
+	private HumanToWorm humanToWorm;
 
 	// Class for calculating the significance of a disease - worm gene
 	// association
@@ -30,15 +67,6 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// If true, the user can see multiplot, shoppingcart, cartview, overlap
 	// table
 	private String showAnyResultToUser;
-
-	// List of diseases selected when user uses OMIM
-	private List<String> diseases;
-
-	// List with data sets from the database that has Lod scores for QTLs
-	private List<String> dataSets;
-
-	// Data set that is selected for the QTL search
-	private String dataSet;
 
 	// User specified (and parsed) list of ENPS ids
 	private List<String> humanGeneQuery;
@@ -57,48 +85,12 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// String that says if OMIM or DGA is set
 	private String diseaseMapping;
 
-	// String that says which worm mapping is selected (datasource coupled to
-	// WormGene ID's)
-	// similar to private String diseaseMapping except it's on the worm side of
-	// things
-	private String phenotypeMapping;
-
-	// public String getPhenotypeMapping()
-	// {
-	// return phenotypeMapping;
-	// }
-	//
-	// public void setPhenotypeMapping(String phenotypeMapping)
-	// {
-	// this.phenotypeMapping = phenotypeMapping;
-	// }
-
-	public String getDataSet()
-	{
-		return dataSet;
-	}
-
-	public void setDataSet(String dataSet)
-	{
-		this.dataSet = dataSet;
-	}
-
-	public List<String> getDataSets()
-	{
-		return dataSets;
-	}
-
-	public void setDataSets(List<String> dataSets)
-	{
-		this.dataSets = dataSets;
-	}
-
-	public HumanToWorm2 getHumanToWorm()
+	public HumanToWorm getHumanToWorm()
 	{
 		return humanToWorm;
 	}
 
-	public void setHumanToWorm(HumanToWorm2 humanToWorm)
+	public void setHumanToWorm(HumanToWorm humanToWorm)
 	{
 		this.humanToWorm = humanToWorm;
 	}
@@ -161,16 +153,6 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	public void setDiseaseMapping(String diseaseMapping)
 	{
 		this.diseaseMapping = diseaseMapping;
-	}
-
-	public List<String> getDiseases()
-	{
-		return diseases;
-	}
-
-	public void setDiseases(List<String> diseases)
-	{
-		this.diseases = diseases;
 	}
 
 	public String getShowAnyResultToUser()

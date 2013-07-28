@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.molgenis.wormqtl.etc;
+package plugins.qtlfinder3.methods;
 
 import org.apache.commons.math3.distribution.HypergeometricDistribution;
 

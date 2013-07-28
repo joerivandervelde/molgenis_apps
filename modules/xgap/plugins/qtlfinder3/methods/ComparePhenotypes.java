@@ -1,4 +1,4 @@
-package plugins.qtlfinder3;
+package plugins.qtlfinder3.methods;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,8 +13,9 @@ import java.util.Set;
 
 import org.molgenis.framework.ui.ScreenModel;
 import org.molgenis.util.Entity;
-import org.molgenis.wormqtl.etc.HypergeometricTest;
 import org.molgenis.xgap.Probe;
+
+import plugins.qtlfinder3.QtlFinderHDModel;
 
 public class ComparePhenotypes
 {

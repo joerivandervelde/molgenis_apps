@@ -135,7 +135,7 @@
 			<#-- DROPDOWN WIDGET -->
 			$("#diseaseSelect").chosen();
 			$("#comparePheno").chosen();
-			$("#diseaseMapping").chosen();
+		
 		});		
 	</script>
 	

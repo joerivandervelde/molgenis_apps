@@ -3,24 +3,23 @@
  */
 package plugins.qtlfinder3;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.molgenis.cluster.DataValue;
 import org.molgenis.framework.db.Database;
-import org.molgenis.framework.db.QueryRule;
-import org.molgenis.framework.db.QueryRule.Operator;
 import org.molgenis.framework.server.MolgenisRequest;
 import org.molgenis.framework.ui.ScreenController;
 import org.molgenis.framework.ui.ScreenMessage;
+import org.molgenis.pheno.ObservationElement;
 import org.molgenis.util.Entity;
-import org.molgenis.wormqtl.etc.GeneMappingDataSource;
-import org.molgenis.wormqtl.etc.HumanToWorm2;
+import org.molgenis.xgap.Gene;
+import org.molgenis.xgap.Probe;
 
 import plugins.qtlfinder2.QtlFinder2;
-import decorators.MolgenisFileHandler;
+import plugins.qtlfinder3.methods.ComparePhenotypes;
+import plugins.qtlfinder3.methods.SearchFunctions;
+import plugins.qtlfinder3.methods.TraitRegionSearch;
 
 /**
  * @author Mark de Haan
@@ -37,7 +36,7 @@ public class QtlFinderHD extends QtlFinder2
 		super(name, parent);
 	}
 
-	private QtlFinderHDModel model = new QtlFinderHDModel();
+	private QtlFinderHDModel model;
 
 	public QtlFinderHDModel getMyModel()
 	{
@@ -47,6 +46,8 @@ public class QtlFinderHD extends QtlFinder2
 	@Override
 	public void handleRequest(Database db, MolgenisRequest request)
 	{
+		initIfNeeded(db);
+
 		if (request.getString("screen") != null)
 		{
 			this.model.setScreenType(request.getString("screen"));
@@ -77,10 +78,19 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.setShowResults(true);
 						this.model.setCartView(false);
 
-						List<String> disease = request.getList("diseaseSelect");
-						this.model.setDiseases(disease);
-						HumanDiseaseSearch hds = new HumanDiseaseSearch();
-						hds.diseaseSearch(model, db);
+						List<String> diseases = request.getList("diseaseSelect");
+						this.model.getDiseaseSearchInputState().setSelectedDiseases(diseases);
+
+						model.setHits(new HashMap<String, Entity>());
+						model.setProbeToGene(new HashMap<String, Gene>());
+
+						List<Probe> hits = SearchFunctions.diseaseSearch(db, this.model.getDiseaseMapping(), diseases,
+								this.model.getHumanToWorm());
+
+						for (Probe p : hits)
+						{
+							model.getHits().put(p.getName(), p);
+						}
 					}
 
 					// Region search
@@ -127,8 +137,16 @@ public class QtlFinderHD extends QtlFinder2
 							Integer chromosome = request.getInt("QtlRegionChr");
 							Integer threshold = request.getInt("QtlLodThreshold");
 
-							QtlSearch qs = new QtlSearch();
-							qs.qtlSearch(dataset, start, end, chromosome, threshold, model, db, this.getModel());
+							// QtlSearch qs = new QtlSearch();
+							List<? extends Entity> e = SearchFunctions.qtlSearch(dataset, start, end, chromosome,
+									threshold, db);
+
+							for (Entity t : e)
+							{
+								this.model.getHits().put(t.get(ObservationElement.NAME).toString(), t);
+							}
+							model.setShowResults(true);
+
 						}
 					}
 
@@ -194,8 +212,18 @@ public class QtlFinderHD extends QtlFinder2
 									"Please fill in at least one human ENSP protein identifier", false));
 						}
 
-						OrthologSearch os = new OrthologSearch();
-						os.orthologSearch(humanGeneQuery, model, db);
+						model.setHits(new HashMap<String, Entity>());
+						model.setProbeToGene(new HashMap<String, Gene>());
+
+						model.setHumanGeneQuery(new ArrayList<String>());
+
+						List<Probe> probes = SearchFunctions.orthologSearch(humanGeneQuery,
+								this.model.getHumanToWorm(), db);
+
+						for (Probe p : probes)
+						{
+							model.getHits().put(p.getName(), p);
+						}
 					}
 
 					// Change disease mapping by reloading
@@ -242,7 +270,7 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.setProbeToGene(null);
 						this.model.setShowResults(false);
 						this.model.setAllOverlaps(null);
-						this.model.setDiseases(null);
+						this.model.getDiseaseSearchInputState().setSelectedDiseases(null);
 						this.model.setShowAnyResultToUser(null);
 					}
 				}
@@ -269,126 +297,32 @@ public class QtlFinderHD extends QtlFinder2
 	}
 
 	/**
-	 * @author Joeri van der Velde, Mark de Haan
+	 * init model and handle errors TODO: give some kind of error screen when
+	 * this goes wrong instead of 'white screen of death' with only stacktrace
+	 * error
 	 * 
-	 *         Reload
-	 * 
-	 *         Initiates objects that are used by the freemarker template from
-	 *         the start
+	 * @param db
 	 */
+	public void initIfNeeded(Database db)
+	{
+		if (this.model == null)
+		{
+			try
+			{
+				this.model = InitQtlFinderHDModel.init(db);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				this.setMessages(new ScreenMessage(e.getMessage() != null ? e.getMessage() : "null", false));
+			}
+		}
+	}
+
 	@Override
 	public void reload(Database db)
 	{
-		try
-		{
-			/**
-			 * @author Mark de Haan
-			 * 
-			 *         Generates a list of datasets that contain QTL lod scores.
-			 *         Used by searching algorithms that set thresholds for QTL
-			 *         values
-			 */
-			if (model.getDataSets() == null)
-			{
-				// give user dropdown of datasets that contain LOD scores
-				List<DataValue> dvList = db.find(DataValue.class, new QueryRule(DataValue.DATANAME_NAME,
-						Operator.EQUALS, "LOD_score"));
-
-				List<String> dataNames = new ArrayList<String>();
-
-				for (DataValue dv : dvList)
-				{
-					dataNames.add(dv.getValue_Name());
-				}
-
-				// list with datasets to be shown in dropdown menu
-				this.model.setDataSets(dataNames);
-			}
-
-			/**
-			 * Pre-loads the hashmaps used by the HumanToWorm class by reading
-			 * in files
-			 * 
-			 * @author Mark de Haans
-			 */
-			if (model.getHumanToWorm() == null)
-			{
-				MolgenisFileHandler filehandle = new MolgenisFileHandler(db);
-				File storage = filehandle.getFileStorage(true, db);
-
-				GeneMappingDataSource omim = new GeneMappingDataSource(new File(storage, "human_disease_OMIM.csv"),
-						"OMIM");
-				GeneMappingDataSource dga = new GeneMappingDataSource(new File(storage, "human_disease_DGA.csv"), "DGA");
-
-				GeneMappingDataSource gwascentral = new GeneMappingDataSource(new File(storage,
-						"human_disease_GWASCENTRAL.csv"), "GWAS Central");
-				GeneMappingDataSource gwascatalog = new GeneMappingDataSource(new File(storage,
-						"human_disease_GWASCATALOG.csv"), "GWAS Catalog");
-				GeneMappingDataSource wormPheno = new GeneMappingDataSource(new File(storage, "worm_disease.csv"),
-						"WormBase");
-				GeneMappingDataSource humanToWorm = new GeneMappingDataSource(new File(storage, "orthologs.csv"),
-						"INPARANOID");
-
-				List<GeneMappingDataSource> humanSources = new ArrayList<GeneMappingDataSource>();
-				humanSources.add(omim);
-				humanSources.add(dga);
-				humanSources.add(gwascentral);
-				humanSources.add(gwascatalog);
-
-				List<GeneMappingDataSource> wormSources = new ArrayList<GeneMappingDataSource>();
-				wormSources.add(wormPheno);
-
-				HumanToWorm2 h2w2 = new HumanToWorm2(humanSources, wormSources, humanToWorm, db);
-
-				this.model.setHumanToWorm(h2w2);
-
-			}
-
-			if (this.model.getDiseaseMapping() == null)
-			{
-				this.model.setDiseaseMapping(this.model.getHumanToWorm().humanSourceNames().toArray()[0].toString());
-			}
-
-			if (this.model.getDataSet() == null)
-			{
-				this.model.setDataSet(this.model.getDataSets().get(0));
-			}
-
-			if (model.getShoppingCart() == null)
-			{
-				this.model.setShoppingCart(new HashMap<String, Entity>());
-			}
-
-			if (this.model.getShowResults() == null)
-			{
-				this.model.setShowResults(false);
-			}
-
-			if (this.model.getScreenType() == null || this.model.getScreenType() == "")
-			{
-				this.model.setScreenType("humanDisease");
-			}
-
-			if (this.model.getCartView() == null)
-			{
-				this.model.setCartView(false);
-			}
-
-			// if (this.model.getPhenotypeMapping() == null)
-			// {
-			// at the moment, there is only one! therefore we don't show it
-			// in the GUI but code it here to keep the rest of the code
-			// consistent
-			// TODO
-
-			// this.model.setPhenotypeMapping("WormBase");
-			// }
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			this.setMessages(new ScreenMessage(e.getMessage() != null ? e.getMessage() : "null", false));
-		}
+		initIfNeeded(db);
 	}
 
 	public String getCustomHtmlHeaders()

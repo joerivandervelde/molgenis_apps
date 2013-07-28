@@ -75,6 +75,7 @@
 	<br>
 	<#-- <input type="checkbox" id="QtlCheckBox" name="QtlCheckBox" onclick="allowQtlSearch();">QTL Region</option> -->
 	
+	<#-- maybe merge the two in the future to allow QTL search constrained by Region search... hide for now-->
 	<div id="elem" style="display:none;">
 		<table>
 			<tr>
@@ -87,8 +88,8 @@
 				<td style="padding-left:25px;">
 					Dataset:<br/>
 					<select name="dataSetSelect"  style="width:50px;">
-						<#list model.dataSets as dataset>
-							<option value="${dataset}" <#if model.dataSet == dataset>selected="selected"</#if>
+						<#list model.qtlSearchInputStates.dataSets as dataset>
+							<option value="${dataset}" <#if model.qtlSearchInputStates.selectedDataSet == dataset>selected="selected"</#if>
 							>${dataset}</option> 
 						</#list>
 					</select>

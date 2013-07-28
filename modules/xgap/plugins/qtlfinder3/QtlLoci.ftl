@@ -18,8 +18,8 @@
 			<td style="padding-left:10px;" width="50">
 			Dataset:<br/>
 			<select name="regionDataSetSelect"  style="width:30px;">
-				<#list model.dataSets as dataset>
-					<option value="${dataset}" <#if model.dataSet == dataset>selected="selected"</#if>
+				<#list model.qtlSearchInputState.dataSets as dataset>
+					<option value="${dataset}" <#if model.qtlSearchInputState.selectedDataSet == dataset>selected="selected"</#if>
 					>${dataset}</option> 
 				</#list>
 			</select>

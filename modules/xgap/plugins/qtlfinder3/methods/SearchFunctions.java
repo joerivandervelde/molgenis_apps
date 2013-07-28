@@ -1,5 +1,7 @@
-package plugins.qtlfinder3;
+package plugins.qtlfinder3.methods;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import matrix.DataMatrixInstance;
@@ -10,15 +12,89 @@ import org.molgenis.framework.db.Database;
 import org.molgenis.framework.db.Query;
 import org.molgenis.framework.db.QueryRule;
 import org.molgenis.framework.db.QueryRule.Operator;
-import org.molgenis.framework.ui.ScreenMessage;
-import org.molgenis.framework.ui.ScreenModel;
 import org.molgenis.pheno.ObservationElement;
 import org.molgenis.util.Entity;
 import org.molgenis.xgap.Chromosome;
 import org.molgenis.xgap.Marker;
+import org.molgenis.xgap.Probe;
 
-public class QtlSearch
+import plugins.qtlfinder3.resources.HumanToWorm;
+
+public class SearchFunctions
 {
+
+	/**
+	 * Disease Search
+	 * 
+	 * User selects a disease from a dropdown list, genes that are associated
+	 * with selected disease via ortholog matching are put in the shopping cart
+	 * 
+	 * @author Mark de Haan
+	 * @param model
+	 * @param db
+	 * @throws Exception
+	 */
+	public static List<Probe> diseaseSearch(Database db, String dataSource, List<String> diseases, HumanToWorm h2w)
+			throws Exception
+	{
+
+		List<String> wormGenes = new ArrayList<String>();
+
+		if (h2w.humanSourceNames().contains(dataSource))
+		{
+			for (String disease : diseases)
+			{
+				wormGenes.addAll(h2w.humanDiseaseToWormGenes(disease, dataSource));
+			}
+		}
+		else
+		{
+			for (String disease : diseases)
+			{
+				wormGenes.addAll(h2w.wormPhenotypeToWormGenes(disease, dataSource));
+			}
+		}
+
+		List<Probe> probes = db.find(Probe.class, new QueryRule(Probe.SYMBOL, Operator.IN, wormGenes), new QueryRule(
+				Operator.OR), new QueryRule(Probe.REPORTSFOR_NAME, Operator.IN, wormGenes));
+
+		return probes;
+
+	}
+
+	/**
+	 * Ortholog Search
+	 * 
+	 * User can submit human genes. The algorithm will then determine the
+	 * ortholog genes belonging to these human genes.
+	 * 
+	 * TODO: Greatly increase the input possibilities
+	 * 
+	 * @author Mark de Haan
+	 * @param db
+	 * @param model
+	 * @param humanGeneQuery
+	 */
+
+	public static List<Probe> orthologSearch(String[] humanGeneQuery, HumanToWorm h2w, Database db) throws Exception
+	{
+		List<String> enpsIDs = new ArrayList<String>(Arrays.asList(humanGeneQuery));
+		List<String> orthologs = new ArrayList<String>();
+		for (String enpsID : enpsIDs)
+		{
+			String ortholog = h2w.humanGeneToWormGene(enpsID);
+			if (ortholog == null)
+			{
+				continue;
+			}
+			orthologs.add(ortholog);
+		}
+
+		List<Probe> probes = db.find(Probe.class, new QueryRule(Probe.SYMBOL, Operator.IN, orthologs));
+
+		return probes;
+
+	}
 
 	/**
 	 * QTL Search User can submit a region to start and end, a chromosome to
@@ -41,9 +117,10 @@ public class QtlSearch
 	 * @throws Exception
 	 * 
 	 */
-	public void qtlSearch(String dataset, Integer start, Integer end, Integer chromosome, Integer threshold,
-			QtlFinderHDModel model, Database db, ScreenModel screenModel) throws Exception
+	public static List<? extends Entity> qtlSearch(String dataset, Integer start, Integer end, Integer chromosome,
+			Integer threshold, Database db) throws Exception
 	{
+		List<Entity> result = new ArrayList<Entity>();
 		List<Chromosome> chrNeeded = db.find(Chromosome.class, new QueryRule(Chromosome.ORDERNR, Operator.LESS,
 				chromosome));
 
@@ -72,8 +149,7 @@ public class QtlSearch
 
 		if (regionMarkers.size() == 0)
 		{
-			screenModel.setMessages(new ScreenMessage("No markers where found within this region of chromosome "
-					+ chromosome, false));
+			throw new Exception("No markers where found within this region of chromosome " + chromosome);
 		}
 		else
 		{
@@ -118,16 +194,12 @@ public class QtlSearch
 				List<? extends Entity> traits = db.find(traitClass, new QueryRule(ObservationElement.NAME, Operator.IN,
 						rowNames));
 
-				for (Entity t : traits)
-				{
-					model.getHits().put(t.get(ObservationElement.NAME).toString(), t);
-				}
-
-				model.setShowResults(true);
+				return traits;
 			}
 			else
 			{
-				// TODO: Do something that is different
+				// FIXME unimplemented!
+				throw new Exception("UNIMPLEMENTED qtlSearch");
 			}
 		}
 	}

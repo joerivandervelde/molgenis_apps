@@ -1,4 +1,4 @@
-package org.molgenis.wormqtl.etc;
+package plugins.qtlfinder3.resources;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +10,7 @@ import java.util.Set;
 import org.molgenis.framework.db.Database;
 import org.molgenis.xgap.Probe;
 
-public class HumanToWorm2
+public class HumanToWorm
 {
 
 	Map<String, GeneMappingDataSource> humanSources;
@@ -33,7 +33,7 @@ public class HumanToWorm2
 	 * @param humanToWormOrthologs
 	 * @throws Exception
 	 */
-	public HumanToWorm2(List<GeneMappingDataSource> humanSources, List<GeneMappingDataSource> wormSources,
+	public HumanToWorm(List<GeneMappingDataSource> humanSources, List<GeneMappingDataSource> wormSources,
 			GeneMappingDataSource humanToWormOrthologs, Database db) throws Exception
 	{
 		// put all human disease sources in a map

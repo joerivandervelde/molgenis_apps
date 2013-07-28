@@ -1,4 +1,4 @@
-package org.molgenis.wormqtl.etc;
+package plugins.qtlfinder3.resources;
 
 import java.io.File;
 import java.util.ArrayList;

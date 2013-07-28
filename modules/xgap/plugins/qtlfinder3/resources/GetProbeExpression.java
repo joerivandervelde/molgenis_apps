@@ -1,4 +1,4 @@
-package plugins.qtlfinder3;
+package plugins.qtlfinder3.resources;
 
 import matrix.DataMatrixInstance;
 

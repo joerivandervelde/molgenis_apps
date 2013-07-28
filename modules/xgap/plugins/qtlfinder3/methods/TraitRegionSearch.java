@@ -1,4 +1,4 @@
-package plugins.qtlfinder3;
+package plugins.qtlfinder3.methods;
 
 import java.util.List;
 
@@ -12,6 +12,10 @@ import org.molgenis.framework.db.QueryRule.Operator;
 import org.molgenis.framework.ui.ScreenModel;
 import org.molgenis.xgap.Chromosome;
 import org.molgenis.xgap.Marker;
+
+import plugins.qtlfinder3.QtlFinderHDModel;
+import plugins.qtlfinder3.SetRegion;
+import plugins.qtlfinder3.resources.GetProbeExpression;
 
 public class TraitRegionSearch
 {
