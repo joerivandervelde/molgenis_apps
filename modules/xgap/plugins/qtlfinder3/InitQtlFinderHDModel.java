@@ -3,13 +3,16 @@ package plugins.qtlfinder3;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.molgenis.cluster.DataValue;
 import org.molgenis.framework.db.Database;
+import org.molgenis.framework.db.DatabaseException;
 import org.molgenis.framework.db.QueryRule;
 import org.molgenis.framework.db.QueryRule.Operator;
 import org.molgenis.util.Entity;
+import org.molgenis.xgap.Chromosome;
 
 import plugins.qtlfinder3.resources.GeneMappingDataSource;
 import plugins.qtlfinder3.resources.HumanToWorm;
@@ -95,8 +98,31 @@ public class InitQtlFinderHDModel
 		//
 		newModel.setCartView(false);
 
+		// setup human disease search
+		List<String> diseases = new ArrayList<String>();
+		newModel.getDiseaseSearchInputState().setSelectedDiseases(diseases);
+
+		// setup region search
+		freshRegionSearch(newModel, db);
+
 		return newModel;
 
+	}
+
+	public static void freshRegionSearch(QtlFinderHDModel model, Database db) throws DatabaseException
+	{
+		List<Chromosome> chromosomes = db.find(Chromosome.class);
+		LinkedHashMap<String, Chromosome> chrs = new LinkedHashMap<String, Chromosome>();
+		for (Chromosome chr : chromosomes)
+		{
+			chrs.put(chr.getName(), chr);
+		}
+		model.getRegionSearchInputState().setChromosomes(chrs);
+		model.getRegionSearchInputState().setSelectedChromosome(chromosomes.get(0).getName());
+		int startBp = (int) (((double) chromosomes.get(0).getBpLength()) / 10.0);
+		int endBp = (int) (((double) chromosomes.get(0).getBpLength()) / 6.0);
+		model.getRegionSearchInputState().setSelectedStartBp(startBp);
+		model.getRegionSearchInputState().setSelectedEndBp(endBp);
 	}
 
 }

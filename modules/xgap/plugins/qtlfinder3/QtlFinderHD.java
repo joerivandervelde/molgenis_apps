@@ -13,6 +13,7 @@ import org.molgenis.framework.ui.ScreenController;
 import org.molgenis.framework.ui.ScreenMessage;
 import org.molgenis.pheno.ObservationElement;
 import org.molgenis.util.Entity;
+import org.molgenis.xgap.Chromosome;
 import org.molgenis.xgap.Gene;
 import org.molgenis.xgap.Probe;
 
@@ -109,10 +110,11 @@ public class QtlFinderHD extends QtlFinder2
 
 							Integer start = request.getInt("regionStart");
 							Integer end = request.getInt("regionEnd");
-							Integer chromosome = request.getInt("regionChr");
+							Integer chromosomeOrderNr = this.model.getRegionSearchInputState().getChromosomes()
+									.get(request.getString("regionChr")).getOrderNr();
 
 							SetRegion sr = new SetRegion();
-							sr.setRegion(start, end, chromosome, db, true, model);
+							sr.setRegion(start, end, chromosomeOrderNr, db, true, model);
 						}
 					}
 
@@ -226,6 +228,28 @@ public class QtlFinderHD extends QtlFinder2
 						}
 					}
 
+					if (action.equals("regionChrChange"))
+					{
+						String selectedChromosome = request.getString("regionChr");
+						this.model.getRegionSearchInputState().setSelectedChromosome(selectedChromosome);
+						Chromosome selectedChr = this.model.getRegionSearchInputState().getChromosomes()
+								.get(selectedChromosome);
+						int startBp, endBp;
+						if (selectedChr.getBpLength() == null)
+						{
+							startBp = 0;
+							endBp = 0;
+						}
+						else
+						{
+							startBp = (int) (((double) selectedChr.getBpLength()) / 10.0);
+							endBp = (int) (((double) selectedChr.getBpLength()) / 6.0);
+						}
+
+						this.model.getRegionSearchInputState().setSelectedStartBp(startBp);
+						this.model.getRegionSearchInputState().setSelectedEndBp(endBp);
+					}
+
 					// Change disease mapping by reloading
 					if (action.equals("mappingChange"))
 					{
@@ -258,6 +282,10 @@ public class QtlFinderHD extends QtlFinder2
 					// Reset
 					if (action.equals("reset"))
 					{
+
+						// reset region search
+						InitQtlFinderHDModel.freshRegionSearch(this.model, db);
+
 						this.model.setShowResults(false);
 						this.model.setQuery(null);
 						this.model.setHits(null);

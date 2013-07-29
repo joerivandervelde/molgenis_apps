@@ -11,11 +11,11 @@
 				<select multiple class=" ui-widget-content ui-corner-all" id="diseaseSelect" name="diseaseSelect"  style="width:500px;">
 					<#if model.humanToWorm.humanSourceNames()?seq_contains(model.diseaseMapping)>
 						<#list model.humanToWorm.humanDiseasesWithOrthology(model.diseaseMapping) as disease>
-							<option value="${disease}">${disease}</option> 
+							<option value="${disease}" <#if model.diseaseSearchInputState.selectedDiseases?seq_contains(disease)>SELECTED</#if>>${disease}</option> 
 						</#list>
 					<#else>
 						<#list model.humanToWorm.wormPhenotypesWithOrthology(model.diseaseMapping) as disease>
-							<option value="${disease}">${disease}</option> 
+							<option value="${disease}" <#if model.diseaseSearchInputState.selectedDiseases?seq_contains(disease)>SELECTED</#if>>${disease}</option> 
 						</#list>
 					</#if>
 				</select>

@@ -16,6 +16,7 @@ import org.molgenis.util.Entity;
 import org.molgenis.xgap.Probe;
 
 import plugins.qtlfinder3.QtlFinderHDModel;
+import plugins.qtlfinder3.resources.HumanToWorm;
 
 public class ComparePhenotypes
 {
@@ -73,6 +74,49 @@ public class ComparePhenotypes
 					model.getDiseaseMapping()));
 		}
 		compareWorm(model, screenModel, wormGenesForThisWormPhenotype);
+	}
+
+	/**
+	 * Input: collection of genes
+	 * 
+	 * @throws Exception
+	 */
+	public void compare(HumanToWorm h2w, Set<String> genes, boolean wormInput) throws Exception
+	{
+
+		// compare versus human diseases
+		for (String source : h2w.humanSourceNames())
+		{
+			for (String disease : h2w.humanDiseasesWithOrthology(source))
+			{
+				if (wormInput)
+				{
+					List<String> wormGenesForThisHumanDisease = h2w.humanDiseaseToWormGenes(disease, source);
+				}
+				else
+				{
+					List<String> humanGenesForThisHumanDisease = h2w.humanDiseaseToHumanGenes(disease, source);
+				}
+
+			}
+		}
+
+		// compare versus worm phenotypes
+		for (String source : h2w.wormSourceNames())
+		{
+			for (String phenotype : h2w.wormPhenotypesWithOrthology(source))
+			{
+				if (wormInput)
+				{
+					List<String> wormGenesForThisWormPhenotype = h2w.wormPhenotypeToHumanGenes(phenotype, source);
+				}
+				else
+				{
+					List<String> humanGenesForThisWormPhenotype = h2w.wormPhenotypeToWormGenes(phenotype, source);
+				}
+			}
+		}
+
 	}
 
 	/**

@@ -1,39 +1,54 @@
 package plugins.qtlfinder3.inputstate;
 
+import java.util.LinkedHashMap;
+
+import org.molgenis.xgap.Chromosome;
+
 public class RegionSearchInputState
 {
-	private Integer startBp;
-	private Integer endBp;
-	private Integer chromosome;
+	private Integer selectedStartBp;
+	private Integer selectedEndBp;
+	private String selectedChromosome;
+	private LinkedHashMap<String, Chromosome> chromosomes;
 
-	public Integer getStartBp()
+	public Integer getSelectedStartBp()
 	{
-		return startBp;
+		return selectedStartBp;
 	}
 
-	public void setStartBp(Integer startBp)
+	public void setSelectedStartBp(Integer selectedStartBp)
 	{
-		this.startBp = startBp;
+		this.selectedStartBp = selectedStartBp;
 	}
 
-	public Integer getEndBp()
+	public Integer getSelectedEndBp()
 	{
-		return endBp;
+		return selectedEndBp;
 	}
 
-	public void setEndBp(Integer endBp)
+	public void setSelectedEndBp(Integer selectedEndBp)
 	{
-		this.endBp = endBp;
+		this.selectedEndBp = selectedEndBp;
 	}
 
-	public Integer getChromosome()
+	public String getSelectedChromosome()
 	{
-		return chromosome;
+		return selectedChromosome;
 	}
 
-	public void setChromosome(Integer chromosome)
+	public void setSelectedChromosome(String selectedChromosome)
 	{
-		this.chromosome = chromosome;
+		this.selectedChromosome = selectedChromosome;
+	}
+
+	public LinkedHashMap<String, Chromosome> getChromosomes()
+	{
+		return chromosomes;
+	}
+
+	public void setChromosomes(LinkedHashMap<String, Chromosome> chromosomes)
+	{
+		this.chromosomes = chromosomes;
 	}
 
 }

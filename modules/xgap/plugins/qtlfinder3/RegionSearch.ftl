@@ -10,20 +10,16 @@
 			<td style="padding-left:10px;" width="50">
 				Chromosome:<br> 
 				<select id="regionChr" name="regionChr">
-					<option value="1">I</option>
-					<option value="2">II</option>
-					<option value="3">III</option>
-					<option value="4">IV</option>
-					<option value="5">V</option>
-					<option value="6">X</option>
-					<option value="7">MtDNA</option>
+					<#list model.regionSearchInputState.chromosomes?keys as key>
+					<option value="${key}" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__regionChrChange';document.forms.${screen.name}.submit();" <#if model.regionSearchInputState.selectedChromosome == key>SELECTED</#if>>${key}</option>
+					</#list>
 				</select>
 			</td>
 			<td style="padding-left:25px;" width="50">
-				Start bp:<br> <input title="starting index" id="regionStart" name="regionStart" type="text" size="10"/>
+				Start bp:<br> <input title="starting index" id="regionStart" name="regionStart" type="text" value="${model.regionSearchInputState.selectedStartBp?c}" size="10"/>
 			</td>
 			<td style="padding-left:10px;" width="50">
-				End bp:<br> <input title="ending index" id="regionEnd" name="regionEnd" type="text" size="10"/>
+				End bp:<br> <input title="ending index" id="regionEnd" name="regionEnd" type="text" value="${model.regionSearchInputState.selectedEndBp?c}" size="10"/>
 			</td>
 			<td style="padding-left: 10px;padding-top:10px;" width="200">
 				<div class="buttons">
@@ -47,9 +43,14 @@
 				$(function() {
 				$( "#slider" ).slider({
 						range: true,
-				        values:[ 1000000, 2000000 ],
+				        values:[ ${model.regionSearchInputState.selectedStartBp?c}, ${model.regionSearchInputState.selectedEndBp?c} ],
 				        min: 0,
-				        max: 5000000,
+				        <#if model.regionSearchInputState.chromosomes[model.regionSearchInputState.selectedChromosome].bpLength??>
+				        	<#assign bpLength = model.regionSearchInputState.chromosomes[model.regionSearchInputState.selectedChromosome].bpLength?c>
+				       	<#else>
+				        	<#assign bpLength = 0>
+				       	</#if>
+				        max: ${bpLength},
 				        step: 1,
 				        slide: function( event, ui ) {
 				            $( "#regionStart" ).val( ui.values[ 0 ] );
@@ -88,8 +89,8 @@
 				<td style="padding-left:25px;">
 					Dataset:<br/>
 					<select name="dataSetSelect"  style="width:50px;">
-						<#list model.qtlSearchInputStates.dataSets as dataset>
-							<option value="${dataset}" <#if model.qtlSearchInputStates.selectedDataSet == dataset>selected="selected"</#if>
+						<#list model.qtlSearchInputState.dataSets as dataset>
+							<option value="${dataset}" <#if model.qtlSearchInputState.selectedDataSet == dataset>selected="selected"</#if>
 							>${dataset}</option> 
 						</#list>
 					</select>
