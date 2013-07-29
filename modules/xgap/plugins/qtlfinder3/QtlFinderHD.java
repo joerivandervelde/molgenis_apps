@@ -20,7 +20,6 @@ import org.molgenis.xgap.Probe;
 import plugins.qtlfinder2.QtlFinder2;
 import plugins.qtlfinder3.methods.ComparePhenotypes;
 import plugins.qtlfinder3.methods.SearchFunctions;
-import plugins.qtlfinder3.methods.TraitRegionSearch;
 
 /**
  * @author Mark de Haan
@@ -113,8 +112,16 @@ public class QtlFinderHD extends QtlFinder2
 							Integer chromosomeOrderNr = this.model.getRegionSearchInputState().getChromosomes()
 									.get(request.getString("regionChr")).getOrderNr();
 
-							SetRegion sr = new SetRegion();
-							sr.setRegion(start, end, chromosomeOrderNr, db, true, model);
+							model.setHits(new HashMap<String, Entity>());
+							model.setProbeToGene(new HashMap<String, Gene>());
+
+							List<Probe> probesInRegion = SearchFunctions.regionSearch(start, end, chromosomeOrderNr, db,
+									true);
+
+							for (Probe p : probesInRegion)
+							{
+								model.getHits().put(p.getName(), p);
+							}
 						}
 					}
 
@@ -170,9 +177,14 @@ public class QtlFinderHD extends QtlFinder2
 							String dataset = request.getString("regionDataSetSelect");
 							double threshold = request.getInt("lodThreshold");
 
-							TraitRegionSearch trs = new TraitRegionSearch();
-
-							trs.traitRegionSearch(trait, dataset, threshold, model, db, this.getModel());
+							model.setHits(new HashMap<String, Entity>());
+							model.setProbeToGene(new HashMap<String, Gene>());
+							List<Probe> probesInQtlRegion = SearchFunctions.qtlRegionSearch(trait, dataset,
+									threshold, db);
+							for (Probe p : probesInQtlRegion)
+							{
+								model.getHits().put(p.getName(), p);
+							}
 						}
 					}
 

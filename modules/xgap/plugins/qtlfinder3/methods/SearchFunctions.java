@@ -24,6 +24,156 @@ public class SearchFunctions
 {
 
 	/**
+	 * Probe QTL region search
+	 * 
+	 * User fills in a probe / trait name, a lod threshold and a dataset to
+	 * search in. The algorithm then uses these parameters to determine the
+	 * highest QTL score present for the submitted probe. Then based on the
+	 * position of the marker containing this QTL, the surrounding region is
+	 * taken and a region search is performed. This determines what probes are
+	 * located within the QTL peak region
+	 * 
+	 * @author Mark de Haan
+	 * @param db
+	 * @param model
+	 * @param threshold
+	 * @param dataset
+	 * @param trait
+	 * @param screenModel
+	 * @throws Exception
+	 */
+
+	public static List<Probe> qtlRegionSearch(String trait, String dataset, double threshold, Database db)
+			throws Exception
+	{
+
+		DataMatrixHandler dmh = new DataMatrixHandler(db);
+
+		Data selectDataset = db.find(Data.class, new QueryRule(Data.NAME, Operator.EQUALS, dataset)).get(0);
+		DataMatrixInstance dataMatrix = dmh.createInstance(selectDataset, db);
+		String highestMarker = getProbeExpression(dataMatrix, trait, threshold);
+
+		List<Marker> highestProbe = db.find(Marker.class, new QueryRule(Marker.NAME, Operator.EQUALS, highestMarker));
+
+		List<Chromosome> chromosomes = db.find(Chromosome.class, new QueryRule(Chromosome.NAME, Operator.EQUALS,
+				highestProbe.get(0).getChromosome_Name()));
+
+		// Once the marker has been determined, the region
+		// within the Qtl is determines by taking the
+		// starting position, and adding or retracting
+		// 10.000 (temporary solution)
+		Integer start = (int) (highestProbe.get(0).getBpStart() - 10000);
+		Integer end = (int) (highestProbe.get(0).getBpStart() + 10000);
+		Integer chromosome = chromosomes.get(0).getOrderNr();
+
+		return regionSearch(start, end, chromosome, db, false);
+	}
+
+	/**
+	 * This method determines what probes and genes are inside the region that
+	 * was selected, either by qtl search or by region search.
+	 * 
+	 * Calls the HumanToWorm class to determine which diseases are mapped to the
+	 * selected region. Sets table view to true to show gene - disease -
+	 * probability as a result
+	 * 
+	 * @author Mark de Haan
+	 * @param start
+	 * @param end
+	 * @param chromosome
+	 * @param db
+	 * @param search
+	 * @throws Exception
+	 */
+
+	public static List<Probe> regionSearch(Integer start, Integer end, Integer chromosome, Database db, boolean search)
+			throws Exception
+	{
+		List<Probe> probesInRegion = new ArrayList<Probe>();
+		List<Chromosome> chrNeeded = db.find(Chromosome.class, new QueryRule(Chromosome.ORDERNR, Operator.LESS,
+				chromosome));
+
+		if (search)
+		{
+			for (Chromosome chr : chrNeeded)
+			{
+				start = start + chr.getBpLength();
+				end = end + chr.getBpLength();
+			}
+		}
+
+		probesInRegion = db.find(Probe.class, new QueryRule(Probe.BPSTART, Operator.GREATER_EQUAL, start),
+				new QueryRule(Probe.BPSTART, Operator.LESS_EQUAL, end));
+
+		return probesInRegion;
+
+	}
+
+	/**
+	 * This method retrieves the highest scoring QTL from a certain probe and
+	 * determines which marker that QTL is located on
+	 * 
+	 * @author Mark de Haan
+	 * @param dm
+	 * @param probe
+	 * @param threshold
+	 * @param screenmodel
+	 * @return returns the name of the marker that has the highest scoring qtl
+	 * @throws Exception
+	 */
+	private static String getProbeExpression(DataMatrixInstance dm, String probe, double threshold) throws Exception
+	{
+		// TODO: Change method of determining region inside QTL
+		// Now: Highest scoring marker + / - 10.000 bp positions = Region
+
+		String bestMarker = "";
+		// Double flankLeft = 0.0;
+		// Double flankRight = 0.0;
+		Double highest = 0.0;
+		Integer highestIdx = 0;
+		Object[] myTraitQtlScore = dm.getRow(probe);
+
+		for (int i = 0; i < myTraitQtlScore.length; i++)
+		{
+			if (highest == 0)
+			{
+				highest = (Double) myTraitQtlScore[i];
+				highestIdx = i;
+			}
+			else
+			{
+				if (highest < (Double) myTraitQtlScore[i])
+				{
+					highest = (Double) myTraitQtlScore[i];
+					highestIdx = i;
+				}
+				else
+				{
+					continue;
+				}
+			}
+		}
+
+		if (highest > threshold)
+		{
+			// flankLeft = (Double) myTraitQtlScore[(highestIdx - 1)];
+			// flankRight = (Double) myTraitQtlScore[(highestIdx + 1)];
+
+			// System.out.println("Flanking left: " + flankLeft +
+			// " The highest QTL is: " + highest + " Flanking right: "
+			// + flankRight);
+
+			bestMarker = dm.getColNames().get(highestIdx);
+
+		}
+		else
+		{
+			throw new Exception("There was no QTL for this probe / trait that scored above the submitted threshold");
+		}
+		return bestMarker;
+	}
+
+	/**
 	 * Disease Search
 	 * 
 	 * User selects a disease from a dropdown list, genes that are associated
