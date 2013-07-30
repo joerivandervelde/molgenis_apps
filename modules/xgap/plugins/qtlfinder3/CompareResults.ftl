@@ -11,8 +11,8 @@
 					</tr> 
 				</thead> 
 				<tbody>
-					<#list model.allOverlaps?keys as source>
-							<#list model.allOverlaps[source]?keys as disease>
+					<#list model.phenoCompareResults.results.sourceToPopulationSize?keys as source>
+							<#list model.phenoCompareResults.results.sourceToPhenoToSuccessStatesPruned[source]?keys as disease>
 								
 								<tr>
 								  	<td>[TODO: LIST OF SELECTED PHENOTYPES]</td> 
