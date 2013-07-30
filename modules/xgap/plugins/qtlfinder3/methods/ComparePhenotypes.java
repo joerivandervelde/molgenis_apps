@@ -50,7 +50,7 @@ public class ComparePhenotypes
 
 		//compareWorm(model, screenModel, wormGenes);
 		
-		compare(model.getHumanToWorm(), wormGenes, true);
+		compare(model.getHumanToWorm(), wormGenes);
 	}
 
 	/**
@@ -77,15 +77,89 @@ public class ComparePhenotypes
 					model.getDiseaseMapping()));
 		}
 	//	compareWorm(model, screenModel, wormGenesForThisWormPhenotype);
-		compare(model.getHumanToWorm(), wormGenesForThisWormPhenotype, true);
+		compare(model.getHumanToWorm(), wormGenesForThisWormPhenotype);
 	}
+	
+	/**
+	 * Input: collection of genes
+	 * 
+	 * same as below but with many informative printlns...
+	 * 
+	 * @throws Exception
+	 */
+	public void compareDEBUG(HumanToWorm h2w, Set<String> sample) throws Exception
+	{
+		//prune input (regardless of human or worm genes)
+		System.out.println("genes original size = " + sample.size());
+		sample.retainAll(h2w.allGenesInOrthologs());
+		int sampleSize = sample.size();
+		System.out.println("genes pruned ('sample') size = " + sampleSize);
+		
+		for(String source : h2w.allSources())
+		{
+			System.out.println("source " + source + " original size = " + h2w.sourceToGenes(source).size());
+			int populationSize = h2w.sourceToGenesWithOrthologs(source).size();
+			System.out.println("source " + source + " pruned ('population') size = " + populationSize);
+			
+			for (String disOrPheno : h2w.disOrPhenoFromSource(source))
+			{
+				Set<String> genesForDisOrPheno = new HashSet<String>(h2w.genesForDisOrPheno(disOrPheno, source));
+				
+				System.out.println("dis/phen " + disOrPheno + " size = " + genesForDisOrPheno.size());
+
+				genesForDisOrPheno.retainAll(h2w.allGenesInOrthologs());
+				int successStates = genesForDisOrPheno.size();
+				
+				System.out.println("disease " + disOrPheno + " pruned ('success states') size = " + successStates);
+				
+				int overlap = h2w.overlap(sample, genesForDisOrPheno);
+				
+				System.out.println("overlap ('successes') size = " + overlap);
+				
+				HypergeometricDistribution h = new HypergeometricDistribution(populationSize, successStates,
+						sampleSize);
+				System.out.println((overlap == 0 ? "" : "## OVERLAP FOUND: ") + "P-VALUE: " + h.upperCumulativeProbability(overlap));
+			}	
+		}
+	}
+	
+	/**
+	 * Compare a set of genes against all diseases/phenotypes in the sources
+	 * 
+	 * @param h2w
+	 * @param sample
+	 * @throws Exception
+	 */
+	public void compare(HumanToWorm h2w, Set<String> sample) throws Exception
+	{
+		sample.retainAll(h2w.allGenesInOrthologs());
+		int sampleSize = sample.size();
+		
+		for(String source : h2w.allSources())
+		{
+			int populationSize = h2w.sourceToGenesWithOrthologs(source).size();
+			for (String disOrPheno : h2w.disOrPhenoFromSource(source))
+			{
+				Set<String> genesForDisOrPheno = new HashSet<String>(h2w.genesForDisOrPheno(disOrPheno, source));
+				genesForDisOrPheno.retainAll(h2w.allGenesInOrthologs());
+				int successStates = genesForDisOrPheno.size();
+				int overlap = h2w.overlap(sample, genesForDisOrPheno);
+				HypergeometricDistribution h = new HypergeometricDistribution(populationSize, successStates,
+						sampleSize);
+				double pval = h.upperCumulativeProbability(overlap);
+			}	
+		}
+	}
+	
+	
+	
 
 	/**
 	 * Input: collection of genes
 	 * 
 	 * @throws Exception
 	 */
-	public void compare(HumanToWorm h2w, Set<String> genes, boolean wormInput) throws Exception
+	public void compare2(HumanToWorm h2w, Set<String> genes, boolean wormInput) throws Exception
 	{
 
 		System.out.println("genes original size = " + genes.size());
@@ -100,16 +174,15 @@ public class ComparePhenotypes
 			genes.retainAll(h2w.allHumanGenesInOrthologs());
 		}
 		int sampleSize = genes.size();
+		
 		System.out.println("genes pruned ('sample') size = " + sampleSize);
 
 		// compare versus human diseases
 		for (String source : h2w.humanSourceNames())
 		{
 
-			System.out.println("human source " + source + " original size = "
-					+ h2w.humanDiseasesToHumanGenes(h2w.humanDiseasesWithOrthology(source), source).size());
-			int populationSize = h2w.humanDiseasesToHumanGenesWithOrthology(h2w.humanDiseasesWithOrthology(source),
-					source).size();
+			System.out.println("human source " + source + " original size = " + h2w.humanDiseasesToHumanGenes(h2w.humanDiseasesWithOrthology(source), source).size());
+			int populationSize = h2w.humanDiseasesToHumanGenesWithOrthology(h2w.humanDiseasesWithOrthology(source), source).size();
 			System.out.println("human source " + source + " pruned ('population') size = " + populationSize);
 
 			// each disease is a 'success state'
@@ -306,7 +379,7 @@ public class ComparePhenotypes
 					model.getDiseaseMapping()));
 		}
 		
-		compare(model.getHumanToWorm(), humanGenesForThisHumanDisease, false);
+		compare(model.getHumanToWorm(), humanGenesForThisHumanDisease);
 
 //		List<String> humanGenesForThisWormPhenotype;
 //
