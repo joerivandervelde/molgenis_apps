@@ -3,6 +3,7 @@ package plugins.qtlfinder3.resources;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -198,7 +199,7 @@ public class HumanToWorm
 	 */
 	public int numberOfOrthologsBetweenHumanAndWorm()
 	{
-		return this.humanToWormOrthologs.getAllGenes().size();
+		return this.humanToWormOrthologs.getTotalNumberOfEdges();
 	}
 
 	public Set<String> humanSourceNames()
@@ -248,6 +249,26 @@ public class HumanToWorm
 	}
 
 	/**
+	 * All worm genes present in the ortholog mapping
+	 * 
+	 * @return
+	 */
+	public Set<String> allWormGenesInOrthologs()
+	{
+		return this.humanToWormOrthologs.getAllMappings();
+	}
+
+	/**
+	 * All human genes present in the ortholog mapping
+	 * 
+	 * @return
+	 */
+	public Set<String> allHumanGenesInOrthologs()
+	{
+		return this.humanToWormOrthologs.getAllGenes();
+	}
+
+	/**
 	 * 
 	 * @param disease
 	 * @return
@@ -255,6 +276,70 @@ public class HumanToWorm
 	public List<String> humanDiseaseToHumanGenes(String disease, String sourceName)
 	{
 		return humanSources.get(sourceName).getGenes(disease);
+	}
+
+	/**
+	 * 
+	 * @param disease
+	 * @return
+	 */
+	public Set<String> humanDiseasesToHumanGenes(List<String> diseases, String sourceName)
+	{
+		Set<String> genes = new HashSet<String>();
+		for (String disease : diseases)
+		{
+			genes.addAll(humanSources.get(sourceName).getGenes(disease));
+		}
+		return genes;
+	}
+	
+	/**
+	 * 
+	 * @param phenotypes
+	 * @return
+	 */
+	public Set<String> wormPhenotypesToWormGenes(List<String> phenotypes, String sourceName)
+	{
+		Set<String> genes = new HashSet<String>();
+		for (String phenotype : phenotypes)
+		{
+			genes.addAll(wormSources.get(sourceName).getGenes(phenotype));
+		}
+		return genes;
+	}
+
+	/**
+	 * 
+	 * @param disease
+	 * @return
+	 */
+	public Set<String> humanDiseasesToHumanGenesWithOrthology(List<String> diseases, String sourceName)
+	{
+		Set<String> genes = new HashSet<String>();
+		for (String disease : diseases)
+		{
+			genes.addAll(humanSources.get(sourceName).getGenes(disease));
+		}
+		// prune
+		genes.retainAll(humanToWormOrthologs.getAllGenes());
+		return genes;
+	}
+	
+	/**
+	 * 
+	 * @param phenotype
+	 * @return
+	 */
+	public Set<String> wormPhenotypesToWormGenesWithOrthology(List<String> phenotypes, String sourceName)
+	{
+		Set<String> genes = new HashSet<String>();
+		for (String phenotype : phenotypes)
+		{
+			genes.addAll(wormSources.get(sourceName).getGenes(phenotype));
+		}
+		// prune
+		genes.retainAll(humanToWormOrthologs.getAllMappings());
+		return genes;
 	}
 
 	/**

@@ -270,7 +270,6 @@ public class SearchFunctions
 	public static List<? extends Entity> qtlSearch(String dataset, Integer start, Integer end, Integer chromosome,
 			Integer threshold, Database db) throws Exception
 	{
-		List<Entity> result = new ArrayList<Entity>();
 		List<Chromosome> chrNeeded = db.find(Chromosome.class, new QueryRule(Chromosome.ORDERNR, Operator.LESS,
 				chromosome));
 
