@@ -5,13 +5,13 @@
 		<div class="buttons"><button type="submit" onclick="document.forms.${screen.name}.__action.value = 'gotoCart'; document.forms.${screen.name}.submit();"><img src="generated-res/img/listview.png" alt=""/> View cart (${model.shoppingCart?keys?size})</button></div>
 		<div class="buttons"><button class="positive" type="submit" onclick="document.forms.${screen.name}.__action.value = 'plotShoppingCart'; document.forms.${screen.name}.submit();"><img src="clusterdemo/icons/icon_plaintext_plot.png" alt=""/> Plot QTLs</button></div>
 		
-		<#if model.screenType == "genomicRegion" || model.screenType == "qtlLoci">
-			<div class="buttons"><button class="positive" type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__plotOverlap'; document.forms.${screen.name}.submit();"><img src="clusterdemo/icons/icon_plaintext_plot.png" alt=""/> Plot Overlap</button></div>
+		<#if model.screenType == "humanDisease">
+			<div class="buttons"><button class="positive" disabled="disabled" type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__plotOverlap'; document.forms.${screen.name}.submit();"><img src="clusterdemo/icons/icon_plaintext_plot.png" alt=""/><font style="color:gray;"> Plot Overlap</font></button></div>
 		<#else>
-			<div class="buttons"><button><img src="clusterdemo/icons/icon_plaintext_plot.png" alt=""/> <font style="color:gray;">Plot Overlap</font></button></div>
+			<div class="buttons"><button class="positive" type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__plotOverlap'; document.forms.${screen.name}.submit();"><img src="clusterdemo/icons/icon_plaintext_plot.png" alt=""/> Plot Overlap</button></div>
 		</#if>
 		
-		<div class="buttons"><button type="submit"><img src="generated-res/img/cancel.png" alt=""/> Clear cart</button></div>
+		<div class="buttons"><button type="submit" onclick="document.forms.${screen.name}.__action.value = 'emptyShoppingCart';document.forms.${screen.name}.submit();"><img src="generated-res/img/cancel.png" alt=""/> Clear cart</button></div>
 		
 		<br>
 	</#if>	
@@ -25,13 +25,11 @@
 	<div id="listOfHits" style="display:block;">	
 		<#if model.showResults>	
 			<@rl.resultList model = model screen = screen/>		
-			<br><br>
 		</#if>	
 			
 		
 		<#if model.cartView>
 			<@sc.shoppingCart model = model screen = screen />
-			
 		</#if>
 	
 		<#if model.phenoCompareResults.results?? && model.screenType="comparePhenotypes">

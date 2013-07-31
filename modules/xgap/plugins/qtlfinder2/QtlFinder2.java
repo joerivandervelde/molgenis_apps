@@ -141,15 +141,13 @@ public class QtlFinder2 extends PluginModel<Entity>
 					this.model.setQuery(null);
 					this.model.setHits(null);
 					this.model.setShortenedQuery(null);
-					this.model.setShoppingCart(null);
+					this.model.setShoppingCart(new HashMap<String, Entity>());
 					this.model.setMultiplot(null);
 					this.model.setReport(null);
 					this.model.setQtls(null);
 					this.model.setCartView(false);
 					this.model.setProbeToGene(null);
 					this.model.setShowResults(false);
-					this.model.setScreenType("");
-
 				}
 
 				if (action.equals("gotoSearch"))
@@ -157,7 +155,6 @@ public class QtlFinder2 extends PluginModel<Entity>
 					this.model.setShowResults(true);
 					this.model.setCartView(false);
 					this.model.setMultiplot(null);
-					this.model.setScreenType("");
 				}
 
 				if (action.equals("shopAll"))
@@ -184,14 +181,12 @@ public class QtlFinder2 extends PluginModel<Entity>
 
 				if (action.equals("emptyShoppingCart"))
 				{
-					this.model.setShoppingCart(null);
-					this.model.setScreenType("");
+					this.model.setShoppingCart(new HashMap<String, Entity>());
 				}
 
 				if (action.startsWith("__entity__report__for__"))
 				{
 					this.model.setCartView(false);
-					this.model.setScreenType("");
 
 					String name = action.substring("__entity__report__for__".length());
 
@@ -223,7 +218,6 @@ public class QtlFinder2 extends PluginModel<Entity>
 					this.model.setMultiplot(null);
 					this.model.setReport(null);
 					this.model.setQtls(null);
-					this.model.setScreenType("");
 
 					if (query == null)
 					{
