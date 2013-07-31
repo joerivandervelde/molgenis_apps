@@ -95,27 +95,12 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// Class for building the translation table hashMaps
 	private HumanToWorm humanToWorm;
 
-	// Class for calculating the significance of a disease - worm gene
-	// // association
-	// private HypergeometricTest hyperGeometric;
-
 	// If true, the user can see multiplot, shoppingcart, cartview, overlap
 	// table
 	private String showAnyResultToUser;
 
-	// // User specified (and parsed) list of ENPS ids
+	// User specified (and parsed) list of ENPS ids
 	// private List<String> humanGeneQuery;
-	//
-	// // A double containing the result of the hyper geometric test
-	// private double hyperTestProbability;
-
-	// // Hash of human phenotypes and number of genes overlapping with the
-	// // selected worm phenotype
-	// private Map<String, Map<String, Integer>> allOverlaps;
-	//
-	// // Hash of disease phenotype found and the p value after hyper testing
-	// // (Compare phenotypes)
-	// private Map<String, Map<String, Double>> allProbabilities;
 
 	// String that says if OMIM, DGA, gwascentral, gwascatalog or wormbase worm
 	// phenotype is set
@@ -139,48 +124,6 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// public void setHumanGeneQuery(List<String> humanGeneQuery)
 	// {
 	// this.humanGeneQuery = humanGeneQuery;
-	// }
-
-	// public double getHyperTestProbability()
-	// {
-	// return hyperTestProbability;
-	// }
-	//
-	// public void setHyperTestProbability(double hyperTestProbability)
-	// {
-	// this.hyperTestProbability = hyperTestProbability;
-	// }
-	//
-	// public HypergeometricTest getHypergeometricTest()
-	// {
-	// return hyperGeometric;
-	// }
-	//
-	// public void setHypergeometricTest(HypergeometricTest hyperGeometric)
-	// {
-	// this.hyperGeometric = hyperGeometric;
-	// }
-
-	// public Map<String, Map<String, Integer>> getAllOverlaps()
-	// {
-	// return allOverlaps;
-	// }
-	//
-	// public void setAllOverlaps(Map<String, Map<String, Integer>>
-	// overlapPerDiseasePerSource)
-	// {
-	// this.allOverlaps = overlapPerDiseasePerSource;
-	// }
-	//
-	// public Map<String, Map<String, Double>> getAllProbabilities()
-	// {
-	// return allProbabilities;
-	// }
-	//
-	// public void setAllProbabilities(Map<String, Map<String, Double>>
-	// pvalsPerDiseasePerSource)
-	// {
-	// this.allProbabilities = pvalsPerDiseasePerSource;
 	// }
 
 	public String getDiseaseMapping()
