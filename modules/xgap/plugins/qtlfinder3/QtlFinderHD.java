@@ -218,22 +218,25 @@ public class QtlFinderHD extends QtlFinder2
 
 						List<Entity> cart = new ArrayList<Entity>(this.model.getShoppingCart().values());
 						ComparePhenotypesResult res = ComparePhenotypes.compareGenesWorm(model.getHumanToWorm(), cart);
-						
-						if(model.getScreenType().equals("genomicRegion"))
+
+						if (model.getScreenType().equals("genomicRegion"))
 						{
-							res.setSamplePhenotypesOrGenes(Arrays.asList(new String[]{"chr" + model.getRegionSearchInputState().getSelectedChromosome() + ":" +model.getRegionSearchInputState().getSelectedStartBp() + "-" + model.getRegionSearchInputState().getSelectedEndBp()}));
+							res.setSamplePhenotypesOrGenes(Arrays.asList(new String[]
+							{ "chr" + model.getRegionSearchInputState().getSelectedChromosome() + ":"
+									+ model.getRegionSearchInputState().getSelectedStartBp() + "-"
+									+ model.getRegionSearchInputState().getSelectedEndBp() }));
 							res.setSampleSource("Region search");
 							this.model.getRegionSearchResults().setResults(res);
-							
+
 						}
-						else if(model.getScreenType().equals("qtlLoci"))
+						else if (model.getScreenType().equals("qtlLoci"))
 						{
-							res.setSamplePhenotypesOrGenes(Arrays.asList(new String[]{"todo"}));
+							res.setSamplePhenotypesOrGenes(Arrays.asList(new String[]
+							{ "todo" }));
 							res.setSampleSource("QTL search");
 							this.model.getQtlSearchResults().setResults(res);
 						}
-						
-						
+
 					}
 
 					// Phenotype comparison with worm list selection
@@ -242,9 +245,23 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.setShowAnyResultToUser("show");
 
 						List<String> phenoDiseases = request.getList("comparePheno");
-					
-						ComparePhenotypesResult res = ComparePhenotypes.comparePhenotypesHuman(model.getHumanToWorm(),
-								model.getDiseaseMapping(), phenoDiseases);
+
+						ComparePhenotypesResult res = null;
+
+						if (model.getHumanToWorm().humanSourceNames().contains(model.getDiseaseMapping()))
+						{
+							res = ComparePhenotypes.comparePhenotypesHuman(model.getHumanToWorm(),
+									model.getDiseaseMapping(), phenoDiseases);
+						}
+						else if (model.getHumanToWorm().wormSourceNames().contains(model.getDiseaseMapping()))
+						{
+							res = ComparePhenotypes.comparePhenotypesWorm(model.getHumanToWorm(),
+									model.getDiseaseMapping(), phenoDiseases);
+						}
+						else
+						{
+							throw new Exception("Source unknown: " + model.getDiseaseMapping());
+						}
 
 						res.setSamplePhenotypesOrGenes(phenoDiseases);
 						res.setSampleSource(model.getDiseaseMapping());
