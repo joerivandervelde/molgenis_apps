@@ -177,6 +177,9 @@ public class QtlFinderHD extends QtlFinder2
 							Integer chromosomeOrderNr = this.model.getRegionSearchInputState().getChromosomes()
 									.get(request.getString("regionChr")).getOrderNr();
 
+							this.model.getRegionSearchInputState().setSelectedStartBp(start);
+							this.model.getRegionSearchInputState().setSelectedEndBp(end);
+
 							model.setHits(new HashMap<String, Entity>());
 							model.setProbeToGene(new HashMap<String, Gene>());
 
@@ -288,8 +291,22 @@ public class QtlFinderHD extends QtlFinder2
 
 						List<String> phenoDiseases = request.getList("comparePheno");
 
-						ComparePhenotypesResult res = ComparePhenotypes.comparePhenotypesHuman(model.getHumanToWorm(),
-								model.getDiseaseMapping(), phenoDiseases);
+						ComparePhenotypesResult res = null;
+
+						if (model.getHumanToWorm().humanSourceNames().contains(model.getDiseaseMapping()))
+						{
+							res = ComparePhenotypes.comparePhenotypesHuman(model.getHumanToWorm(),
+									model.getDiseaseMapping(), phenoDiseases);
+						}
+						else if (model.getHumanToWorm().wormSourceNames().contains(model.getDiseaseMapping()))
+						{
+							res = ComparePhenotypes.comparePhenotypesWorm(model.getHumanToWorm(),
+									model.getDiseaseMapping(), phenoDiseases);
+						}
+						else
+						{
+							throw new Exception("Source unknown: " + model.getDiseaseMapping());
+						}
 
 						res.setSamplePhenotypesOrGenes(phenoDiseases);
 						res.setSampleSource(model.getDiseaseMapping());

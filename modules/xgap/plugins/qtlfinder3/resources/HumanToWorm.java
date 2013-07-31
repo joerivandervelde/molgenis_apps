@@ -53,40 +53,7 @@ public class HumanToWorm
 			wormSourcesMap.put(g.getName(), g);
 		}
 		this.wormSources = wormSourcesMap;
-
-		// save ortholog mapping
-		// validate that there all relations are 1-to-1
-		List<String> humanGenesInOrthologs = new ArrayList<String>();
-		List<String> wormGenesInOrthologs = new ArrayList<String>();
-		for (String humanGene : humanToWormOrthologs.getAllGenes())
-		{
-			if (humanGenesInOrthologs.contains(humanGene))
-			{
-				// throw new
-				// Exception("Duplicate human gene in ortholog mapping: " +
-				// humanGene);
-				// TODO: allow multiple mappings?
-			}
-			humanGenesInOrthologs.add(humanGene);
-
-			List<String> wormGene = humanToWormOrthologs.getMapping(humanGene);
-			if (wormGene.size() != 1)
-			{
-				// throw new
-				// Exception("There is not exactly 1 mapping for human gene: " +
-				// humanGene);
-				// TODO: allow multiple mappings?
-			}
-
-			if (wormGenesInOrthologs.contains(wormGene))
-			{
-				// throw new
-				// Exception("Duplicate worm gene in ortholog mapping: " +
-				// wormGene);
-				// TODO: allow multiple mappings?
-			}
-			wormGenesInOrthologs.add(wormGene.get(0));
-		}
+		
 		this.humanToWormOrthologs = humanToWormOrthologs;
 
 		// create humanDiseasesHavingOrthologyPerSource
@@ -396,19 +363,22 @@ public class HumanToWorm
 					List<String> orthologs;
 					if(sampleIsHuman)
 					{
-						orthologs = humanToWormOrthologs.getMapping(gene);
+						orthologs = this.humanToWormOrthologs.getMapping(gene);
 					}
 					else
 					{
-						orthologs = humanToWormOrthologs.getGenes(gene);
+						orthologs = this.humanToWormOrthologs.getGenes(gene);
 					}
 					
+					//copy so we don't remove the data with retainAll
+					List<String> orthoCopy = new ArrayList<String>(orthologs);
+					
 					//remove orthologs that are not in the disease/phenotype
-					orthologs.retainAll(genesForDisOrPheno);
+					orthoCopy.retainAll(genesForDisOrPheno);
 					
 					//if there are still multiple orthologs for this disease/phenotype in the cross-organism, treat it as 1
 					//we cannot test against one-to-many relations, because there is potentially more overlap than sample/draw size!
-					overlapTotal += orthologs.size() > 1 ? 1 : orthologs.size();
+					overlapTotal += orthoCopy.size() > 1 ? 1 : orthoCopy.size();
 				}
 			return overlapTotal;
 		}
