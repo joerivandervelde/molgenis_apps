@@ -134,6 +134,9 @@ public class QtlFinderHD extends QtlFinder2
 							Integer end = request.getInt("regionEnd");
 							Integer chromosomeOrderNr = this.model.getRegionSearchInputState().getChromosomes()
 									.get(request.getString("regionChr")).getOrderNr();
+							
+							this.model.getRegionSearchInputState().setSelectedStartBp(start);
+							this.model.getRegionSearchInputState().setSelectedEndBp(end);
 
 							model.setHits(new HashMap<String, Entity>());
 							model.setProbeToGene(new HashMap<String, Gene>());
