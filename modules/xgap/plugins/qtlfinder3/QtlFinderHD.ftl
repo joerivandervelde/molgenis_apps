@@ -62,7 +62,7 @@
 			
 			<#-- macro's-->	
 			<@diseaseMapping model = model screen = screen/>	
-			<@browseSearch />
+			<@browseSearch screen = screen/>
 			
 			<#if model.screenType == "humanDisease">
 				<@hd.humanDisease model = model screen = screen />
@@ -104,9 +104,9 @@
 	</div>	
 </#macro>
 
-<#macro browseSearch>
-	<table align="center" id="browse">
-		<tr>
+<#macro browseSearch screen>
+	<table align="center" id="browse" >
+		<tr >
 			<td align="center" style="padding-left:0px;">
 				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease" <#if model.screenType=="humanDisease">style="color:#4682b4;"</#if> onclick="document.forms.${screen.name}.__action.value='__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>Human Diseases</b></a>
 			</td>	
@@ -118,6 +118,9 @@
 			</td>	
 			<td align="center">
 				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=comparePhenotypes" <#if model.screenType=="comparePhenotypes">style="color:#4682b4;"</#if> onclick="document.forms.${screen.name}.__action.value='__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>Compare Phenotypes</b></a>
+			</td>
+			<td>
+				<button style="height:20px;width:100px;" type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__reset';document.forms.${screen.name}.submit();"><font style="color:#660033;">Reset All<font></button>			 		
 			</td>	
 		</tr>	
 	</table>
