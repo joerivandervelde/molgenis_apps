@@ -4,6 +4,7 @@
 package plugins.qtlfinder3;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -217,7 +218,22 @@ public class QtlFinderHD extends QtlFinder2
 
 						List<Entity> cart = new ArrayList<Entity>(this.model.getShoppingCart().values());
 						ComparePhenotypesResult res = ComparePhenotypes.compareGenesWorm(model.getHumanToWorm(), cart);
-						// FIXME: set to model!
+						
+						if(model.getScreenType().equals("genomicRegion"))
+						{
+							res.setSamplePhenotypesOrGenes(Arrays.asList(new String[]{"chr" + model.getRegionSearchInputState().getSelectedChromosome() + ":" +model.getRegionSearchInputState().getSelectedStartBp() + "-" + model.getRegionSearchInputState().getSelectedEndBp()}));
+							res.setSampleSource("Region search");
+							this.model.getRegionSearchResults().setResults(res);
+							
+						}
+						else if(model.getScreenType().equals("qtlLoci"))
+						{
+							res.setSamplePhenotypesOrGenes(Arrays.asList(new String[]{"todo"}));
+							res.setSampleSource("QTL search");
+							this.model.getQtlSearchResults().setResults(res);
+						}
+						
+						
 					}
 
 					// Phenotype comparison with worm list selection
@@ -226,14 +242,12 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.setShowAnyResultToUser("show");
 
 						List<String> phenoDiseases = request.getList("comparePheno");
-
-						System.out.println("GOING TO COMPARE PHENO");
-
+					
 						ComparePhenotypesResult res = ComparePhenotypes.comparePhenotypesHuman(model.getHumanToWorm(),
 								model.getDiseaseMapping(), phenoDiseases);
 
-						System.out.println("DONE COMPARING PHENO.. res sample size = " + res.getSampleSize());
-
+						res.setSamplePhenotypesOrGenes(phenoDiseases);
+						res.setSampleSource(model.getDiseaseMapping());
 						this.model.getPhenoCompareResults().setResults(res);
 
 					}

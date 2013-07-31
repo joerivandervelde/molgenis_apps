@@ -34,9 +34,18 @@
 			
 		</#if>
 	
-		<#if model.allOverlaps??>
-			<@cr.compareResults model = model screen = screen />
+		<#if model.phenoCompareResults.results?? && model.screenType="comparePhenotypes">
+			<@cr.compareResults results = model.phenoCompareResults.results />
 			<br><br>
 		</#if>	
+		<#if model.regionSearchResults.results?? && model.screenType="genomicRegion">
+			<@cr.compareResults results = model.regionSearchResults.results />
+			<br><br>
+		</#if>
+		<#if model.qtlSearchResults.results?? && model.screenType="qtlLoci">
+			<@cr.compareResults results = model.qtlSearchResults.results />
+			<br><br>
+		</#if>
+				
 	</div>				
 </#macro>

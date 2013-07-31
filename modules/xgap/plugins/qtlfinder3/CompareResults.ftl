@@ -1,26 +1,43 @@
-<#macro compareResults model screen>
-		<div>	
+<#macro compareResults results>
+		<div>
+		Overlap test for <b>
+		<#list results.samplePhenotypesOrGenes as samplePhenotypesOrGenes>
+			${samplePhenotypesOrGenes} 
+		</#list>
+		</b> from source <b>${results.sampleSource}</b><br><br>
 			<table id="wormHumanTable" width="850" align="center"> 
 				<thead> 
 					<tr> 
-			    		<th>Worm phenotype</th> 
-					    <th>Human Phenotype</th> 
-						<th>Source</th>
-					    <th>Number of genes overlapping</th> 
+					    <th>Vs. phenotype</th>
+					    <th>From source</th>
+					    <th>Gene overlap</th>
+					    <th>Out of</th>
 					    <th>P-value</th>
+					    <th>Single test thres.</th>
+					    <th>Bonferroni thres.</th>
+					    <th>Single test signf.?</th>
+					    <th>Bonferroni signf.?</th>
+					    
 					</tr> 
 				</thead> 
 				<tbody>
-					<#list model.phenoCompareResults.results.sourceToPopulationSize?keys as source>
-							<#list model.phenoCompareResults.results.sourceToPhenoToSuccessStatesPruned[source]?keys as disease>
-								
+					<#list results.sourceToPopulationSize?keys as source>
+							<#list results.sourceToPhenoToSuccessStatesPruned[source]?keys as disease>
+												
 								<tr>
-								  	<td>[TODO: LIST OF SELECTED PHENOTYPES]</td> 
+								  
 								    <td>${disease}</td>
 								    <td>${source}</td> 
-								    <td align="center">${model.getAllOverlaps()[source][disease]}</td>
-								    <td>${model.getAllProbabilities()[source][disease]}</td>  
+								    <td>${results.sourceToPhenoToSuccesses[source][disease]?c}</td>
+								    <td>${results.sourceToPhenoToSuccessStatesPruned[source][disease]?c} vs ${results.sampleSizePruned?c}</td>
+									<td>${results.sourceToPhenoToPval[source][disease]?c}</td>
+									<td>${results.baseThreshold?c}</td>
+									<td>${results.sourceToBonferroniThreshold[source]?c}</td>
+									<td><#if results.sourceToPhenoToPval[source][disease] lt results.baseThreshold><font color="green">YES</font><#else><font color="red">NO</font></#if></td>
+									<td><#if results.sourceToPhenoToPval[source][disease] lt results.sourceToBonferroniThreshold[source]><font color="green">YES</font><#else><font color="red">NO</font></#if></td>
+
 								</tr>
+								
 							</#list>				
 					</#list>
 				</tbody> 
