@@ -1,14 +1,20 @@
 package plugins.qtlfinder3.methods;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ComparePhenotypesResult
 {
-	
+	private String sampleSource;
+	private List<String> samplePhenotypesOrGenes;
 	private int sampleSize;
 	private int sampleSizePruned;
 	
+	private double baseThreshold;
+	private Map<String, Double> sourceToBonferroniThreshold;
+
 	private Map<String, Integer> sourceToPopulationSize;
 	private Map<String, Integer> sourceToPopulationSizePruned;
 	
@@ -20,6 +26,9 @@ public class ComparePhenotypesResult
 	
 	public ComparePhenotypesResult()
 	{
+		this.samplePhenotypesOrGenes = new ArrayList<String>();
+		this.sourceToBonferroniThreshold = new HashMap<String, Double>();
+		
 		this.sourceToPopulationSize = new HashMap<String, Integer>();
 		this.sourceToPopulationSizePruned = new HashMap<String, Integer>();
 		
@@ -31,6 +40,66 @@ public class ComparePhenotypesResult
 		
 	}
 	
+	
+
+
+
+	public String getSampleSource()
+	{
+		return sampleSource;
+	}
+
+
+
+
+
+	public void setSampleSource(String sampleSource)
+	{
+		this.sampleSource = sampleSource;
+	}
+
+
+
+
+
+	public void setSamplePhenotypesOrGenes(List<String> samplePhenotypesOrGenes)
+	{
+		this.samplePhenotypesOrGenes = samplePhenotypesOrGenes;
+	}
+
+
+
+
+
+	public List<String> getSamplePhenotypesOrGenes()
+	{
+		return samplePhenotypesOrGenes;
+	}
+
+
+
+
+
+	public double getBaseThreshold()
+	{
+		return baseThreshold;
+	}
+
+
+
+	public void setBaseThreshold(double baseThreshold)
+	{
+		this.baseThreshold = baseThreshold;
+	}
+
+
+
+	public Map<String, Double> getSourceToBonferroniThreshold()
+	{
+		return sourceToBonferroniThreshold;
+	}
+
+
 	public int getSampleSize()
 	{
 		return sampleSize;

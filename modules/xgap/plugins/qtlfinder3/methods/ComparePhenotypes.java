@@ -105,12 +105,14 @@ public class ComparePhenotypes
 	{
 
 		ComparePhenotypesResult res = new ComparePhenotypesResult();
+		
 		int sampleSizeUnpruned = sample.size();
 		sample.retainAll(h2w.allGenesInOrthologs());
 		int sampleSize = sample.size();
 
 		res.setSampleSize(sampleSizeUnpruned);
 		res.setSampleSizePruned(sampleSize);
+		res.setBaseThreshold(0.05);
 
 		for (String source : h2w.allSources())
 
@@ -120,9 +122,11 @@ public class ComparePhenotypes
 			Map<String, Integer> phenoToSuccesses = new HashMap<String, Integer>();
 			Map<String, Double> phenoToPval = new HashMap<String, Double>();
 
-			res.getSourceToPopulationSize().put(source, h2w.sourceToGenes(source).size());
 			int populationSize = h2w.sourceToGenesWithOrthologs(source).size();
+			
+			res.getSourceToPopulationSize().put(source, h2w.sourceToGenes(source).size());
 			res.getSourceToPopulationSizePruned().put(source, populationSize);
+			res.getSourceToBonferroniThreshold().put(source, res.getBaseThreshold() / h2w.disOrPhenoFromSource(source).size());
 
 			for (String disOrPheno : h2w.disOrPhenoFromSource(source))
 			{
@@ -137,7 +141,6 @@ public class ComparePhenotypes
 
 				if (overlap > 0)
 				{
-
 					phenoToSuccessStates.put(disOrPheno, successStatesUnpruned);
 					phenoToSuccessStatesPruned.put(disOrPheno, successStates);
 					phenoToSuccesses.put(disOrPheno, overlap);
@@ -152,45 +155,8 @@ public class ComparePhenotypes
 			Map<String, Double> sorted = sortByValues(phenoToPval);
 			res.getSourceToPhenoToPval().put(source, sorted);
 		}
-
 		return res;
 
-	}
-
-	public void compareDEBUG(HumanToWorm h2w, Set<String> sample) throws Exception
-	{
-		// prune input (regardless of human or worm genes)
-		System.out.println("genes original size = " + sample.size());
-		sample.retainAll(h2w.allGenesInOrthologs());
-		int sampleSize = sample.size();
-		System.out.println("genes pruned ('sample') size = " + sampleSize);
-
-		for (String source : h2w.allSources())
-		{
-			System.out.println("source " + source + " original size = " + h2w.sourceToGenes(source).size());
-			int populationSize = h2w.sourceToGenesWithOrthologs(source).size();
-			System.out.println("source " + source + " pruned ('population') size = " + populationSize);
-
-			for (String disOrPheno : h2w.disOrPhenoFromSource(source))
-			{
-				Set<String> genesForDisOrPheno = new HashSet<String>(h2w.genesForDisOrPheno(disOrPheno, source));
-
-				System.out.println("dis/phen " + disOrPheno + " size = " + genesForDisOrPheno.size());
-
-				genesForDisOrPheno.retainAll(h2w.allGenesInOrthologs());
-				int successStates = genesForDisOrPheno.size();
-
-				System.out.println("disease " + disOrPheno + " pruned ('success states') size = " + successStates);
-
-				int overlap = h2w.overlap(sample, genesForDisOrPheno);
-
-				System.out.println("overlap ('successes') size = " + overlap);
-
-				HypergeometricDistribution h = new HypergeometricDistribution(populationSize, successStates, sampleSize);
-				System.out.println((overlap == 0 ? "" : "## OVERLAP FOUND: ") + "P-VALUE: "
-						+ h.upperCumulativeProbability(overlap));
-			}
-		}
 	}
 
 	public static <K extends Comparable, V extends Comparable> Map<K, V> sortByValues(Map<K, V> map)
