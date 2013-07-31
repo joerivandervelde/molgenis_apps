@@ -19,6 +19,7 @@ import org.molgenis.xgap.Probe;
 
 import plugins.qtlfinder2.QtlFinder2;
 import plugins.qtlfinder3.methods.ComparePhenotypes;
+import plugins.qtlfinder3.methods.ComparePhenotypesResult;
 import plugins.qtlfinder3.methods.SearchFunctions;
 
 /**
@@ -75,6 +76,8 @@ public class QtlFinderHD extends QtlFinder2
 		if (request.getString("__action") != null)
 		{
 			String action = request.getString("__action");
+
+			System.out.println("ACTION: " + action);
 
 			try
 			{
@@ -213,7 +216,8 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.setShowResults(false);
 
 						List<Entity> cart = new ArrayList<Entity>(this.model.getShoppingCart().values());
-						new ComparePhenotypes().compareGenesWorm(model, this.getModel(), cart);
+						ComparePhenotypesResult res = ComparePhenotypes.compareGenesWorm(model.getHumanToWorm(), cart);
+						// FIXME: set to model!
 					}
 
 					// Phenotype comparison with worm list selection
@@ -223,19 +227,19 @@ public class QtlFinderHD extends QtlFinder2
 
 						List<String> phenoDiseases = request.getList("comparePheno");
 
-						ComparePhenotypes cp = new ComparePhenotypes();
+						System.out.println("GOING TO COMPARE PHENO");
 
-						if (this.model.getHumanToWorm().humanSourceNames().contains(this.model.getDiseaseMapping()))
-						{
-							cp.comparePhenotypesHuman(model, this.getModel(), phenoDiseases);
-						}
-						else
-						{
-							cp.comparePhenotypesWorm(model, this.getModel(), phenoDiseases);
-						}
+						ComparePhenotypesResult res = ComparePhenotypes.comparePhenotypesHuman(model.getHumanToWorm(),
+								model.getDiseaseMapping(), phenoDiseases);
+
+						System.out.println("DONE COMPARING PHENO.. res sample size = " + res.getSampleSize());
+
+						this.model.getPhenoCompareResults().setResults(res);
+
 					}
 
 					// Ortholog Search
+					// TODO: not implemented!
 					if (action.equals("humanGeneSearch"))
 					{
 						String[] humanGeneQuery = request.getString("enspIds").split(", ");
@@ -248,7 +252,7 @@ public class QtlFinderHD extends QtlFinder2
 						model.setHits(new HashMap<String, Entity>());
 						model.setProbeToGene(new HashMap<String, Gene>());
 
-						model.setHumanGeneQuery(new ArrayList<String>());
+						// model.setHumanGeneQuery(new ArrayList<String>());
 
 						List<Probe> probes = SearchFunctions.orthologSearch(humanGeneQuery,
 								this.model.getHumanToWorm(), db);
@@ -317,7 +321,10 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.setQtls(null);
 						this.model.setCartView(false);
 						this.model.setProbeToGene(null);
-						this.model.setAllOverlaps(null);
+
+						this.model.setShowResults(false);
+						// this.model.setAllOverlaps(null);
+
 						this.model.getDiseaseSearchInputState().setSelectedDiseases(null);
 						this.model.getDiseaseSearchResults().setDiseaseSearchHits(null);
 						this.model.setShowAnyResultToUser(null);
