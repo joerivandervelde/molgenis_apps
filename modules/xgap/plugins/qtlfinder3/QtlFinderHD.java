@@ -52,28 +52,70 @@ public class QtlFinderHD extends QtlFinder2
 
 		if (request.getString("screen") != null)
 		{
-			// Save hits before going to another search function
-			if (this.model.getScreenType() == "humanDisease")
-			{
-				this.model.getDiseaseSearchResults().setDiseaseSearchHits(this.model.getHits());
-			}
-			else if (this.model.getScreenType() == "genomicRegion")
-			{
+			System.out.println("Screen change imminent!");
 
-			}
-			else if (this.model.getScreenType() == "qtlLoci")
+			if (this.model.getHits() != null)
 			{
+				System.out.println("Hits is not null, need to back up search hits before switching screen!");
+				// Save hits before going to another search function
+				if (this.model.getScreenType().equals("humanDisease"))
 
-			}
-			else if (this.model.getScreenType() == "comparePhenotypes")
-			{
+				{
+					System.out.println("Saving hits for human disease..");
+					this.model.getDiseaseSearchResults().setDiseaseSearchHits(this.model.getHits());
+					System.out.println("hits: " + this.model.getDiseaseSearchResults().getDiseaseSearchHits());
+					this.model.setHits(null);
+					System.out.println("hits: " + this.model.getDiseaseSearchResults().getDiseaseSearchHits());
+				}
 
+				else if (this.model.getScreenType().equals("genomicRegion"))
+				{
+					this.model.getRegionSearchResults().setRegionSearchHits(this.model.getHits());
+					this.model.setHits(null);
+				}
+				else if (this.model.getScreenType().equals("qtlLoci"))
+				{
+					this.model.getQtlSearchResults().setQtlSearchHits(this.model.getHits());
+					this.model.setHits(null);
+				}
+				else
+				{
+					// TODO: nothing???
+				}
 			}
 
 			this.model.setScreenType(request.getString("screen"));
+
+			if (this.model.getScreenType().equals("humanDisease"))
+			{
+				if (this.model.getDiseaseSearchResults().getDiseaseSearchHits() != null)
+				{
+					this.model.setHits(this.model.getDiseaseSearchResults().getDiseaseSearchHits());
+				}
+			}
+			else if (this.model.getScreenType().equals("genomicRegion"))
+			{
+				if (this.model.getRegionSearchResults().getRegionSearchHits() != null)
+				{
+					this.model.setHits(this.model.getRegionSearchResults().getRegionSearchHits());
+				}
+			}
+			else if (this.model.getScreenType().equals("qtlLoci"))
+			{
+				if (this.model.getQtlSearchResults().getQtlSearchHits() != null)
+				{
+					this.model.setHits(this.model.getQtlSearchResults().getQtlSearchHits());
+				}
+			}
+			else
+			{
+				// TODO: nothing???
+			}
+
 			this.model.setCartView(false);
 			this.model.setShowResults(false);
 		}
+
 		if (request.getString("__action") != null)
 		{
 			String action = request.getString("__action");
@@ -218,22 +260,25 @@ public class QtlFinderHD extends QtlFinder2
 
 						List<Entity> cart = new ArrayList<Entity>(this.model.getShoppingCart().values());
 						ComparePhenotypesResult res = ComparePhenotypes.compareGenesWorm(model.getHumanToWorm(), cart);
-						
-						if(model.getScreenType().equals("genomicRegion"))
+
+						if (model.getScreenType().equals("genomicRegion"))
 						{
-							res.setSamplePhenotypesOrGenes(Arrays.asList(new String[]{"chr" + model.getRegionSearchInputState().getSelectedChromosome() + ":" +model.getRegionSearchInputState().getSelectedStartBp() + "-" + model.getRegionSearchInputState().getSelectedEndBp()}));
+							res.setSamplePhenotypesOrGenes(Arrays.asList(new String[]
+							{ "chr" + model.getRegionSearchInputState().getSelectedChromosome() + ":"
+									+ model.getRegionSearchInputState().getSelectedStartBp() + "-"
+									+ model.getRegionSearchInputState().getSelectedEndBp() }));
 							res.setSampleSource("Region search");
 							this.model.getRegionSearchResults().setResults(res);
-							
+
 						}
-						else if(model.getScreenType().equals("qtlLoci"))
+						else if (model.getScreenType().equals("qtlLoci"))
 						{
-							res.setSamplePhenotypesOrGenes(Arrays.asList(new String[]{"todo"}));
+							res.setSamplePhenotypesOrGenes(Arrays.asList(new String[]
+							{ "todo" }));
 							res.setSampleSource("QTL search");
 							this.model.getQtlSearchResults().setResults(res);
 						}
-						
-						
+
 					}
 
 					// Phenotype comparison with worm list selection
@@ -242,7 +287,7 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.setShowAnyResultToUser("show");
 
 						List<String> phenoDiseases = request.getList("comparePheno");
-					
+
 						ComparePhenotypesResult res = ComparePhenotypes.comparePhenotypesHuman(model.getHumanToWorm(),
 								model.getDiseaseMapping(), phenoDiseases);
 
