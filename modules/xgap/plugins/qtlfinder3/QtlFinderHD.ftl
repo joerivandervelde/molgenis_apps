@@ -75,12 +75,12 @@
 			<#if model.screenType == "qtlLoci">
 				<@ql.qtlLoci model = model screen = screen />
 			</#if>
-	
-			<@report.reportScreen model = model screen = screen />
 		
 			<#if model.screenType == "comparePhenotypes">
 				<@cp.comparePhenotypes model = model screen = screen /> 				
 			</#if>
+			
+			<@report.reportScreen model = model screen = screen />
 			
 			<#if model.multiplot??>
 				<@mp.multiPlot model=model screen=screen />
@@ -95,10 +95,10 @@
 	<div style="position:relative;float:left;">
 		<select id="diseaseMapping" name="diseaseMapping" style="width:200px;">
 			<#list model.humanToWorm.humanSourceNames() as source>
-			<option onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();" value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Human: ${source}</option>
+				<option onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();" value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Human: ${source}</option>
 			</#list>
 			<#list model.humanToWorm.wormSourceNames() as source>
-			<option onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();" value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Worm: ${source}</option>
+				<option onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();" value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Worm: ${source}</option>
 			</#list>
 		</select>
 	</div>	
@@ -108,16 +108,16 @@
 	<table align="center" id="browse">
 		<tr>
 			<td align="center" style="padding-left:0px;">
-				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>Human Diseases</b></a>
+				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease" <#if model.screenType=="humanDisease">style="color:#4682b4;"</#if> onclick="document.forms.${screen.name}.__action.value='__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>Human Diseases</b></a>
 			</td>	
 			<td align="center">		
-				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=genomicRegion" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>Genomic region</b></a>
+				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=genomicRegion" <#if model.screenType=="genomicRegion">style="color:#4682b4;"</#if> onclick="document.forms.${screen.name}.__action.value='__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>Genomic region</b></a>
 			</td>	
 			<td align="center">	
-				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=qtlLoci" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>QTL Loci</b></a>
+				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=qtlLoci" <#if model.screenType=="qtlLoci">style="color:#4682b4;"</#if> onclick="document.forms.${screen.name}.__action.value='__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>QTL Loci</b></a>
 			</td>	
 			<td align="center">
-				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=comparePhenotypes" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>Compare Phenotypes</b></a>
+				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=comparePhenotypes" <#if model.screenType=="comparePhenotypes">style="color:#4682b4;"</#if> onclick="document.forms.${screen.name}.__action.value='__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>Compare Phenotypes</b></a>
 			</td>	
 		</tr>	
 	</table>
@@ -139,7 +139,7 @@
 		});		
 	</script>
 	
-	<#-- RESULT TABLE STYLE -->
+	<#-- STYLES -->
 	<style> 
 		table.dataTable tr.odd{
 			background:#EAEAEA;
@@ -162,6 +162,7 @@
 		#browse a:visited {color:#13507A;}
 		#browse a:hover {color:#4682b4;}
 		#browse a:active {color:#0000FF;}
+		#browse a {text-decoration: none}
 		
 		#probeReport a {color:#13507A;}      
 		#probeReport a:visited {color:#13507A;}

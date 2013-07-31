@@ -4,7 +4,7 @@ import java.util.List;
 
 public class DiseaseSearchInputState
 {
-	// List of diseases selected when user uses OMIM
+	// List of diseases that is filled with disease selections made by the user
 	private List<String> selectedDiseases;
 
 	public List<String> getSelectedDiseases()

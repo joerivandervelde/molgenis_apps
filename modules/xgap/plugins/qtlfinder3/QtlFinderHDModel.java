@@ -13,6 +13,10 @@ import plugins.qtlfinder3.inputstate.QtlSearchInputState;
 import plugins.qtlfinder3.inputstate.RegionSearchInputState;
 import plugins.qtlfinder3.methods.HypergeometricTest;
 import plugins.qtlfinder3.resources.HumanToWorm;
+import plugins.qtlfinder3.results.DiseaseSearchResults;
+import plugins.qtlfinder3.results.PhenoCompareResults;
+import plugins.qtlfinder3.results.QtlSearchResults;
+import plugins.qtlfinder3.results.RegionSearchResults;
 
 /**
  * @author mark
@@ -26,12 +30,21 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	private DiseaseSearchInputState diseaseSearchInputState;
 	private PhenoCompareInputState phenoCompareInputState;
 
+	private DiseaseSearchResults diseaseSearchResults;
+	private QtlSearchResults qtlSearchResults;
+	private RegionSearchResults regionSearchResults;
+	private PhenoCompareResults phenoCompareResults;
+
 	public QtlFinderHDModel()
 	{
 		this.regionSearchInputState = new RegionSearchInputState();
 		this.qtlSearchInputState = new QtlSearchInputState();
 		this.diseaseSearchInputState = new DiseaseSearchInputState();
 		this.phenoCompareInputState = new PhenoCompareInputState();
+		this.diseaseSearchResults = new DiseaseSearchResults();
+		this.qtlSearchResults = new QtlSearchResults();
+		this.regionSearchResults = new RegionSearchResults();
+		this.phenoCompareResults = new PhenoCompareResults();
 	}
 
 	public DiseaseSearchInputState getDiseaseSearchInputState()
@@ -52,6 +65,26 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	public QtlSearchInputState getQtlSearchInputState()
 	{
 		return qtlSearchInputState;
+	}
+
+	public DiseaseSearchResults getDiseaseSearchResults()
+	{
+		return diseaseSearchResults;
+	}
+
+	public QtlSearchResults getQtlSearchResults()
+	{
+		return qtlSearchResults;
+	}
+
+	public RegionSearchResults getRegionSearchResults()
+	{
+		return regionSearchResults;
+	}
+
+	public PhenoCompareResults getPhenoCompareResults()
+	{
+		return phenoCompareResults;
 	}
 
 	// Prefix for actions coming from the human worm association form
@@ -82,7 +115,8 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// (Compare phenotypes)
 	private Map<String, Map<String, Double>> allProbabilities;
 
-	// String that says if OMIM or DGA is set
+	// String that says if OMIM, DGA, gwascentral, gwascatalog or wormbase worm
+	// phenotype is set
 	private String diseaseMapping;
 
 	public HumanToWorm getHumanToWorm()

@@ -292,7 +292,7 @@ public class HumanToWorm
 		}
 		return genes;
 	}
-	
+
 	/**
 	 * 
 	 * @param phenotypes
@@ -324,7 +324,7 @@ public class HumanToWorm
 		genes.retainAll(humanToWormOrthologs.getAllGenes());
 		return genes;
 	}
-	
+
 	/**
 	 * 
 	 * @param phenotype

@@ -50,6 +50,24 @@ public class QtlFinderHD extends QtlFinder2
 
 		if (request.getString("screen") != null)
 		{
+			// Save hits before going to another search function
+			if (this.model.getScreenType() == "humanDisease")
+			{
+				this.model.getDiseaseSearchResults().setDiseaseSearchHits(this.model.getHits());
+			}
+			else if (this.model.getScreenType() == "genomicRegion")
+			{
+
+			}
+			else if (this.model.getScreenType() == "qtlLoci")
+			{
+
+			}
+			else if (this.model.getScreenType() == "comparePhenotypes")
+			{
+
+			}
+
 			this.model.setScreenType(request.getString("screen"));
 			this.model.setCartView(false);
 			this.model.setShowResults(false);
@@ -81,16 +99,17 @@ public class QtlFinderHD extends QtlFinder2
 						List<String> diseases = request.getList("diseaseSelect");
 						this.model.getDiseaseSearchInputState().setSelectedDiseases(diseases);
 
-						model.setHits(new HashMap<String, Entity>());
-						model.setProbeToGene(new HashMap<String, Gene>());
+						this.model.setHits(new HashMap<String, Entity>());
+						this.model.setProbeToGene(new HashMap<String, Gene>());
 
 						List<Probe> hits = SearchFunctions.diseaseSearch(db, this.model.getDiseaseMapping(), diseases,
 								this.model.getHumanToWorm());
 
 						for (Probe p : hits)
 						{
-							model.getHits().put(p.getName(), p);
+							this.model.getHits().put(p.getName(), p);
 						}
+
 					}
 
 					// Region search
@@ -115,8 +134,8 @@ public class QtlFinderHD extends QtlFinder2
 							model.setHits(new HashMap<String, Entity>());
 							model.setProbeToGene(new HashMap<String, Gene>());
 
-							List<Probe> probesInRegion = SearchFunctions.regionSearch(start, end, chromosomeOrderNr, db,
-									true);
+							List<Probe> probesInRegion = SearchFunctions.regionSearch(start, end, chromosomeOrderNr,
+									db, true);
 
 							for (Probe p : probesInRegion)
 							{
@@ -179,8 +198,8 @@ public class QtlFinderHD extends QtlFinder2
 
 							model.setHits(new HashMap<String, Entity>());
 							model.setProbeToGene(new HashMap<String, Gene>());
-							List<Probe> probesInQtlRegion = SearchFunctions.qtlRegionSearch(trait, dataset,
-									threshold, db);
+							List<Probe> probesInQtlRegion = SearchFunctions.qtlRegionSearch(trait, dataset, threshold,
+									db);
 							for (Probe p : probesInQtlRegion)
 							{
 								model.getHits().put(p.getName(), p);
@@ -281,16 +300,6 @@ public class QtlFinderHD extends QtlFinder2
 						}
 					}
 
-					if (action.equals("searchChange"))
-					{
-						System.out.println("Go change the bloody search, and set stuff"
-								+ this.model.getShowAnyResultToUser());
-
-						this.model.setShowAnyResultToUser(null);
-
-						System.out.println("Changed it bloody, and set stuff" + this.model.getShowAnyResultToUser());
-					}
-
 					// Reset
 					if (action.equals("reset"))
 					{
@@ -302,15 +311,15 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.setQuery(null);
 						this.model.setHits(null);
 						this.model.setShortenedQuery(null);
-						this.model.setShoppingCart(null);
+						this.model.setShoppingCart(new HashMap<String, Entity>());
 						this.model.setMultiplot(null);
 						this.model.setReport(null);
 						this.model.setQtls(null);
 						this.model.setCartView(false);
 						this.model.setProbeToGene(null);
-						this.model.setShowResults(false);
 						this.model.setAllOverlaps(null);
 						this.model.getDiseaseSearchInputState().setSelectedDiseases(null);
+						this.model.getDiseaseSearchResults().setDiseaseSearchHits(null);
 						this.model.setShowAnyResultToUser(null);
 					}
 				}

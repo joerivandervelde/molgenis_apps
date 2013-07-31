@@ -7,6 +7,8 @@
 		
 		<#if model.screenType == "genomicRegion" || model.screenType == "qtlLoci">
 			<div class="buttons"><button class="positive" type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__plotOverlap'; document.forms.${screen.name}.submit();"><img src="clusterdemo/icons/icon_plaintext_plot.png" alt=""/> Plot Overlap</button></div>
+		<#else>
+			<div class="buttons"><button><img src="clusterdemo/icons/icon_plaintext_plot.png" alt=""/> <font style="color:gray;">Plot Overlap</font></button></div>
 		</#if>
 		
 		<div class="buttons"><button type="submit"><img src="generated-res/img/cancel.png" alt=""/> Clear cart</button></div>
@@ -23,16 +25,18 @@
 	<div id="listOfHits" style="display:block;">	
 		<#if model.showResults>	
 			<@rl.resultList model = model screen = screen/>		
+			<br><br>
 		</#if>	
-	</div>		
+			
 		
 		<#if model.cartView>
 			<@sc.shoppingCart model = model screen = screen />
-			<br><br>
+			
 		</#if>
 	
 		<#if model.allOverlaps??>
 			<@cr.compareResults model = model screen = screen />
 			<br><br>
-		</#if>				
+		</#if>	
+	</div>				
 </#macro>
