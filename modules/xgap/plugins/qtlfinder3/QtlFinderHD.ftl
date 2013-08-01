@@ -131,10 +131,29 @@
 <#--- SCRIPTS --->
 	<script>
 		$(document).ready(function(){
+			
+			jQuery.fn.dataTableExt.oSort["scientific-pre"] = function ( a ) {
+        		return parseFloat(a);
+    		};
+ 
+			jQuery.fn.dataTableExt.oSort["scientific-asc"] = function ( a, b ) {
+    			return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+			};
+ 
+    		jQuery.fn.dataTableExt.oSort["scientific-desc"] = function ( a, b ) {
+        		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    		};
+			
+		
 		
 			<#-- TABLE WIDGET -->
-			$( "#wormHumanTable" ).dataTable();
-			
+			$( "#wormHumanTable" ).dataTable(
+				{ 
+					"aaSorting": [[4, "asc" ]],
+					"aoColumns":[null, null, null, null, {"sType" : "scientific" }, null, null, null, null] 
+				}
+			);
+                    
 			<#-- DROPDOWN WIDGET -->
 			$("#diseaseSelect").chosen();
 			$("#comparePheno").chosen();
