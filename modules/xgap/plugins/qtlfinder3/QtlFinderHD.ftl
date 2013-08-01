@@ -61,6 +61,8 @@
 			<#import "../qtlfinder3/ReportScreen.ftl" as report>
 			
 			<#-- macro's-->	
+			<@styleAndScript />
+			
 			<@diseaseMapping model = model screen = screen/>	
 			<@browseSearch screen = screen/>
 			
@@ -86,7 +88,6 @@
 				<@mp.multiPlot model=model screen=screen />
 			</#if>
 			
-			<@styleAndScript />
 		</div>
 	</form>
 </#macro>
@@ -120,7 +121,7 @@
 				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=comparePhenotypes" <#if model.screenType=="comparePhenotypes">style="color:#4682b4;"</#if> onclick="document.forms.${screen.name}.__action.value='__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>Compare Phenotypes</b></a>
 			</td>
 			<td>
-				<button style="height:20px;width:100px;" type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__reset';document.forms.${screen.name}.submit();"><font style="color:#660033;">Reset All<font></button>			 		
+				<button style="height:20px;width:100px;" type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__resetAll';document.forms.${screen.name}.submit();"><font style="color:#660033;">Reset All<font></button>			 		
 			</td>	
 		</tr>	
 	</table>
@@ -132,6 +133,7 @@
 	<script>
 		$(document).ready(function(){
 			
+			<#-- CUSTOM JQUERY SORTING FOR SCIENTIFIC ANNOTATION -->
 			jQuery.fn.dataTableExt.oSort["scientific-pre"] = function ( a ) {
         		return parseFloat(a);
     		};
@@ -144,15 +146,35 @@
         		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
     		};
 			
-		
-		
 			<#-- TABLE WIDGET -->
-			$( "#wormHumanTable" ).dataTable(
-				{ 
-					"aaSorting": [[4, "asc" ]],
-					"aoColumns":[null, null, null, null, {"sType" : "scientific" }, null, null, null, null] 
-				}
-			);
+			$( "#wormHumanTable" ).dataTable( {
+			
+				"oLanguage": {
+         			"sSearch": "Filter:"
+       			},
+			 
+				"aaSorting": [[4, "asc" ]],
+				"aoColumns":[null, null, null, null, {"sType" : "scientific" }, null, null, null, null], 
+				
+			});
+			
+			<#-- SLIDER WIDGET -->
+			$( "#slider" ).slider({
+						range: true,
+				        values:[ ${model.regionSearchInputState.selectedStartBp?c}, ${model.regionSearchInputState.selectedEndBp?c} ],
+				        min: 0,
+				        <#if model.regionSearchInputState.chromosomes[model.regionSearchInputState.selectedChromosome].bpLength??>
+				        	<#assign bpLength = model.regionSearchInputState.chromosomes[model.regionSearchInputState.selectedChromosome].bpLength?c>
+				       	<#else>
+				        	<#assign bpLength = 0>
+				       	</#if>
+				        max: ${bpLength},
+				        step: 1,
+				        slide: function( event, ui ) {
+				            $( "#regionStart" ).val( ui.values[ 0 ] );
+				            $( "#regionEnd" ).val( ui.values[ 1 ] );
+				        }
+				    });
                     
 			<#-- DROPDOWN WIDGET -->
 			$("#diseaseSelect").chosen();

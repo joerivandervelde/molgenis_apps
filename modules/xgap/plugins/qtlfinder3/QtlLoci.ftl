@@ -27,7 +27,7 @@
 			
 			<td width="290" style="padding-top:10px;padding-left:10px;">
 				<div class="buttons">
-					<button style="color:blue;" type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__traitRegionSearch';
+					<button style="color:blue;" type="submit" onclick="document.getElementById('listOfHits').style.display = 'none';document.getElementById('imageSpace').style.display = 'block';document.forms.${screen.name}.__action.value = '__qtlfinderhd__traitRegionSearch';
 					document.forms.${screen.name}.submit();">
 					<img src="generated-res/img/recordview.png" alt=""/>Search</button>
 				</div>	

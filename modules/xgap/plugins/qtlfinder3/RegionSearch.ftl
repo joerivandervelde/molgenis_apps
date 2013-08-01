@@ -23,7 +23,8 @@
 			</td>
 			<td style="padding-left: 10px;padding-top:10px;" width="200">
 				<div class="buttons">
-					<button style="color:blue;" type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__regionSearch';
+					<button style="color:blue;" type="submit" onclick="document.getElementById('listOfHits').style.display = 'none';document.getElementById('imageSpace').style.display = 'block';
+					document.forms.${screen.name}.__action.value = '__qtlfinderhd__regionSearch';
 					document.forms.${screen.name}.submit();">
 					<img src="generated-res/img/recordview.png" alt=""/>Search</button>
 				</div>	
@@ -39,26 +40,6 @@
 			</td>
 			<td colspan="2">
 				<div id="slider"></div>
-				<script>
-				$(function() {
-				$( "#slider" ).slider({
-						range: true,
-				        values:[ ${model.regionSearchInputState.selectedStartBp?c}, ${model.regionSearchInputState.selectedEndBp?c} ],
-				        min: 0,
-				        <#if model.regionSearchInputState.chromosomes[model.regionSearchInputState.selectedChromosome].bpLength??>
-				        	<#assign bpLength = model.regionSearchInputState.chromosomes[model.regionSearchInputState.selectedChromosome].bpLength?c>
-				       	<#else>
-				        	<#assign bpLength = 0>
-				       	</#if>
-				        max: ${bpLength},
-				        step: 1,
-				        slide: function( event, ui ) {
-				            $( "#regionStart" ).val( ui.values[ 0 ] );
-				            $( "#regionEnd" ).val( ui.values[ 1 ] );
-				        }
-				    });
-				});
-				</script>
 			</td>
 			<td>
 			</td>

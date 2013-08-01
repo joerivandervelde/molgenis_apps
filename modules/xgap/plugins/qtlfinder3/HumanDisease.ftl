@@ -8,7 +8,7 @@
 		</tr>
 		<tr>
 			<td width="200" style="padding-left:25px;">
-				<select multiple class=" ui-widget-content ui-corner-all" id="diseaseSelect" name="diseaseSelect"  style="width:500px;">
+				<select data-placeholder="Select one or multiple diseases" multiple class=" ui-widget-content ui-corner-all" id="diseaseSelect" name="diseaseSelect"  style="width:500px;">
 					<#if model.humanToWorm.humanSourceNames()?seq_contains(model.diseaseMapping)>
 						<#list model.humanToWorm.humanDiseasesWithOrthology(model.diseaseMapping) as disease>
 							<option value="${disease}" <#if model.diseaseSearchInputState.selectedDiseases?? && model.diseaseSearchInputState.selectedDiseases?seq_contains(disease)>SELECTED</#if>>${disease}</option> 

@@ -10,7 +10,7 @@
 			
 			<tr>
 				<td width="200" style="padding-left:25px;">
-					<select multiple class=" ui-widget-content ui-corner-all" id="comparePheno" name="comparePheno"  style="width:500px;">
+					<select data-placeholder="Select one or multiple diseases" multiple class=" ui-widget-content ui-corner-all" id="comparePheno" name="comparePheno"  style="width:500px;">
 				
 					<#if model.humanToWorm.humanSourceNames()?seq_contains(model.diseaseMapping)>
 						<#list model.humanToWorm.humanDiseasesWithOrthology(model.diseaseMapping) as phenotype>
@@ -32,7 +32,7 @@
 			
 				<td width="290" style="padding-left:10px;">
 					<div class="buttons">
-						<button style="color:blue;" type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__comparePhenotypes'; 
+						<button style="color:blue;" type="submit" id="search" onclick="document.getElementById('listOfHits').style.display = 'none';document.getElementById('imageSpace').style.display = 'block';document.forms.${screen.name}.__action.value = '__qtlfinderhd__comparePhenotypes'; 
 						document.forms.${screen.name}.submit();"><img src="generated-res/img/recordview.png" alt=""/>Compare</button>
 			 		</div>				
 			 		
