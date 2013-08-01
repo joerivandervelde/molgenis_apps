@@ -27,7 +27,6 @@
 			<@rl.resultList model = model screen = screen/>		
 		</#if>	
 			
-		
 		<#if model.cartView>
 			<@sc.shoppingCart model = model screen = screen />
 		</#if>

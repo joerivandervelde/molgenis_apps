@@ -56,16 +56,12 @@ public class QtlFinderHD extends QtlFinder2
 
 			if (this.model.getHits() != null)
 			{
-				System.out.println("Hits is not null, need to back up search hits before switching screen!");
 				// Save hits before going to another search function
 				if (this.model.getScreenType().equals("humanDisease"))
 
 				{
-					System.out.println("Saving hits for human disease..");
 					this.model.getDiseaseSearchResults().setDiseaseSearchHits(this.model.getHits());
-					System.out.println("hits: " + this.model.getDiseaseSearchResults().getDiseaseSearchHits());
 					this.model.setHits(null);
-					System.out.println("hits: " + this.model.getDiseaseSearchResults().getDiseaseSearchHits());
 				}
 
 				else if (this.model.getScreenType().equals("genomicRegion"))
@@ -383,7 +379,7 @@ public class QtlFinderHD extends QtlFinder2
 					// Reset
 					if (action.equals("reset"))
 					{
-
+						System.out.println("Go go reset!");
 						// reset region search
 						InitQtlFinderHDModel.freshRegionSearch(this.model, db);
 
@@ -397,10 +393,7 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.setQtls(null);
 						this.model.setCartView(false);
 						this.model.setProbeToGene(null);
-
 						this.model.setShowResults(false);
-						// this.model.setAllOverlaps(null);
-
 						this.model.getDiseaseSearchInputState().setSelectedDiseases(null);
 						this.model.getDiseaseSearchResults().setDiseaseSearchHits(null);
 						this.model.setShowAnyResultToUser(null);
