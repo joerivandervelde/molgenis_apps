@@ -19,8 +19,8 @@ public class HumanToWorm
 	GeneMappingDataSource humanToWormOrthologs;
 
 	Map<String, Map<String, List<String>>> probeToSourceToDisease;
-	Map<String, List<String>> humanDiseasesHavingOrthologyPerSource;
-	Map<String, List<String>> wormPhenotypeHavingOrthologyPerSource;
+	Map<String, Set<String>> humanDiseasesHavingOrthologyPerSource;
+	Map<String, Set<String>> wormPhenotypeHavingOrthologyPerSource;
 	Set<String> allGenesInOrthologs;
 
 	/**
@@ -57,10 +57,10 @@ public class HumanToWorm
 		this.humanToWormOrthologs = humanToWormOrthologs;
 
 		// create humanDiseasesHavingOrthologyPerSource
-		Map<String, List<String>> humanDiseasesHavingOrthologyPerSource = new HashMap<String, List<String>>();
+		Map<String, Set<String>> humanDiseasesHavingOrthologyPerSource = new HashMap<String, Set<String>>();
 		for (String source : this.humanSources.keySet())
 		{
-			List<String> diseasesWithOrthology = new ArrayList<String>();
+			Set<String> diseasesWithOrthology = new HashSet<String>();
 			for (String disease : this.humanSources.get(source).getAllMappings())
 			{
 				if (!(Collections.disjoint(this.humanSources.get(source).getGenes(disease),
@@ -74,10 +74,10 @@ public class HumanToWorm
 		this.humanDiseasesHavingOrthologyPerSource = humanDiseasesHavingOrthologyPerSource;
 
 		// create wormPhenotypeHavingOrthologyPerSource
-		Map<String, List<String>> wormPhenotypeHavingOrthologyPerSource = new HashMap<String, List<String>>();
+		Map<String, Set<String>> wormPhenotypeHavingOrthologyPerSource = new HashMap<String, Set<String>>();
 		for (String source : this.wormSources.keySet())
 		{
-			List<String> phenotypesWithOrthology = new ArrayList<String>();
+			Set<String> phenotypesWithOrthology = new HashSet<String>();
 			for (String phenotype : this.wormSources.get(source).getAllMappings())
 			{
 				if (!(Collections.disjoint(this.wormSources.get(source).getGenes(phenotype),
@@ -168,12 +168,13 @@ public class HumanToWorm
 
 	/**
 	 * total number of ortholog mappings
+	 * because of many-to-many, average it out
 	 * 
 	 * @return
 	 */
 	public int numberOfOrthologsBetweenHumanAndWorm()
 	{
-		return this.humanToWormOrthologs.getTotalNumberOfEdges();
+		return (this.humanToWormOrthologs.geneToMapping.keySet().size() + this.humanToWormOrthologs.mappingToGenes.keySet().size()) / 2;
 	}
 
 	public Set<String> humanSourceNames()
@@ -294,15 +295,15 @@ public class HumanToWorm
 	 * @throws Exception 
 	 * 
 	 */
-	public Set<String> disOrPhenoFromSource(String source) throws Exception
+	public Set<String> disOrPhenoWithOrthologyFromSource(String source) throws Exception
 	{
 		if(this.humanSources.keySet().contains(source))
 		{
-			return humanSources.get(source).getAllMappings();
+			return humanDiseasesHavingOrthologyPerSource.get(source);
 		}
 		else if(this.wormSources.keySet().contains(source))
 		{
-			return wormSources.get(source).getAllMappings();
+			return wormPhenotypeHavingOrthologyPerSource.get(source);
 		}
 		else
 		{
@@ -356,6 +357,8 @@ public class HumanToWorm
 		}
 		else
 		{
+			Set<String> orthologsAlreadySeen = new HashSet<String>();
+			
 				int overlapTotal = 0;
 				for(String gene : sample)
 				{
@@ -376,8 +379,12 @@ public class HumanToWorm
 					//remove orthologs that are not in the disease/phenotype
 					orthoCopy.retainAll(genesForDisOrPheno);
 					
+					//remove orthologs that we have already seen to fix the 'many to one' problem
+					orthoCopy.removeAll(orthologsAlreadySeen);
+					orthologsAlreadySeen.addAll(orthologs);
+					
 					//if there are still multiple orthologs for this disease/phenotype in the cross-organism, treat it as 1
-					//we cannot test against one-to-many relations, because there is potentially more overlap than sample/draw size!
+					//fixes the 'one to many' problem.. we cannot test against one-to-many relations, because there is potentially more overlap than sample/draw size!
 					overlapTotal += orthoCopy.size() > 1 ? 1 : orthoCopy.size();
 				}
 			return overlapTotal;
@@ -430,7 +437,7 @@ public class HumanToWorm
 	 * @param disease
 	 * @return
 	 */
-	public Set<String> humanDiseasesToHumanGenes(List<String> diseases, String sourceName)
+	public Set<String> humanDiseasesToHumanGenes(Set<String> diseases, String sourceName)
 	{
 		Set<String> genes = new HashSet<String>();
 		for (String disease : diseases)
@@ -445,7 +452,7 @@ public class HumanToWorm
 	 * @param phenotypes
 	 * @return
 	 */
-	public Set<String> wormPhenotypesToWormGenes(List<String> phenotypes, String sourceName)
+	public Set<String> wormPhenotypesToWormGenes(Set<String> phenotypes, String sourceName)
 	{
 		Set<String> genes = new HashSet<String>();
 		for (String phenotype : phenotypes)
@@ -460,7 +467,7 @@ public class HumanToWorm
 	 * @param disease
 	 * @return
 	 */
-	public Set<String> humanDiseasesToHumanGenesWithOrthology(List<String> diseases, String sourceName)
+	public Set<String> humanDiseasesToHumanGenesWithOrthology(Set<String> diseases, String sourceName)
 	{
 		Set<String> genes = humanDiseasesToHumanGenes(diseases, sourceName);
 		genes.retainAll(humanToWormOrthologs.getAllGenes());
@@ -472,7 +479,7 @@ public class HumanToWorm
 	 * @param phenotype
 	 * @return
 	 */
-	public Set<String> wormPhenotypesToWormGenesWithOrthology(List<String> phenotypes, String sourceName)
+	public Set<String> wormPhenotypesToWormGenesWithOrthology(Set<String> phenotypes, String sourceName)
 	{
 		Set<String> genes = wormPhenotypesToWormGenes(phenotypes, sourceName);
 		genes.retainAll(humanToWormOrthologs.getAllMappings());
@@ -481,23 +488,10 @@ public class HumanToWorm
 
 	/**
 	 * 
-	 * @param disease
-	 * @return
-	 */
-	// public List<String> humanDiseaseToHumanGenesHavingWormOrtholog(String
-	// disease, String sourceName)
-	// {
-	// List<String> result = new ArrayList<String>();
-	// // TODO: implement
-	// return result;
-	// }
-
-	/**
-	 * 
 	 * @param dataSource
 	 * @return
 	 */
-	public List<String> humanDiseasesWithOrthology(String dataSource)
+	public Set<String> humanDiseasesWithOrthology(String dataSource)
 	{
 		return this.humanDiseasesHavingOrthologyPerSource.get(dataSource);
 	}
@@ -507,7 +501,7 @@ public class HumanToWorm
 	 * @param dataSource
 	 * @return
 	 */
-	public List<String> wormPhenotypesWithOrthology(String dataSource)
+	public Set<String> wormPhenotypesWithOrthology(String dataSource)
 	{
 		return this.wormPhenotypeHavingOrthologyPerSource.get(dataSource);
 	}

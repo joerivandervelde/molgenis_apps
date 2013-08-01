@@ -50,7 +50,7 @@ public class AllVsAll
 		if(toFile){
 			for (String sampleSource : h2w.allSources())
 			{
-				for (String sampleDisOrPheno : h2w.disOrPhenoFromSource(sampleSource))
+				for (String sampleDisOrPheno : h2w.disOrPhenoWithOrthologyFromSource(sampleSource))
 				{
 					bw.write("\t\"" + sampleSource + "_" + sampleDisOrPheno+"\"");
 				}
@@ -68,8 +68,8 @@ public class AllVsAll
 		{	
 			for (String source : h2w.allSources())
 			{
-				double bonferroniThreshold = 0.05 / (Math.max(h2w.disOrPhenoFromSource(sampleSource).size(), h2w.disOrPhenoFromSource(source).size()));
-				System.out.println("Bonferroni for " + sampleSource + " vs " + source + ": 0.05 / (Math.max(" +h2w.disOrPhenoFromSource(sampleSource).size() +", "+ h2w.disOrPhenoFromSource(source).size() + ") = "+ (Math.max(h2w.disOrPhenoFromSource(sampleSource).size(), h2w.disOrPhenoFromSource(source).size())) + ")  = " + bonferroniThreshold);
+				double bonferroniThreshold = 0.05 / (Math.max(h2w.disOrPhenoWithOrthologyFromSource(sampleSource).size(), h2w.disOrPhenoWithOrthologyFromSource(source).size()));
+				System.out.println("Bonferroni for " + sampleSource + " vs " + source + ": 0.05 / (Math.max(" +h2w.disOrPhenoWithOrthologyFromSource(sampleSource).size() +", "+ h2w.disOrPhenoWithOrthologyFromSource(source).size() + ") = "+ (Math.max(h2w.disOrPhenoWithOrthologyFromSource(sampleSource).size(), h2w.disOrPhenoWithOrthologyFromSource(source).size())) + ")  = " + bonferroniThreshold);
 
 			}
 		}
@@ -81,7 +81,7 @@ public class AllVsAll
 		//draw samples from 
 		for (String sampleSource : h2w.allSources())
 		{
-			for (String sampleDisOrPheno : h2w.disOrPhenoFromSource(sampleSource))
+			for (String sampleDisOrPheno : h2w.disOrPhenoWithOrthologyFromSource(sampleSource))
 			{
 			
 				Set<String> sampleGenes = new HashSet<String>(h2w.genesForDisOrPheno(sampleDisOrPheno, sampleSource));
@@ -93,9 +93,9 @@ public class AllVsAll
 				for (String source : h2w.allSources())
 				{
 					
-					double bonferroniThreshold = 0.05 / (Math.max(h2w.disOrPhenoFromSource(sampleSource).size(), h2w.disOrPhenoFromSource(source).size()));
+					double bonferroniThreshold = 0.05 / (Math.max(h2w.disOrPhenoWithOrthologyFromSource(sampleSource).size(), h2w.disOrPhenoWithOrthologyFromSource(source).size()));
 					
-					for (String disOrPheno : h2w.disOrPhenoFromSource(source))
+					for (String disOrPheno : h2w.disOrPhenoWithOrthologyFromSource(source))
 					{
 						
 						Set<String> genesForDisOrPheno = new HashSet<String>(h2w.genesForDisOrPheno(disOrPheno, source));

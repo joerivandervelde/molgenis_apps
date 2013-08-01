@@ -113,6 +113,8 @@ public class ComparePhenotypes
 		res.setSampleSize(sampleSizeUnpruned);
 		res.setSampleSizePruned(sampleSize);
 		res.setBaseThreshold(0.05);
+		
+		int populationSize = h2w.numberOfOrthologsBetweenHumanAndWorm();
 
 		for (String source : h2w.allSources())
 
@@ -121,14 +123,12 @@ public class ComparePhenotypes
 			Map<String, Integer> phenoToSuccessStatesPruned = new HashMap<String, Integer>();
 			Map<String, Integer> phenoToSuccesses = new HashMap<String, Integer>();
 			Map<String, Double> phenoToPval = new HashMap<String, Double>();
-
-			int populationSize = h2w.sourceToGenesWithOrthologs(source).size();
 			
 			res.getSourceToPopulationSize().put(source, h2w.sourceToGenes(source).size());
 			res.getSourceToPopulationSizePruned().put(source, populationSize);
-			res.getSourceToBonferroniThreshold().put(source, res.getBaseThreshold() / h2w.disOrPhenoFromSource(source).size());
+			res.getSourceToBonferroniThreshold().put(source, res.getBaseThreshold() / h2w.disOrPhenoWithOrthologyFromSource(source).size());
 
-			for (String disOrPheno : h2w.disOrPhenoFromSource(source))
+			for (String disOrPheno : h2w.disOrPhenoWithOrthologyFromSource(source))
 			{
 				Set<String> genesForDisOrPheno = new HashSet<String>(h2w.genesForDisOrPheno(disOrPheno, source));
 				int successStatesUnpruned = genesForDisOrPheno.size();

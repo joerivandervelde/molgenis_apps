@@ -17,7 +17,6 @@ public class GeneMappingDataSource
 	Map<String, List<String>> geneToMapping;
 	Map<String, List<String>> geneToDetails;
 	Map<String, List<String>> mappingToGenes;
-	int totalNumberOfEdges;
 
 	// obviously missing, but not needed? : mappingToDetails
 
@@ -50,14 +49,6 @@ public class GeneMappingDataSource
 		while (s.hasNext())
 		{
 			String line = s.nextLine();
-
-//			if (lines.contains(line))
-//			{
-			//TODO: this makes it very slow... enable once to validate?
-//				throw new Exception("DUPLICATE LINE: " + line);
-//			}
-//			lines.add(line);
-			totalNumberOfEdges++;
 
 			try
 			{
@@ -178,14 +169,4 @@ public class GeneMappingDataSource
 		return mappingToGenes.get(mapping);
 	}
 
-	/**
-	 * Get the total number of edged between genes and mappings Not 100%
-	 * guarenteed to be unique.. we check of duplicate lines, and the
-	 * gene-mapping, mapping-gene maps contain unique relations, but there could
-	 * be lines with swapped columns (bad data)
-	 */
-	public int getTotalNumberOfEdges()
-	{
-		return totalNumberOfEdges;
-	}
 }
