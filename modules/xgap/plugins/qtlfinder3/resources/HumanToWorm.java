@@ -165,6 +165,8 @@ public class HumanToWorm
 		
 
 	}
+	
+	
 
 	/**
 	 * total number of ortholog mappings
@@ -284,6 +286,22 @@ public class HumanToWorm
 		else if(this.wormSources.keySet().contains(source))
 		{
 			return wormPhenotypesToWormGenesWithOrthology(wormPhenotypesWithOrthology(source), source);
+		}
+		else
+		{
+			throw new Exception("Unknown source: " + source);
+		}
+	}
+	
+	public Set<String> detailsForDisease(String source, String disease) throws Exception
+	{
+		if(this.humanSources.keySet().contains(source))
+		{
+			return humanSources.get(source).getDetailsByMapping(disease);
+		}
+		else if(this.wormSources.keySet().contains(source))
+		{
+			return wormSources.get(source).getDetailsByMapping(disease);
 		}
 		else
 		{
