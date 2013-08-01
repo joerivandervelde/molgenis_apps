@@ -82,6 +82,7 @@ public class QtlFinderHD extends QtlFinder2
 
 			this.model.setScreenType(request.getString("screen"));
 
+			// Load the correct hits when a certain search function is selected
 			if (this.model.getScreenType().equals("humanDisease"))
 			{
 				if (this.model.getDiseaseSearchResults().getDiseaseSearchHits() != null)
@@ -163,6 +164,12 @@ public class QtlFinderHD extends QtlFinder2
 									+ "for your region search. An entire chromosome selection will result in to "
 									+ "many hits, overloading your browser", false));
 						}
+						else if (request.getString("regionStart").contains(" ")
+								|| request.getString("regionEnd").contains(" "))
+						{
+							this.setMessages(new ScreenMessage("Make sure there are no spaces or tabs in your input",
+									false));
+						}
 						else
 						{
 							this.model.setShowAnyResultToUser("show");
@@ -197,6 +204,12 @@ public class QtlFinderHD extends QtlFinder2
 							this.setMessages(new ScreenMessage("Please fill in a starting and ending point "
 									+ "for your region search. An entire chromosome selection will result in to "
 									+ "many hits, overloading your browser", false));
+						}
+						else if (request.getString("QtlRegionStart").contains(" ")
+								|| request.getString("QtlRegionEnd").contains(" "))
+						{
+							this.setMessages(new ScreenMessage("Make sure there are no spaces or tabs in your input",
+									false));
 						}
 						else
 						{
@@ -397,6 +410,48 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.getDiseaseSearchInputState().setSelectedDiseases(null);
 						this.model.getDiseaseSearchResults().setDiseaseSearchHits(null);
 						this.model.setShowAnyResultToUser(null);
+
+						if (this.model.getScreenType().equals("comparePhenotypes"))
+						{
+							this.model.getPhenoCompareResults().setResults(null);
+						}
+
+						if (this.model.getScreenType().equals("qtlLoci"))
+						{
+							this.model.getQtlSearchResults().setResults(null);
+						}
+
+						if (this.model.getScreenType().equals("genomicRegion"))
+						{
+							this.model.getRegionSearchResults().setResults(null);
+						}
+
+					}
+
+					if (action.equals("resetAll"))
+					{
+						System.out.println("Go go reset all!");
+
+						// reset region search
+						InitQtlFinderHDModel.freshRegionSearch(this.model, db);
+
+						this.model.setShowResults(false);
+						this.model.setQuery(null);
+						this.model.setHits(null);
+						this.model.setShortenedQuery(null);
+						this.model.setShoppingCart(new HashMap<String, Entity>());
+						this.model.setMultiplot(null);
+						this.model.setReport(null);
+						this.model.setQtls(null);
+						this.model.setCartView(false);
+						this.model.setProbeToGene(null);
+						this.model.setShowResults(false);
+						this.model.getDiseaseSearchInputState().setSelectedDiseases(null);
+						this.model.getDiseaseSearchResults().setDiseaseSearchHits(null);
+						this.model.setShowAnyResultToUser(null);
+						this.model.getPhenoCompareResults().setResults(null);
+						this.model.getRegionSearchResults().setResults(null);
+						this.model.getQtlSearchResults().setResults(null);
 					}
 				}
 
