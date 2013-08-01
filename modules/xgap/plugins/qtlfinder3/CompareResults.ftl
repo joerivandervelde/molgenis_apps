@@ -27,9 +27,9 @@
 								    <td>${source}</td> 
 								    <td>${results.sourceToPhenoToSuccesses[source][disease]?c}</td>
 								    <td>${results.sourceToPhenoToSuccessStatesPruned[source][disease]?c} vs ${results.sampleSizePruned?c}</td>
-									<td>${results.sourceToPhenoToPval[source][disease]?string("0.###E0")}</td>
+									<td>${results.sourceToPhenoToPval[source][disease]?string("0.##E0")}</td>
 									<td>${results.baseThreshold?c}</td>
-									<td>${results.sourceToBonferroniThreshold[source]?string("0.###E0")}</td>
+									<td>${results.sourceToBonferroniThreshold[source]?string("0.##E0")}</td>
 									<td><#if results.sourceToPhenoToPval[source][disease] lt results.baseThreshold><font color="green">YES</font><#else><font color="red">NO</font></#if></td>
 									<td><#if results.sourceToPhenoToPval[source][disease] lt results.sourceToBonferroniThreshold[source]><font color="green">YES</font><#else><font color="red">NO</font></#if></td>
 
