@@ -17,6 +17,7 @@ public class GeneMappingDataSource
 	Map<String, List<String>> geneToMapping;
 	Map<String, List<String>> geneToDetails;
 	Map<String, List<String>> mappingToGenes;
+	Map<String, Set<String>> mappingToDetails;
 
 	// obviously missing, but not needed? : mappingToDetails
 
@@ -37,6 +38,7 @@ public class GeneMappingDataSource
 		Map<String, List<String>> geneToMapping = new HashMap<String, List<String>>();
 		Map<String, List<String>> geneToDetails = new HashMap<String, List<String>>();
 		Map<String, List<String>> mappingToGenes = new HashMap<String, List<String>>();
+		Map<String, List<String>> mappingToDetails = new HashMap<String, List<String>>();
 
 		Scanner s = new Scanner(csvTable);
 
@@ -72,10 +74,11 @@ public class GeneMappingDataSource
 			else
 			{
 				List<String> mappingList = new ArrayList<String>();
-				List<String> detailsList = new ArrayList<String>();
 				mappingList.add(mapping);
-				detailsList.add(details);
 				geneToMapping.put(geneID, mappingList);
+				
+				List<String> detailsList = new ArrayList<String>();
+				detailsList.add(details);
 				geneToDetails.put(geneID, detailsList);
 			}
 
@@ -83,12 +86,17 @@ public class GeneMappingDataSource
 			if (mappingToGenes.keySet().contains(mapping))
 			{
 				mappingToGenes.get(mapping).add(geneID);
+				mappingToDetails.get(mapping).add(details);
 			}
 			else
 			{
 				List<String> geneList = new ArrayList<String>();
 				geneList.add(geneID);
 				mappingToGenes.put(mapping, geneList);
+				
+				List<String> detailsList = new ArrayList<String>();
+				detailsList.add(details);
+				mappingToDetails.put(mapping, detailsList);
 			}
 
 		}
@@ -121,6 +129,18 @@ public class GeneMappingDataSource
 	public List<String> getDetails(String gene)
 	{
 		return geneToDetails.get(gene);
+	}
+	
+	/**
+	 * Print all available details for this human gene in HTML format.
+	 * 
+	 * @param gene
+	 *            identifier, e.g. ENSP00000155840
+	 * @return
+	 */
+	public Set<String> getDetailsByMapping(String mapping)
+	{
+		return mappingToDetails.get(mapping);
 	}
 
 	/**

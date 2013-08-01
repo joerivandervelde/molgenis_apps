@@ -289,6 +289,22 @@ public class HumanToWorm
 		}
 	}
 
+	public Set<String> detailsForDisease(String source, String disease) throws Exception
+	{
+		if (this.humanSources.keySet().contains(source))
+		{
+			return humanSources.get(source).getDetailsByMapping(disease);
+		}
+		else if (this.wormSources.keySet().contains(source))
+		{
+			return wormSources.get(source).getDetailsByMapping(disease);
+		}
+		else
+		{
+			throw new Exception("Unknown source: " + source);
+		}
+	}
+
 	/**
 	 * @throws Exception
 	 * 
@@ -682,14 +698,5 @@ public class HumanToWorm
 			return new HashMap<String, List<String>>();
 		}
 		return probeToSourceToDisease.get(probe);
-	}
-
-	public String detailsForDisease(String source, String disease)
-	{
-		if (this.humanSources.keySet().contains(source))
-		{
-
-		}
-		return "";
 	}
 }
