@@ -201,6 +201,8 @@
 			background:#D8D8D8;
 		}
 		
+		#wormHumanTable a:hover {color:#13507A;}
+		
 		#browse td {padding-left:15px;padding-top:5px;}
 		#browse	a {color:#13507A;}      
 		#browse a:visited {color:#13507A;}

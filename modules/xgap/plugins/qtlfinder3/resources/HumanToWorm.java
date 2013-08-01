@@ -53,7 +53,7 @@ public class HumanToWorm
 			wormSourcesMap.put(g.getName(), g);
 		}
 		this.wormSources = wormSourcesMap;
-		
+
 		this.humanToWormOrthologs = humanToWormOrthologs;
 
 		// create humanDiseasesHavingOrthologyPerSource
@@ -157,24 +157,22 @@ public class HumanToWorm
 				}
 			}
 		}
-		
-		
+
 		HashSet<String> allGenesInOrthologs = new HashSet<String>(this.humanToWormOrthologs.getAllMappings());
 		allGenesInOrthologs.addAll(this.humanToWormOrthologs.getAllGenes());
 		this.allGenesInOrthologs = allGenesInOrthologs;
-		
 
 	}
 
 	/**
-	 * total number of ortholog mappings
-	 * because of many-to-many, average it out
+	 * total number of ortholog mappings because of many-to-many, average it out
 	 * 
 	 * @return
 	 */
 	public int numberOfOrthologsBetweenHumanAndWorm()
 	{
-		return (this.humanToWormOrthologs.geneToMapping.keySet().size() + this.humanToWormOrthologs.mappingToGenes.keySet().size()) / 2;
+		return (this.humanToWormOrthologs.geneToMapping.keySet().size() + this.humanToWormOrthologs.mappingToGenes
+				.keySet().size()) / 2;
 	}
 
 	public Set<String> humanSourceNames()
@@ -242,7 +240,7 @@ public class HumanToWorm
 	{
 		return this.humanToWormOrthologs.getAllGenes();
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -251,18 +249,18 @@ public class HumanToWorm
 	{
 		return this.allGenesInOrthologs;
 	}
-	
+
 	/**
-	 * @throws Exception 
+	 * @throws Exception
 	 * 
 	 */
 	public Set<String> sourceToGenes(String source) throws Exception
 	{
-		if(this.humanSources.keySet().contains(source))
+		if (this.humanSources.keySet().contains(source))
 		{
 			return humanDiseasesToHumanGenes(humanDiseasesWithOrthology(source), source);
 		}
-		else if(this.wormSources.keySet().contains(source))
+		else if (this.wormSources.keySet().contains(source))
 		{
 			return wormPhenotypesToWormGenes(wormPhenotypesWithOrthology(source), source);
 		}
@@ -271,17 +269,17 @@ public class HumanToWorm
 			throw new Exception("Unknown source: " + source);
 		}
 	}
-	
+
 	/**
 	 * 
 	 */
 	public Set<String> sourceToGenesWithOrthologs(String source) throws Exception
 	{
-		if(this.humanSources.keySet().contains(source))
+		if (this.humanSources.keySet().contains(source))
 		{
 			return humanDiseasesToHumanGenesWithOrthology(humanDiseasesWithOrthology(source), source);
 		}
-		else if(this.wormSources.keySet().contains(source))
+		else if (this.wormSources.keySet().contains(source))
 		{
 			return wormPhenotypesToWormGenesWithOrthology(wormPhenotypesWithOrthology(source), source);
 		}
@@ -290,18 +288,18 @@ public class HumanToWorm
 			throw new Exception("Unknown source: " + source);
 		}
 	}
-	
+
 	/**
-	 * @throws Exception 
+	 * @throws Exception
 	 * 
 	 */
 	public Set<String> disOrPhenoWithOrthologyFromSource(String source) throws Exception
 	{
-		if(this.humanSources.keySet().contains(source))
+		if (this.humanSources.keySet().contains(source))
 		{
 			return humanDiseasesHavingOrthologyPerSource.get(source);
 		}
-		else if(this.wormSources.keySet().contains(source))
+		else if (this.wormSources.keySet().contains(source))
 		{
 			return wormPhenotypeHavingOrthologyPerSource.get(source);
 		}
@@ -310,47 +308,48 @@ public class HumanToWorm
 			throw new Exception("Unknown source: " + source);
 		}
 	}
-	
+
 	/**
-	 * @throws Exception 
+	 * @throws Exception
 	 * 
 	 */
-//	private Set<String> overlapSampleCache;
+	// private Set<String> overlapSampleCache;
 	public int overlap(Set<String> sample, Set<String> genesForDisOrPheno) throws Exception
 	{
-//		boolean newSample = false;
-//		if(this.overlapSampleCache == null || this.overlapSampleCache != sample)
-//		{
-//			System.out.println("NEW SAMPLE !!");
-//			newSample = true;
-//			this.overlapSampleCache = sample;
-//		}
-//		
-//		if(newSample){
-		//check if all sample inputs are from one organism
+		// boolean newSample = false;
+		// if(this.overlapSampleCache == null || this.overlapSampleCache !=
+		// sample)
+		// {
+		// System.out.println("NEW SAMPLE !!");
+		// newSample = true;
+		// this.overlapSampleCache = sample;
+		// }
+		//
+		// if(newSample){
+		// check if all sample inputs are from one organism
 		boolean sampleIsHuman = this.humanToWormOrthologs.getAllGenes().containsAll(sample);
-		if(!sampleIsHuman)
+		if (!sampleIsHuman)
 		{
-			if(!this.humanToWormOrthologs.getAllMappings().containsAll(sample))
+			if (!this.humanToWormOrthologs.getAllMappings().containsAll(sample))
 			{
 				throw new Exception("Sample input is neither fully worm nor human");
 			}
 		}
-//		}
-		
-		//check if all genesForDisOrPheno inputs are from one organism
+		// }
+
+		// check if all genesForDisOrPheno inputs are from one organism
 		boolean genesForDisOrPhenoIsHuman = this.humanToWormOrthologs.getAllGenes().containsAll(genesForDisOrPheno);
-		if(!genesForDisOrPhenoIsHuman)
+		if (!genesForDisOrPhenoIsHuman)
 		{
-			if(!this.humanToWormOrthologs.getAllMappings().containsAll(genesForDisOrPheno))
+			if (!this.humanToWormOrthologs.getAllMappings().containsAll(genesForDisOrPheno))
 			{
 				throw new Exception("GenesForDisOrPhenoIsHuman input is neither fully worm nor human");
 			}
 		}
-		
+
 		// if sample and genesForDisOrPhenoIsHuman are the same organism
 		// we can just intersect to get the overlap
-		if((sampleIsHuman && genesForDisOrPhenoIsHuman) || (!sampleIsHuman && !genesForDisOrPhenoIsHuman))
+		if ((sampleIsHuman && genesForDisOrPhenoIsHuman) || (!sampleIsHuman && !genesForDisOrPhenoIsHuman))
 		{
 			genesForDisOrPheno.retainAll(sample);
 			return genesForDisOrPheno.size();
@@ -358,50 +357,54 @@ public class HumanToWorm
 		else
 		{
 			Set<String> orthologsAlreadySeen = new HashSet<String>();
-			
-				int overlapTotal = 0;
-				for(String gene : sample)
+
+			int overlapTotal = 0;
+			for (String gene : sample)
+			{
+				// get the orthologs
+				List<String> orthologs;
+				if (sampleIsHuman)
 				{
-					//get the orthologs
-					List<String> orthologs;
-					if(sampleIsHuman)
-					{
-						orthologs = this.humanToWormOrthologs.getMapping(gene);
-					}
-					else
-					{
-						orthologs = this.humanToWormOrthologs.getGenes(gene);
-					}
-					
-					//copy so we don't remove the data with retainAll
-					List<String> orthoCopy = new ArrayList<String>(orthologs);
-					
-					//remove orthologs that are not in the disease/phenotype
-					orthoCopy.retainAll(genesForDisOrPheno);
-					
-					//remove orthologs that we have already seen to fix the 'many to one' problem
-					orthoCopy.removeAll(orthologsAlreadySeen);
-					orthologsAlreadySeen.addAll(orthologs);
-					
-					//if there are still multiple orthologs for this disease/phenotype in the cross-organism, treat it as 1
-					//fixes the 'one to many' problem.. we cannot test against one-to-many relations, because there is potentially more overlap than sample/draw size!
-					overlapTotal += orthoCopy.size() > 1 ? 1 : orthoCopy.size();
+					orthologs = this.humanToWormOrthologs.getMapping(gene);
 				}
+				else
+				{
+					orthologs = this.humanToWormOrthologs.getGenes(gene);
+				}
+
+				// copy so we don't remove the data with retainAll
+				List<String> orthoCopy = new ArrayList<String>(orthologs);
+
+				// remove orthologs that are not in the disease/phenotype
+				orthoCopy.retainAll(genesForDisOrPheno);
+
+				// remove orthologs that we have already seen to fix the 'many
+				// to one' problem
+				orthoCopy.removeAll(orthologsAlreadySeen);
+				orthologsAlreadySeen.addAll(orthologs);
+
+				// if there are still multiple orthologs for this
+				// disease/phenotype in the cross-organism, treat it as 1
+				// fixes the 'one to many' problem.. we cannot test against
+				// one-to-many relations, because there is potentially more
+				// overlap than sample/draw size!
+				overlapTotal += orthoCopy.size() > 1 ? 1 : orthoCopy.size();
+			}
 			return overlapTotal;
 		}
 	}
-	
+
 	/**
-	 * @throws Exception 
+	 * @throws Exception
 	 * 
 	 */
 	public List<String> genesForDisOrPheno(String disOrPheno, String source) throws Exception
 	{
-		if(this.humanSources.keySet().contains(source))
+		if (this.humanSources.keySet().contains(source))
 		{
 			return humanSources.get(source).getGenes(disOrPheno);
 		}
-		else if(this.wormSources.keySet().contains(source))
+		else if (this.wormSources.keySet().contains(source))
 		{
 			return wormSources.get(source).getGenes(disOrPheno);
 		}
@@ -410,7 +413,7 @@ public class HumanToWorm
 			throw new Exception("Unknown source: " + source);
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -679,5 +682,14 @@ public class HumanToWorm
 			return new HashMap<String, List<String>>();
 		}
 		return probeToSourceToDisease.get(probe);
+	}
+
+	public String detailsForDisease(String source, String disease)
+	{
+		if (this.humanSources.keySet().contains(source))
+		{
+
+		}
+		return "";
 	}
 }

@@ -1,10 +1,11 @@
 <#macro compareResults results>
 		<div>
-		Overlap test for <b>
+		<h3 style="padding-left:25px;"> Overlap test for <b>
 		<#list results.samplePhenotypesOrGenes as samplePhenotypesOrGenes>
-			${samplePhenotypesOrGenes} 
+			<#if !samplePhenotypesOrGenes_has_next>${samplePhenotypesOrGenes}<#else>${samplePhenotypesOrGenes}; </#if>
 		</#list>
-		</b> from source <b>${results.sampleSource}</b><br><br>
+		</b> from source <b>${results.sampleSource}</b><h3>
+		<hr style="border-color:#13507A;border-width:thin;">
 			<table id="wormHumanTable" width="850" align="center"> 
 				<thead> 
 					<th>Vs. phenotype</th>
@@ -21,9 +22,8 @@
 					<#list results.sourceToPopulationSize?keys as source>
 							<#list results.sourceToPhenoToSuccessStatesPruned[source]?keys as disease>
 												
-								<tr>
-								  
-								    <td><#if results.samplePhenotypesOrGenes?seq_contains(disease)><font color="gray">${disease}</font><#else>${disease}</#if></td>
+								<tr> 
+								    <td><a style="text-decoration:none;" href=""><#if results.samplePhenotypesOrGenes?seq_contains(disease)><font color="gray">${disease}</font><#else>${disease}</#if></td>
 								    <td>${source}</td> 
 								    <td>${results.sourceToPhenoToSuccesses[source][disease]?c}</td>
 								    <td>${results.sourceToPhenoToSuccessStatesPruned[source][disease]?c} vs ${results.sampleSizePruned?c}</td>
