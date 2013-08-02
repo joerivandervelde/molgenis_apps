@@ -63,8 +63,7 @@
 			<#-- macro's-->	
 			<@styleAndScript />
 			
-			<@diseaseMapping model = model screen = screen/>	
-			<@browseSearch screen = screen/>
+			<@browseBar model = model screen = screen/>
 			
 			<#if model.screenType == "humanDisease">
 				<@hd.humanDisease model = model screen = screen />
@@ -92,37 +91,54 @@
 	</form>
 </#macro>
 
-<#macro diseaseMapping model screen>
-	<div style="position:relative;float:left;">
-		<select id="diseaseMapping" name="diseaseMapping" style="width:200px;">
-			<#list model.humanToWorm.humanSourceNames() as source>
-				<option onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();" value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Human: ${source}</option>
-			</#list>
-			<#list model.humanToWorm.wormSourceNames() as source>
-				<option onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();" value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Worm: ${source}</option>
-			</#list>
-		</select>
-	</div>	
-</#macro>
+<#macro browseBar model screen>
+	
 
-<#macro browseSearch screen>
 	<table align="center" id="browse" >
-		<tr >
+		<tr>
+			<td>
+				Select a disease / phenotype datasource:
+				<select id="diseaseMapping" name="diseaseMapping" style="width:200px;float:left;">
+					<#list model.humanToWorm.humanSourceNames() as source>
+						<option onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();" value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Human: ${source}</option>
+					</#list>
+					<#list model.humanToWorm.wormSourceNames() as source>
+						<option onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();" value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Worm: ${source}</option>
+					</#list>
+				</select>
+			</td>
+		
 			<td align="center" style="padding-left:0px;">
-				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease" <#if model.screenType=="humanDisease">style="color:#4682b4;"</#if> onclick="document.forms.${screen.name}.__action.value='__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>Human Diseases</b></a>
+				<img height="50" width="50" src="clusterdemo/wormqtl/humanDisease.png" />
 			</td>	
 			<td align="center">		
-				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=genomicRegion" <#if model.screenType=="genomicRegion">style="color:#4682b4;"</#if> onclick="document.forms.${screen.name}.__action.value='__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>Genomic region</b></a>
+				<img height="50" width="50" src="clusterdemo/wormqtl/genomicRegion.png" />
 			</td>	
 			<td align="center">	
-				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=qtlLoci" <#if model.screenType=="qtlLoci">style="color:#4682b4;"</#if> onclick="document.forms.${screen.name}.__action.value='__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>QTL Loci</b></a>
+				<img height="50" width="50" src="clusterdemo/wormqtl/QtlLoci.png" />
 			</td>	
 			<td align="center">
-				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=comparePhenotypes" <#if model.screenType=="comparePhenotypes">style="color:#4682b4;"</#if> onclick="document.forms.${screen.name}.__action.value='__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>Compare Phenotypes</b></a>
-			</td>
-			<td>
-				<button style="height:20px;width:100px;" type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__resetAll';document.forms.${screen.name}.submit();"><font style="color:#660033;">Reset All<font></button>			 		
+				<img height="50" width="50" src="clusterdemo/wormqtl/ComparePhenotypes.png" />
 			</td>	
+			
+				<button style="height:20px;width:100px;float:right;" type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__resetAll';document.forms.${screen.name}.submit();"><font style="color:#660033;">Reset All</font></button>
+			
+		</tr>	
+		<tr>
+			<td colspan="1"></td>
+			
+			<td align="center" style="padding-left:0px;">
+				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease" <#if model.screenType=="humanDisease">style="color:#4682b4;"</#if> onclick="document.forms.${screen.name}.__action.value='__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>Disease</b>2<b>QTL</b></a>
+			</td>	
+			<td align="center">		
+				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=genomicRegion" <#if model.screenType=="genomicRegion">style="color:#4682b4;"</#if> onclick="document.forms.${screen.name}.__action.value='__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>Region</b>2<b>disease</b></a>
+			</td>	
+			<td align="center">	
+				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=qtlLoci" <#if model.screenType=="qtlLoci">style="color:#4682b4;"</#if> onclick="document.forms.${screen.name}.__action.value='__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>QTL</b>2<b>disease</b></a>
+			</td>	
+			<td align="center">
+				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=comparePhenotypes" <#if model.screenType=="comparePhenotypes">style="color:#4682b4;"</#if> onclick="document.forms.${screen.name}.__action.value='__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>ComparePheno</b></a>
+			</td>			 			
 		</tr>	
 	</table>
 	<hr style="border-color:#13507A;border-width:thin;">
@@ -179,6 +195,8 @@
 			<#-- DROPDOWN WIDGET -->
 			$("#diseaseSelect").chosen();
 			$("#comparePheno").chosen();
+			
+			
 		
 		});		
 	</script>
@@ -200,6 +218,8 @@
 		table.dataTable tr.odd td.sorting_1 {
 			background:#D8D8D8;
 		}
+		
+		#wormHumanTable a:hover {color:#13507A;}
 		
 		#browse td {padding-left:15px;padding-top:5px;}
 		#browse	a {color:#13507A;}      

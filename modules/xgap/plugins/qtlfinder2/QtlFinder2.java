@@ -164,6 +164,13 @@ public class QtlFinder2 extends PluginModel<Entity>
 
 				if (action.equals("plotShoppingCart"))
 				{
+					if (this.model.getShoppingCart().size() > 500)
+					{
+						this.setMessages(new ScreenMessage("You are trying to plot "
+								+ this.model.getShoppingCart().size()
+								+ " probes. Please clear your cart and select a smaller number of probes.", false));
+					}
+
 					plotFromShoppingCart(db);
 
 					StringBuilder permaLink = new StringBuilder();

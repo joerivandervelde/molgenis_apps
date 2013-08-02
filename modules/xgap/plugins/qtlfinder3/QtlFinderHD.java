@@ -135,24 +135,31 @@ public class QtlFinderHD extends QtlFinder2
 					// Human Disease search
 					if (action.equals("diseaseSearch"))
 					{
-						this.model.setShowAnyResultToUser("show");
-						this.model.setShowResults(true);
-						this.model.setCartView(false);
-
 						List<String> diseases = request.getList("diseaseSelect");
 						this.model.getDiseaseSearchInputState().setSelectedDiseases(diseases);
 
-						this.model.setHits(new HashMap<String, Entity>());
-						this.model.setProbeToGene(new HashMap<String, Gene>());
-
-						List<Probe> hits = SearchFunctions.diseaseSearch(db, this.model.getDiseaseMapping(), diseases,
-								this.model.getHumanToWorm());
-
-						for (Probe p : hits)
+						if (diseases.size() > 25)
 						{
-							this.model.getHits().put(p.getName(), p);
+							this.setMessages(new ScreenMessage("You selected " + diseases.size()
+									+ " diseases. There is a limit of 15. " + "Please narrow down your search.", false));
 						}
+						else
+						{
+							this.model.setShowAnyResultToUser("show");
+							this.model.setShowResults(true);
+							this.model.setCartView(false);
 
+							this.model.setHits(new HashMap<String, Entity>());
+							this.model.setProbeToGene(new HashMap<String, Gene>());
+
+							List<Probe> hits = SearchFunctions.diseaseSearch(db, this.model.getDiseaseMapping(),
+									diseases, this.model.getHumanToWorm());
+
+							for (Probe p : hits)
+							{
+								this.model.getHits().put(p.getName(), p);
+							}
+						}
 					}
 
 					// Region search
@@ -164,12 +171,20 @@ public class QtlFinderHD extends QtlFinder2
 									+ "for your region search. An entire chromosome selection will result in to "
 									+ "many hits, overloading your browser", false));
 						}
+
 						else if (request.getString("regionStart").contains(" ")
 								|| request.getString("regionEnd").contains(" "))
 						{
 							this.setMessages(new ScreenMessage("Make sure there are no spaces or tabs in your input",
 									false));
+
 						}
+						else if (request.getString("regionStart").contains("\\w")
+								|| request.getString("regionEnd").contains("\\w"))
+						{
+							this.setMessages(new ScreenMessage("Please fill in numbers, not letters", false));
+						}
+
 						else
 						{
 							this.model.setShowAnyResultToUser("show");
@@ -210,6 +225,12 @@ public class QtlFinderHD extends QtlFinder2
 						{
 							this.setMessages(new ScreenMessage("Make sure there are no spaces or tabs in your input",
 									false));
+
+						}
+						else if (request.getString("QtlRegionStart").contains("\\w")
+								|| request.getString("QtlRegionEnd").contains("\\w"))
+						{
+							this.setMessages(new ScreenMessage("Please fill in numbers, not letters", false));
 						}
 						else
 						{
@@ -296,9 +317,9 @@ public class QtlFinderHD extends QtlFinder2
 					// Phenotype comparison with worm list selection
 					if (action.equals("comparePhenotypes"))
 					{
-						this.model.setShowAnyResultToUser("show");
-
 						List<String> phenoDiseases = request.getList("comparePheno");
+
+						this.model.setShowAnyResultToUser("show");
 
 						ComparePhenotypesResult res = null;
 
@@ -320,7 +341,6 @@ public class QtlFinderHD extends QtlFinder2
 						res.setSamplePhenotypesOrGenes(phenoDiseases);
 						res.setSampleSource(model.getDiseaseMapping());
 						this.model.getPhenoCompareResults().setResults(res);
-
 					}
 
 					// Ortholog Search
