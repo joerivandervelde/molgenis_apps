@@ -9,18 +9,22 @@
 			</tr>	
 			
 			<tr>
+				<td width="100" align="center" style="vertical-align:middle;">
+					Mapping:
+					${model.diseaseMapping}
+				</td>
 				<td width="200" style="padding-left:25px;">
 					<select data-placeholder="Select one or multiple diseases" multiple class=" ui-widget-content ui-corner-all" id="comparePheno" name="comparePheno"  style="width:500px;">
 				
 					<#if model.humanToWorm.humanSourceNames()?seq_contains(model.diseaseMapping)>
 						<#list model.humanToWorm.humanDiseasesWithOrthology(model.diseaseMapping) as phenotype>
 							<option value="${phenotype}"
-							>${phenotype} </option>
+							>${model.diseaseMapping}: ${phenotype} </option>
 						</#list>	
 					<#else>
 						<#list model.humanToWorm.wormPhenotypesWithOrthology(model.diseaseMapping) as phenotype>
 							<option value="${phenotype}"
-							>${phenotype} </option>
+							>${model.diseaseMapping}: ${phenotype} </option>
 						</#list>
 					</#if>
 					
@@ -43,14 +47,11 @@
 				</td>	
 			</tr>	
 			<tr>
-				<td colspan="3" height="70" align="center" style="padding-top:20px;">
-					<span style="font-size:12px;">(<i>for example</i>: high incidence male progeny or embryonic arrest)<br>
-					The genes that are associated with the selected phenotype will be compared with every human phenotype in the current database. 
-					All worm and human phenotypes will be returned in a result table showing how they overlap.
+				<td colspan="4" height="70" align="center" style="padding-top:20px;">
+					<span style="font-size:12px;">Place holder for descriptive text. Change per source?
 					</span>
 				</td>
 			</tr>
 		</table>
 	</div>
-	<br>
 </#macro>		

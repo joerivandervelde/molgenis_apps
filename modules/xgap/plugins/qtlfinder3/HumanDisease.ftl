@@ -7,6 +7,10 @@
 			</td>
 		</tr>
 		<tr>
+			<td width="100" align="center" style="vertical-align:middle;">
+				Mapping:
+				${model.diseaseMapping}
+			</td>
 			<td width="200" style="padding-left:25px;">
 				<select data-placeholder="Select one or multiple diseases" multiple class=" ui-widget-content ui-corner-all" id="diseaseSelect" name="diseaseSelect"  style="width:500px;">
 					<#if model.humanToWorm.humanSourceNames()?seq_contains(model.diseaseMapping)>
@@ -33,9 +37,8 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan="3" height="70" align="center" style="padding-top:20px;">
-				<span style="font-size:12px;">(<i>for example</i>: Selecting primary breast cancer or celiac disease)<br>
-				Gene hits, for example on <a href="http://www.geneontology.org/">Geno Ontology</a> or anatomy terms, will show the probes and related terms for the genes that are orthologous to the human genes associated with the selected disease.
+			<td colspan="5" height="70" align="center" style="padding-top:20px;">
+				<span style="font-size:12px;">Placeholder for text that is descriptive. Per datasource?
 				</span>
 			</td>
 		</tr>
