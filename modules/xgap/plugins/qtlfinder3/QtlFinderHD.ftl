@@ -96,9 +96,9 @@
 
 	<table align="center" id="browse" >
 		<tr>
-			<td>
-				Select a disease / phenotype datasource:
-				<select id="diseaseMapping" name="diseaseMapping" style="width:200px;float:left;">
+			<td style="vertical-align:middle;">
+				Select a disease datasource:<br>
+				<select id="diseaseMapping" name="diseaseMapping" style="width:175px;float:left;">
 					<#list model.humanToWorm.humanSourceNames() as source>
 						<option onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();" value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Human: ${source}</option>
 					</#list>
@@ -107,26 +107,24 @@
 					</#list>
 				</select>
 			</td>
-		
+			<td colspan="1"></td>
 			<td align="center" style="padding-left:0px;">
-				<img height="50" width="50" src="clusterdemo/wormqtl/humanDisease.png" />
+				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease"><img height="50" width="50"  src="clusterdemo/wormqtl/humanDisease.png" /></a>
 			</td>	
 			<td align="center">		
-				<img height="50" width="50" src="clusterdemo/wormqtl/genomicRegion.png" />
+				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=genomicRegion"><img height="50" width="50"  src="clusterdemo/wormqtl/genomicRegion.png" /></a>
 			</td>	
 			<td align="center">	
-				<img height="50" width="50" src="clusterdemo/wormqtl/QtlLoci.png" />
+				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=qtlLoci"><img height="50" width="50"  src="clusterdemo/wormqtl/QtlLoci.png" /></a>
 			</td>	
 			<td align="center">
-				<img height="50" width="50" src="clusterdemo/wormqtl/ComparePhenotypes.png" />
+				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=comparePhenotypes"><img height="50" width="50"  src="clusterdemo/wormqtl/ComparePhenotypes.png" /></a>
 			</td>	
-			
-				<button style="height:20px;width:100px;float:right;" type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__resetAll';document.forms.${screen.name}.submit();"><font style="color:#660033;">Reset All</font></button>
-			
+			<td style="vertical-align:middle;"><button style="height:20px;width:100px;float:right;vertical-align:middle;" type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__resetAll';document.forms.${screen.name}.submit();"><font style="color:#660033;">Reset All</font></button></td>	
 		</tr>	
 		<tr>
 			<td colspan="1"></td>
-			
+			<td colspan="1"></td>
 			<td align="center" style="padding-left:0px;">
 				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease" <#if model.screenType=="humanDisease">style="color:#4682b4;"</#if> onclick="document.forms.${screen.name}.__action.value='__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>Disease</b>2<b>QTL</b></a>
 			</td>	
@@ -138,7 +136,8 @@
 			</td>	
 			<td align="center">
 				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=comparePhenotypes" <#if model.screenType=="comparePhenotypes">style="color:#4682b4;"</#if> onclick="document.forms.${screen.name}.__action.value='__qtlfinderhd__searchChange';document.forms.${screen.name}.submit();"><b>ComparePheno</b></a>
-			</td>			 			
+			</td>
+						 			
 		</tr>	
 	</table>
 	<hr style="border-color:#13507A;border-width:thin;">
