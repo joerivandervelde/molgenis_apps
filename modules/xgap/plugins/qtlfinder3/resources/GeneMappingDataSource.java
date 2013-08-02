@@ -3,6 +3,7 @@ package plugins.qtlfinder3.resources;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -38,7 +39,7 @@ public class GeneMappingDataSource
 		Map<String, List<String>> geneToMapping = new HashMap<String, List<String>>();
 		Map<String, List<String>> geneToDetails = new HashMap<String, List<String>>();
 		Map<String, List<String>> mappingToGenes = new HashMap<String, List<String>>();
-		Map<String, List<String>> mappingToDetails = new HashMap<String, List<String>>();
+		Map<String, Set<String>> mappingToDetails = new HashMap<String, Set<String>>();
 
 		Scanner s = new Scanner(csvTable);
 
@@ -76,7 +77,7 @@ public class GeneMappingDataSource
 				List<String> mappingList = new ArrayList<String>();
 				mappingList.add(mapping);
 				geneToMapping.put(geneID, mappingList);
-				
+
 				List<String> detailsList = new ArrayList<String>();
 				detailsList.add(details);
 				geneToDetails.put(geneID, detailsList);
@@ -93,8 +94,8 @@ public class GeneMappingDataSource
 				List<String> geneList = new ArrayList<String>();
 				geneList.add(geneID);
 				mappingToGenes.put(mapping, geneList);
-				
-				List<String> detailsList = new ArrayList<String>();
+
+				Set<String> detailsList = new HashSet<String>();
 				detailsList.add(details);
 				mappingToDetails.put(mapping, detailsList);
 			}
@@ -107,6 +108,7 @@ public class GeneMappingDataSource
 		this.geneToMapping = geneToMapping;
 		this.geneToDetails = geneToDetails;
 		this.mappingToGenes = mappingToGenes;
+		this.mappingToDetails = mappingToDetails;
 	}
 
 	/**
@@ -130,7 +132,7 @@ public class GeneMappingDataSource
 	{
 		return geneToDetails.get(gene);
 	}
-	
+
 	/**
 	 * Print all available details for this human gene in HTML format.
 	 * 
@@ -140,6 +142,7 @@ public class GeneMappingDataSource
 	 */
 	public Set<String> getDetailsByMapping(String mapping)
 	{
+
 		return mappingToDetails.get(mapping);
 	}
 

@@ -1,14 +1,9 @@
 package plugins.qtlfinder3.methods;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.math3.distribution.HypergeometricDistribution;
@@ -105,7 +100,7 @@ public class ComparePhenotypes
 	{
 
 		ComparePhenotypesResult res = new ComparePhenotypesResult();
-		
+
 		int sampleSizeUnpruned = sample.size();
 		sample.retainAll(h2w.allGenesInOrthologs());
 		int sampleSize = sample.size();
@@ -113,7 +108,7 @@ public class ComparePhenotypes
 		res.setSampleSize(sampleSizeUnpruned);
 		res.setSampleSizePruned(sampleSize);
 		res.setBaseThreshold(0.05);
-		
+
 		int populationSize = h2w.numberOfOrthologsBetweenHumanAndWorm();
 
 		for (String source : h2w.allSources())
@@ -123,10 +118,12 @@ public class ComparePhenotypes
 			Map<String, Integer> phenoToSuccessStatesPruned = new HashMap<String, Integer>();
 			Map<String, Integer> phenoToSuccesses = new HashMap<String, Integer>();
 			Map<String, Double> phenoToPval = new HashMap<String, Double>();
-			
+			Map<String, Set<String>> phenoToDetails = new HashMap<String, Set<String>>();
+
 			res.getSourceToPopulationSize().put(source, h2w.sourceToGenes(source).size());
 			res.getSourceToPopulationSizePruned().put(source, populationSize);
-			res.getSourceToBonferroniThreshold().put(source, res.getBaseThreshold() / h2w.disOrPhenoWithOrthologyFromSource(source).size());
+			res.getSourceToBonferroniThreshold().put(source,
+					res.getBaseThreshold() / h2w.disOrPhenoWithOrthologyFromSource(source).size());
 
 			for (String disOrPheno : h2w.disOrPhenoWithOrthologyFromSource(source))
 			{
@@ -145,6 +142,7 @@ public class ComparePhenotypes
 					phenoToSuccessStatesPruned.put(disOrPheno, successStates);
 					phenoToSuccesses.put(disOrPheno, overlap);
 					phenoToPval.put(disOrPheno, pval);
+					phenoToDetails.put(disOrPheno, h2w.detailsForDisease(source, disOrPheno));
 				}
 
 			}
@@ -152,37 +150,9 @@ public class ComparePhenotypes
 			res.getSourceToPhenoToSuccessStates().put(source, phenoToSuccessStates);
 			res.getSourceToPhenoToSuccessStatesPruned().put(source, phenoToSuccessStatesPruned);
 			res.getSourceToPhenoToSuccesses().put(source, phenoToSuccesses);
-			Map<String, Double> sorted = sortByValues(phenoToPval);
-			res.getSourceToPhenoToPval().put(source, sorted);
+			res.getSourceToPhenoToPval().put(source, phenoToPval);
+			res.getSourceToPhenoToDetails().put(source, phenoToDetails);
 		}
 		return res;
-
 	}
-
-	public static <K extends Comparable, V extends Comparable> Map<K, V> sortByValues(Map<K, V> map)
-	{
-		List<Map.Entry<K, V>> entries = new LinkedList<Map.Entry<K, V>>(map.entrySet());
-
-		Collections.sort(entries, new Comparator<Map.Entry<K, V>>()
-		{
-
-			@Override
-			public int compare(Entry<K, V> o1, Entry<K, V> o2)
-			{
-				return o2.getValue().compareTo(o1.getValue());
-			}
-		});
-
-		// LinkedHashMap will keep the keys in the order they are inserted
-		// which is currently sorted on natural ordering
-		Map<K, V> sortedMap = new LinkedHashMap<K, V>();
-
-		for (Map.Entry<K, V> entry : entries)
-		{
-			sortedMap.put(entry.getKey(), entry.getValue());
-		}
-
-		return sortedMap;
-	}
-
 }

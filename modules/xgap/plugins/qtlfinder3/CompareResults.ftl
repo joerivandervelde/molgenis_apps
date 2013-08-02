@@ -21,12 +21,13 @@
 				<tbody>
 					<#list results.sourceToPopulationSize?keys as source>
 							<#list results.sourceToPhenoToSuccessStatesPruned[source]?keys as disease>
-												
+											
 								<tr> 
-								    <td><a style="text-decoration:none;" href=""><#if results.samplePhenotypesOrGenes?seq_contains(disease)><font color="gray">${disease}</font><#else>${disease}</#if></td>
+								    <td><a style="text-decoration:none;" href="${results.sourceToPhenoToDetails[source][disease][0]}" target="__blank"><#if results.samplePhenotypesOrGenes?seq_contains(disease)><font color="gray">${disease}</font><#else>${disease}</#if></td>
 								    <td>${source}</td> 
 								    <td>${results.sourceToPhenoToSuccesses[source][disease]?c}</td>
 								    <td>${results.sourceToPhenoToSuccessStatesPruned[source][disease]?c} vs ${results.sampleSizePruned?c}</td>
+								    <#-- ?string(0.##E0) == scientific annotation, # sets amount of numbers behind comma-->
 									<td>${results.sourceToPhenoToPval[source][disease]?string("0.##E0")}</td>
 									<td>${results.baseThreshold?c}</td>
 									<td>${results.sourceToBonferroniThreshold[source]?string("0.##E0")}</td>
