@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.sql.DataSource;
 
@@ -40,9 +41,9 @@ public class AllVsAll
 		File out = new File("all_vs_all.tsv");
 		System.out.println("writing to: " + out.getAbsolutePath());
 		// if file doesnt exists, then create it
-		if (!out.exists()) {
-			out.createNewFile();
-		}
+//		if (!out.exists()) {
+//			out.createNewFile();
+//		}
 		FileWriter fw = new FileWriter(out.getAbsoluteFile());
 		BufferedWriter bw = new BufferedWriter(fw);
 		
@@ -75,6 +76,8 @@ public class AllVsAll
 		}
 		
 		System.out.println("Phenotype" + "\t" + "vs phenotype" + "\t" + "Pval" + "\t" + "overlap" + "\t" + "successSates" + "\t" + "sampleSize");
+		
+		TreeMap<Double, String> sortedResults = new TreeMap<Double, String>();
 		
 		List<String> combinationsAlreadySeen = new ArrayList<String>();
 		
@@ -110,7 +113,7 @@ public class AllVsAll
 							
 							
 							
-							if(pval < bonferroniThreshold)
+							if(pval < 0.001)
 							{
 								boolean humanSampleSource = h2w.humanSourceNames().contains(sampleSource);
 								boolean humanDisOrPhenSource = h2w.humanSourceNames().contains(source);
@@ -119,9 +122,22 @@ public class AllVsAll
 								{
 									String sampleName = "\""+sampleSource + " " + sampleDisOrPheno+"\"";
 									String vsDisOrPheno = "\""+source + " " + disOrPheno+"\"";
+									
+									
+									
 									if(!sampleName.equals(vsDisOrPheno) && !combinationsAlreadySeen.contains(vsDisOrPheno+sampleName)){
-										System.out.println(sampleName + "\t" + vsDisOrPheno + "\t" + pval + "\t" + overlap + "\t" + successStates + "\t" + sampleSize);
-								
+										
+										if(sampleSource.equals("WormBase"))
+										{
+											sortedResults.put(pval, sampleDisOrPheno + "\t" + source + "\t" + disOrPheno + "\t" + pval + "\t" + overlap + "\t" + successStates + "\t" + sampleSize);
+										}
+										else
+										{
+											sortedResults.put(pval, disOrPheno + "\t" + sampleSource + "\t" + sampleDisOrPheno + "\t" + pval + "\t" + overlap + "\t" + successStates + "\t" + sampleSize);
+										}
+										
+										//String res = sampleName + "\t" + vsDisOrPheno + "\t" + pval + "\t" + overlap + "\t" + successStates + "\t" + sampleSize;
+										//System.out.println(res);
 										combinationsAlreadySeen.add(sampleName+vsDisOrPheno);
 									
 									}
@@ -155,6 +171,11 @@ public class AllVsAll
 		}
 
 		bw.close();
+		
+		for(String res : sortedResults.values())
+		{
+			System.out.println(res);
+		}
 		
 	}
 
