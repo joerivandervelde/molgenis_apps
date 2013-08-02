@@ -4,7 +4,7 @@
 		<#list results.samplePhenotypesOrGenes as samplePhenotypesOrGenes>
 			<#if !samplePhenotypesOrGenes_has_next>${samplePhenotypesOrGenes}<#else>${samplePhenotypesOrGenes}; </#if>
 		</#list>
-		</b> from source <b>${results.sampleSource}</b><h3>
+		</b> from source <b>${results.sampleSource}</b></h3>
 		<hr style="border-color:#13507A;border-width:thin;">
 			<table id="wormHumanTable" width="850" align="center"> 
 				<thead> 
