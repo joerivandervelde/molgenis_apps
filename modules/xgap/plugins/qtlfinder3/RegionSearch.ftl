@@ -48,8 +48,7 @@
 		<tr>
 			<td colspan="4" height="10" align="center">
 				<br>
-				<span style="font-size:12px;">(<i>for example:</i> start bp = 1000, end bp = 25000, chromosome = 4)<br>
-				Gene hits, for example on <a href="http://www.geneontology.org/">Geno Ontology</a> or anatomy terms, will show the probes and related terms for the genes that are located in the selected region.
+				<span style="font-size:12px;">Placeholder for text that is descriptive. Per datasource? Click <a href=""style="text-decoration:none;" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__loadExample';document.forms.${screen.name}.submit();">here</a> to load a tested example query.
 				</span>
 			</td>
 		</tr>

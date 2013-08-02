@@ -34,11 +34,12 @@
 		 			<button type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__reset'; 
 		 			document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset</button>			 	
     			</div>
+    			
 			</td>
 		</tr>
 		<tr>
 			<td colspan="5" height="70" align="center" style="padding-top:20px;">
-				<span style="font-size:12px;">Placeholder for text that is descriptive. Per datasource?
+				<span style="font-size:12px;">Placeholder for text that is descriptive. Per datasource? Click <a href=""style="text-decoration:none;" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__loadExample';document.forms.${screen.name}.submit();">here</a> to load a tested example query.
 				</span>
 			</td>
 		</tr>

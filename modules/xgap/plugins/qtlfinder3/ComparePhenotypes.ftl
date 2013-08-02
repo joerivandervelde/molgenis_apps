@@ -18,13 +18,12 @@
 				
 					<#if model.humanToWorm.humanSourceNames()?seq_contains(model.diseaseMapping)>
 						<#list model.humanToWorm.humanDiseasesWithOrthology(model.diseaseMapping) as phenotype>
-							<option value="${phenotype}"
-							>${model.diseaseMapping}: ${phenotype} </option>
+							<option value="${phenotype}" <#if model.diseaseSearchInputState.selectedDiseases?? && model.diseaseSearchInputState.selectedDiseases?seq_contains(phenotype)>SELECTED</#if>>${phenotype} </option>
 						</#list>	
 					<#else>
 						<#list model.humanToWorm.wormPhenotypesWithOrthology(model.diseaseMapping) as phenotype>
-							<option value="${phenotype}"
-							>${model.diseaseMapping}: ${phenotype} </option>
+							<option value="${phenotype}" <#if model.diseaseSearchInputState.selectedDiseases?? && model.diseaseSearchInputState.selectedDiseases?seq_contains(phenotype)>SELECTED</#if>
+							>${phenotype} </option>
 						</#list>
 					</#if>
 					
@@ -48,7 +47,7 @@
 			</tr>	
 			<tr>
 				<td colspan="4" height="70" align="center" style="padding-top:20px;">
-					<span style="font-size:12px;">Place holder for descriptive text. Change per source?
+					<span style="font-size:12px;">Placeholder for text that is descriptive. Per datasource? Click <a href=""style="text-decoration:none;" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__loadExample';document.forms.${screen.name}.submit();">here</a> to load a tested example query.
 					</span>
 				</td>
 			</tr>

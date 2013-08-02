@@ -409,6 +409,48 @@ public class QtlFinderHD extends QtlFinder2
 						}
 					}
 
+					// loads example per search function for reviewer to use
+					if (action.equals("loadExample"))
+					{
+						if (this.model.getScreenType().equals("humanDisease"))
+						{
+							this.model.setDiseaseMapping("OMIM");
+							List<String> diseases = new ArrayList<String>();
+							diseases.add("Glutamine deficiency, congenital, 610015 (3)");
+							this.model.getDiseaseSearchInputState().setSelectedDiseases(diseases);
+						}
+
+						if (this.model.getScreenType().equals("comparePhenotypes"))
+						{
+							this.model.setDiseaseMapping("OMIM");
+							List<String> phenoDiseases = new ArrayList<String>();
+
+							phenoDiseases.add("Breast cancer, early-onset, 114480 (3)");
+							phenoDiseases.add("Breast cancer, somatic, 114480 (3)");
+							phenoDiseases.add("Breast cancer, invasive ductal, 114480 (3)");
+							phenoDiseases.add("Breast cancer (3)");
+							phenoDiseases.add("{Breast-ovarian cancer, familial, 1}, 604370 (3)");
+							phenoDiseases.add("{Breast cancer, susceptibility to}, 114480 (3)");
+							phenoDiseases.add("{Breast and colorectal cancer, susceptibility to} (3)");
+							phenoDiseases.add("Ovarian cancer, 167000 (3)");
+							phenoDiseases.add("Ovarian cancer, somatic, 604370 (3)");
+							phenoDiseases.add("Adenocarcinoma, ovarian, somatic, 604370 (3)");
+
+							this.model.getDiseaseSearchInputState().setSelectedDiseases(phenoDiseases);
+						}
+
+						if (this.model.getScreenType().equals("qtlLoci"))
+						{
+
+						}
+
+						if (this.model.getScreenType().equals("genomicRegion"))
+						{
+
+						}
+
+					}
+
 					// Reset
 					if (action.equals("reset"))
 					{
