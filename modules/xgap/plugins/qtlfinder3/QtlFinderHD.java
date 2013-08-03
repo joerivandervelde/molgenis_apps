@@ -6,7 +6,9 @@ package plugins.qtlfinder3;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.molgenis.framework.db.Database;
 import org.molgenis.framework.server.MolgenisRequest;
@@ -296,18 +298,18 @@ public class QtlFinderHD extends QtlFinder2
 
 						if (model.getScreenType().equals("genomicRegion"))
 						{
-							res.setSamplePhenotypesOrGenes(Arrays.asList(new String[]
+							res.setSampleInputs(new HashSet<String>(Arrays.asList(new String[]
 							{ "chr" + model.getRegionSearchInputState().getSelectedChromosome() + ":"
 									+ model.getRegionSearchInputState().getSelectedStartBp() + "-"
-									+ model.getRegionSearchInputState().getSelectedEndBp() }));
+									+ model.getRegionSearchInputState().getSelectedEndBp() })));
 							res.setSampleSource("Region search");
 							this.model.getRegionSearchResults().setResults(res);
 
 						}
 						else if (model.getScreenType().equals("qtlLoci"))
 						{
-							res.setSamplePhenotypesOrGenes(Arrays.asList(new String[]
-							{ "todo" }));
+							res.setSampleInputs(new HashSet<String>(Arrays.asList(new String[]
+							{ "todo" })));
 							res.setSampleSource("QTL search");
 							this.model.getQtlSearchResults().setResults(res);
 						}
@@ -317,7 +319,7 @@ public class QtlFinderHD extends QtlFinder2
 					// Phenotype comparison with worm list selection
 					if (action.equals("comparePhenotypes"))
 					{
-						List<String> phenoDiseases = request.getList("comparePheno");
+						Set<String> phenoDiseases = new HashSet<String>(request.getList("comparePheno"));
 
 						this.model.setShowAnyResultToUser("show");
 
@@ -338,7 +340,7 @@ public class QtlFinderHD extends QtlFinder2
 							throw new Exception("Source unknown: " + model.getDiseaseMapping());
 						}
 
-						res.setSamplePhenotypesOrGenes(phenoDiseases);
+						res.setSampleInputs(phenoDiseases);
 						res.setSampleSource(model.getDiseaseMapping());
 						this.model.getPhenoCompareResults().setResults(res);
 					}

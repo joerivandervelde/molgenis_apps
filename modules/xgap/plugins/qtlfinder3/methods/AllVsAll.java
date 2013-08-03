@@ -105,7 +105,7 @@ public class AllVsAll
 						genesForDisOrPheno.retainAll(h2w.allGenesInOrthologs());
 						int successStates = genesForDisOrPheno.size();
 						
-						int overlap = h2w.overlap(sampleGenes, genesForDisOrPheno);
+						int overlap = h2w.overlap(sampleGenes, genesForDisOrPheno).keySet().size();
 						try
 						{
 							HypergeometricDistribution h = new HypergeometricDistribution(populationSize, successStates, sampleSize);

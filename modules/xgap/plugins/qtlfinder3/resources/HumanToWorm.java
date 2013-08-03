@@ -330,7 +330,7 @@ public class HumanToWorm
 	 * 
 	 */
 	// private Set<String> overlapSampleCache;
-	public int overlap(Set<String> sample, Set<String> genesForDisOrPheno) throws Exception
+	public Map<String, Set<String>> overlap(Set<String> sample, Set<String> genesForDisOrPheno) throws Exception
 	{
 		// boolean newSample = false;
 		// if(this.overlapSampleCache == null || this.overlapSampleCache !=
@@ -368,13 +368,19 @@ public class HumanToWorm
 		if ((sampleIsHuman && genesForDisOrPhenoIsHuman) || (!sampleIsHuman && !genesForDisOrPhenoIsHuman))
 		{
 			genesForDisOrPheno.retainAll(sample);
-			return genesForDisOrPheno.size();
+			Map<String, Set<String>> res = new HashMap<String,Set<String>>();
+			for(String s : genesForDisOrPheno)
+			{
+				res.put(s, null);
+			}
+			return res;
 		}
 		else
 		{
 			Set<String> orthologsAlreadySeen = new HashSet<String>();
+			Map<String, Set<String>> overlap = new HashMap<String, Set<String>>();
 
-			int overlapTotal = 0;
+			/** int overlapTotal = 0; */
 			for (String gene : sample)
 			{
 				// get the orthologs
@@ -389,7 +395,7 @@ public class HumanToWorm
 				}
 
 				// copy so we don't remove the data with retainAll
-				List<String> orthoCopy = new ArrayList<String>(orthologs);
+				Set<String> orthoCopy = new HashSet<String>(orthologs);
 
 				// remove orthologs that are not in the disease/phenotype
 				orthoCopy.retainAll(genesForDisOrPheno);
@@ -404,9 +410,15 @@ public class HumanToWorm
 				// fixes the 'one to many' problem.. we cannot test against
 				// one-to-many relations, because there is potentially more
 				// overlap than sample/draw size!
-				overlapTotal += orthoCopy.size() > 1 ? 1 : orthoCopy.size();
+				/** overlapTotal += orthoCopy.size() > 1 ? 1 : orthoCopy.size(); */
+				
+				//'equivalant' to counting only one is adding the orthoCopy list one 1 key entry
+				if(orthoCopy.size() > 0)
+				{
+					overlap.put(gene, orthoCopy);
+				}
 			}
-			return overlapTotal;
+			return overlap;
 		}
 	}
 
