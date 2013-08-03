@@ -75,7 +75,7 @@ public class AllVsAll
 			}
 		}
 		
-		System.out.println("Phenotype" + "\t" + "vs phenotype" + "\t" + "Pval" + "\t" + "overlap" + "\t" + "successSates" + "\t" + "sampleSize");
+		System.out.println("Phenotype1 (Ce)" + "\t" + "Phenotype2 (Hs)" + "\t" + "n1" + "\t" + "n2" + "\t" + "k" + "\t" + "P value");
 		
 		TreeMap<Double, String> sortedResults = new TreeMap<Double, String>();
 		
@@ -129,11 +129,11 @@ public class AllVsAll
 										
 										if(sampleSource.equals("WormBase"))
 										{
-											sortedResults.put(pval, sampleDisOrPheno + "\t" + source + "\t" + disOrPheno + "\t" + pval + "\t" + overlap + "\t" + successStates + "\t" + sampleSize);
+											sortedResults.put(pval, sampleDisOrPheno + "\t" + disOrPheno + " ["+source+"]" + "\t" + sampleSize + "\t" + successStates + "\t" + overlap + "\t" + pval);
 										}
 										else
 										{
-											sortedResults.put(pval, disOrPheno + "\t" + sampleSource + "\t" + sampleDisOrPheno + "\t" + pval + "\t" + overlap + "\t" + successStates + "\t" + sampleSize);
+											sortedResults.put(pval, disOrPheno + "\t" + sampleDisOrPheno +  " ["+sampleSource+"]" + "\t" + successStates + "\t" + sampleSize + "\t" + overlap + "\t" + pval);
 										}
 										
 										//String res = sampleName + "\t" + vsDisOrPheno + "\t" + pval + "\t" + overlap + "\t" + successStates + "\t" + sampleSize;
