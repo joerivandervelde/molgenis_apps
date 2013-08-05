@@ -22,7 +22,7 @@ public class ComparePhenotypes
 	 * @param phenotypes
 	 * @throws Exception
 	 */
-	public static ComparePhenotypesResult comparePhenotypesHuman(HumanToWorm h2w, String source, List<String> phenotypes)
+	public static ComparePhenotypesResult comparePhenotypesHuman(HumanToWorm h2w, String source, Set<String> phenotypes)
 			throws Exception
 	{
 		Set<String> humanGenesForThisHumanDisease = new HashSet<String>();
@@ -76,7 +76,7 @@ public class ComparePhenotypes
 	 * @param wormphenotype
 	 * @throws Exception
 	 * */
-	public static ComparePhenotypesResult comparePhenotypesWorm(HumanToWorm h2w, String source, List<String> phenotypes)
+	public static ComparePhenotypesResult comparePhenotypesWorm(HumanToWorm h2w, String source, Set<String> phenotypes)
 			throws Exception
 	{
 		Set<String> wormGenesForThisWormPhenotype = new HashSet<String>();
@@ -100,12 +100,13 @@ public class ComparePhenotypes
 	{
 
 		ComparePhenotypesResult res = new ComparePhenotypesResult();
+		res.setSampleGenes(sample);
 
-		int sampleSizeUnpruned = sample.size();
+//		int sampleSizeUnpruned = sample.size();
 		sample.retainAll(h2w.allGenesInOrthologs());
 		int sampleSize = sample.size();
 
-		res.setSampleSize(sampleSizeUnpruned);
+	//	res.setSampleSize(sampleSizeUnpruned);
 		res.setSampleSizePruned(sampleSize);
 		res.setBaseThreshold(0.05);
 
@@ -114,13 +115,15 @@ public class ComparePhenotypes
 		for (String source : h2w.allSources())
 
 		{
-			Map<String, Integer> phenoToSuccessStates = new HashMap<String, Integer>();
+			//Map<String, Integer> phenoToSuccessStates = new HashMap<String, Integer>();
 			Map<String, Integer> phenoToSuccessStatesPruned = new HashMap<String, Integer>();
 			Map<String, Integer> phenoToSuccesses = new HashMap<String, Integer>();
 			Map<String, Double> phenoToPval = new HashMap<String, Double>();
+			Map<String, Set<String>> phenoToGenes = new HashMap<String, Set<String>>();
+			Map<String, Map<String,Set<String>>> phenoToOverlappingGenes = new HashMap<String, Map<String,Set<String>>>();
 			Map<String, Set<String>> phenoToDetails = new HashMap<String, Set<String>>();
 
-			res.getSourceToPopulationSize().put(source, h2w.sourceToGenes(source).size());
+			//res.getSourceToPopulationSize().put(source, h2w.sourceToGenes(source).size());
 			res.getSourceToPopulationSizePruned().put(source, populationSize);
 			res.getSourceToBonferroniThreshold().put(source,
 					res.getBaseThreshold() / h2w.disOrPhenoWithOrthologyFromSource(source).size());
@@ -128,29 +131,36 @@ public class ComparePhenotypes
 			for (String disOrPheno : h2w.disOrPhenoWithOrthologyFromSource(source))
 			{
 				Set<String> genesForDisOrPheno = new HashSet<String>(h2w.genesForDisOrPheno(disOrPheno, source));
-				int successStatesUnpruned = genesForDisOrPheno.size();
+			//	int successStatesUnpruned = genesForDisOrPheno.size();
 				genesForDisOrPheno.retainAll(h2w.allGenesInOrthologs());
 				int successStates = genesForDisOrPheno.size();
+				
+				Set<String> genesForDisOrPhenoCopy = new HashSet<String>(genesForDisOrPheno);
 
-				int overlap = h2w.overlap(sample, genesForDisOrPheno);
+				Map<String, Set<String>> overlappingGenes = h2w.overlap(sample, genesForDisOrPheno);
+				int overlap = overlappingGenes.keySet().size();
 				HypergeometricDistribution h = new HypergeometricDistribution(populationSize, successStates, sampleSize);
 				double pval = h.upperCumulativeProbability(overlap);
 
 				if (overlap > 0)
 				{
-					phenoToSuccessStates.put(disOrPheno, successStatesUnpruned);
+					//phenoToSuccessStates.put(disOrPheno, successStatesUnpruned);
 					phenoToSuccessStatesPruned.put(disOrPheno, successStates);
 					phenoToSuccesses.put(disOrPheno, overlap);
 					phenoToPval.put(disOrPheno, pval);
+					phenoToGenes.put(disOrPheno, genesForDisOrPhenoCopy);
+					phenoToOverlappingGenes.put(disOrPheno, overlappingGenes);
 					phenoToDetails.put(disOrPheno, h2w.detailsForDisease(source, disOrPheno));
 				}
 
 			}
 
-			res.getSourceToPhenoToSuccessStates().put(source, phenoToSuccessStates);
+			//res.getSourceToPhenoToSuccessStates().put(source, phenoToSuccessStates);
 			res.getSourceToPhenoToSuccessStatesPruned().put(source, phenoToSuccessStatesPruned);
 			res.getSourceToPhenoToSuccesses().put(source, phenoToSuccesses);
 			res.getSourceToPhenoToPval().put(source, phenoToPval);
+			res.getSourceToPhenoToGenes().put(source, phenoToGenes);
+			res.getSourceToPhenoToOverlappingGenes().put(source, phenoToOverlappingGenes);
 			res.getSourceToPhenoToDetails().put(source, phenoToDetails);
 		}
 		return res;
