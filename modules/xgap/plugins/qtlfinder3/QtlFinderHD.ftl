@@ -98,12 +98,12 @@
 		<tr>
 			<td style="vertical-align:middle;">
 				Select a disease datasource:<br>
-				<select id="diseaseMapping" name="diseaseMapping" style="width:175px;float:left;">
+				<select id="diseaseMapping" name="diseaseMapping" style="width:175px;float:left;" onchange="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();">
 					<#list model.humanToWorm.humanSourceNames() as source>
-						<option onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();" value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Human: ${source}</option>
+						<option value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Human: ${source}</option>
 					</#list>
 					<#list model.humanToWorm.wormSourceNames() as source>
-						<option onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();" value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Worm: ${source}</option>
+						<option value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Worm: ${source}</option>
 					</#list>
 				</select>
 			</td>
