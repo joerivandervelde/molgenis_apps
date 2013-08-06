@@ -173,6 +173,15 @@
 				
 			});
 			
+			$( "#hitList" ).dataTable({
+			
+				"oLanguage": {
+         			"sSearch": "Filter:"
+         		},
+         		
+         		"aaSorting": [[2, "asc" ]],	
+       		});
+			
 			<#-- SLIDER WIDGET -->
 			$( "#slider" ).slider({
 						range: true,
