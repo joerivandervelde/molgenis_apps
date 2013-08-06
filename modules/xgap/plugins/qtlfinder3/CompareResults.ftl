@@ -12,7 +12,7 @@
 													</#if>
 												</#list>
 												')">
-									<font color="blue"><u>
+									<font style="cursor: pointer;" color="blue"><u>
 										<#list results.sampleInputs as sampleInput>
 											${sampleInput}<#if sampleInput_has_next>; </#if>
 										</#list>
@@ -78,7 +78,7 @@
 											')">
 											</@compress>
 											<nobr>
-											<font color="blue"><u>${results.sampleSizePruned?c} vs ${results.sourceToPhenoToSuccessStatesPruned[source][disease]?c}</u></font>
+											<font style="cursor: pointer;" color="blue"><u>${results.sampleSizePruned?c} vs ${results.sourceToPhenoToSuccessStatesPruned[source][disease]?c}</u></font>
 											<img src="clusterdemo/wormqtl/overlap.png" width="30%" height="30%" />
 											</nobr>
 										</div>
