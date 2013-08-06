@@ -99,9 +99,6 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// table
 	private String showAnyResultToUser;
 
-	// User specified (and parsed) list of ENPS ids
-	// private List<String> humanGeneQuery;
-
 	// String that says if OMIM, DGA, gwascentral, gwascatalog or wormbase worm
 	// phenotype is set
 	private String diseaseMapping;
@@ -119,16 +116,6 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	{
 		this.humanToWorm = humanToWorm;
 	}
-
-	// public List<String> getHumanGeneQuery()
-	// {
-	// return humanGeneQuery;
-	// }
-	//
-	// public void setHumanGeneQuery(List<String> humanGeneQuery)
-	// {
-	// this.humanGeneQuery = humanGeneQuery;
-	// }
 
 	public String getDiseaseMapping()
 	{

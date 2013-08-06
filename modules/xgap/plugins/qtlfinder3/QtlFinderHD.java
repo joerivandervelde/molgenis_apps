@@ -364,31 +364,6 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.getPhenoCompareResults().setResults(res);
 					}
 
-					// Ortholog Search
-					// TODO: not implemented!
-					if (action.equals("humanGeneSearch"))
-					{
-						String[] humanGeneQuery = request.getString("enspIds").split(", ");
-						if (humanGeneQuery.length == 0)
-						{
-							this.setMessages(new ScreenMessage(
-									"Please fill in at least one human ENSP protein identifier", false));
-						}
-
-						model.setHits(new HashMap<String, Entity>());
-						model.setProbeToGene(new HashMap<String, Gene>());
-
-						// model.setHumanGeneQuery(new ArrayList<String>());
-
-						List<Probe> probes = SearchFunctions.orthologSearch(humanGeneQuery,
-								this.model.getHumanToWorm(), db);
-
-						for (Probe p : probes)
-						{
-							model.getHits().put(p.getName(), p);
-						}
-					}
-
 					if (action.equals("regionChrChange"))
 					{
 						String selectedChromosome = request.getString("regionChr");
