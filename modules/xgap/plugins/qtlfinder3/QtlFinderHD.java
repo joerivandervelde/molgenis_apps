@@ -290,30 +290,39 @@ public class QtlFinderHD extends QtlFinder2
 
 					if (action.equals("plotOverlap"))
 					{
-						this.model.setCartView(false);
-						this.model.setShowResults(false);
-
-						List<Entity> cart = new ArrayList<Entity>(this.model.getShoppingCart().values());
-						ComparePhenotypesResult res = ComparePhenotypes.compareGenesWorm(model.getHumanToWorm(), cart);
-
-						if (model.getScreenType().equals("genomicRegion"))
+						if (this.model.getShoppingCart().size() < 1)
 						{
-							res.setSampleInputs(new HashSet<String>(Arrays.asList(new String[]
-							{ "chr" + model.getRegionSearchInputState().getSelectedChromosome() + ":"
-									+ model.getRegionSearchInputState().getSelectedStartBp() + "-"
-									+ model.getRegionSearchInputState().getSelectedEndBp() })));
-							res.setSampleSource("Region search");
-							this.model.getRegionSearchResults().setResults(res);
-
-						}
-						else if (model.getScreenType().equals("qtlLoci"))
-						{
-							res.setSampleInputs(new HashSet<String>(Arrays.asList(new String[]
-							{ "todo" })));
-							res.setSampleSource("QTL search");
-							this.model.getQtlSearchResults().setResults(res);
+							this.setMessages(new ScreenMessage("You cannot plot a cart that is empty", false));
 						}
 
+						else
+						{
+							this.model.setCartView(false);
+							this.model.setShowResults(false);
+
+							List<Entity> cart = new ArrayList<Entity>(this.model.getShoppingCart().values());
+							ComparePhenotypesResult res = ComparePhenotypes.compareGenesWorm(model.getHumanToWorm(),
+									cart);
+
+							if (model.getScreenType().equals("genomicRegion"))
+							{
+								res.setSampleInputs(new HashSet<String>(Arrays.asList(new String[]
+								{ "chr" + model.getRegionSearchInputState().getSelectedChromosome() + ":"
+										+ model.getRegionSearchInputState().getSelectedStartBp() + "-"
+										+ model.getRegionSearchInputState().getSelectedEndBp() })));
+								res.setSampleSource("Region search");
+								this.model.getRegionSearchResults().setResults(res);
+
+							}
+							else if (model.getScreenType().equals("qtlLoci"))
+							{
+								res.setSampleInputs(new HashSet<String>(Arrays.asList(new String[]
+								{ "todo" })));
+								res.setSampleSource("QTL search");
+								this.model.getQtlSearchResults().setResults(res);
+							}
+
+						}
 					}
 
 					// Phenotype comparison with worm list selection

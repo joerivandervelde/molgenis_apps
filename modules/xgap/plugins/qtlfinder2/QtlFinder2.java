@@ -164,26 +164,35 @@ public class QtlFinder2 extends PluginModel<Entity>
 
 				if (action.equals("plotShoppingCart"))
 				{
-					if (this.model.getShoppingCart().size() > 500)
+					if (this.model.getShoppingCart().size() < 1)
 					{
-						this.setMessages(new ScreenMessage("You are trying to plot "
-								+ this.model.getShoppingCart().size()
-								+ " probes. Please clear your cart and select a smaller number of probes.", false));
+						this.setMessages(new ScreenMessage("You cannot plot a cart that is empty", false));
 					}
-
-					plotFromShoppingCart(db);
-
-					StringBuilder permaLink = new StringBuilder();
-					for (Entity e : this.model.getShoppingCart().values())
+					else
 					{
-						permaLink.append(e.get(ObservableFeature.ID) + ",");
+						if (this.model.getShoppingCart().size() > 500)
+						{
+							this.setMessages(new ScreenMessage("You are trying to plot "
+									+ this.model.getShoppingCart().size()
+									+ " probes. Please clear your cart and select a smaller number of probes.", false));
+						}
+						else
+						{
+							plotFromShoppingCart(db);
+
+							StringBuilder permaLink = new StringBuilder();
+							for (Entity e : this.model.getShoppingCart().values())
+							{
+								permaLink.append(e.get(ObservableFeature.ID) + ",");
+							}
+
+							permaLink.deleteCharAt(permaLink.length() - 1);
+							this.model.setPermaLink(permaLink.toString());
+
+							model.setShowResults(false);
+							model.setCartView(false);
+						}
 					}
-
-					permaLink.deleteCharAt(permaLink.length() - 1);
-					this.model.setPermaLink(permaLink.toString());
-
-					model.setShowResults(false);
-					model.setCartView(false);
 				}
 
 				if (action.equals("emptyShoppingCart"))
