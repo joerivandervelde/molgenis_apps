@@ -54,7 +54,7 @@ public class QtlFinderHD extends QtlFinder2
 
 		if (request.getString("screen") != null)
 		{
-			System.out.println("Screen change imminent!");
+			System.out.println("Screen change imminent! " + request.getString("screen"));
 
 			if (this.model.getHits() != null)
 			{
@@ -80,6 +80,16 @@ public class QtlFinderHD extends QtlFinder2
 				{
 					// TODO: nothing???
 				}
+			}
+
+			// When the screen changes, disease selection is removed
+			if (this.model.getScreenType().equals(request.getString("screen")))
+			{
+				// TODO: nothing???
+			}
+			else
+			{
+				this.model.getDiseaseSearchInputState().setSelectedDiseases(null);
 			}
 
 			this.model.setScreenType(request.getString("screen"));
@@ -423,19 +433,29 @@ public class QtlFinderHD extends QtlFinder2
 					// loads example per search function for reviewer to use
 					if (action.equals("loadExample"))
 					{
+						this.model.setExampleMode(true);
+
 						if (this.model.getScreenType().equals("humanDisease"))
 						{
+							System.out.println("Set example " + this.model.getScreenType());
+
 							this.model.setDiseaseMapping("OMIM");
 							List<String> diseases = new ArrayList<String>();
+
+							// Disease(s) to load into input box as example
 							diseases.add("Glutamine deficiency, congenital, 610015 (3)");
+
 							this.model.getDiseaseSearchInputState().setSelectedDiseases(diseases);
 						}
 
 						if (this.model.getScreenType().equals("comparePhenotypes"))
 						{
+							System.out.println("Set example " + this.model.getScreenType());
+
 							this.model.setDiseaseMapping("OMIM");
 							List<String> phenoDiseases = new ArrayList<String>();
 
+							// Disease(s) to load into input box as example
 							phenoDiseases.add("Breast cancer, early-onset, 114480 (3)");
 							phenoDiseases.add("Breast cancer, somatic, 114480 (3)");
 							phenoDiseases.add("Breast cancer, invasive ductal, 114480 (3)");
@@ -452,12 +472,22 @@ public class QtlFinderHD extends QtlFinder2
 
 						if (this.model.getScreenType().equals("qtlLoci"))
 						{
+							System.out.println("Set example " + this.model.getScreenType());
 
+							this.model.getQtlSearchInputState().setSelectedDataSet("rock_qtl");
 						}
 
 						if (this.model.getScreenType().equals("genomicRegion"))
 						{
+							System.out.println("Set example " + this.model.getScreenType());
 
+							this.model.getRegionSearchInputState().setSelectedStartBp(Integer.parseInt("15430739"));
+							this.model.getRegionSearchInputState().setSelectedEndBp(Integer.parseInt("16430739"));
+							this.model.getRegionSearchInputState().setSelectedChromosome("V");
+
+							System.out.println(this.model.getRegionSearchInputState().getSelectedChromosome() + " "
+									+ this.model.getRegionSearchInputState().getSelectedEndBp() + " "
+									+ this.model.getRegionSearchInputState().getSelectedStartBp());
 						}
 
 					}

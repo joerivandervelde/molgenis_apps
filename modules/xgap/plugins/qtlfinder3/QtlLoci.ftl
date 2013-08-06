@@ -8,11 +8,11 @@
 		</tr>
 		<tr >
 			<td style="padding-left:25px;" width="50">
-				Probe name:<br /> <input title="trait name" id="traitInput" name="traitInput" type="text" size="10"/>
+				Probe name:<br /> <input title="trait name" id="traitInput" name="traitInput" type="text" size="10" <#if model.exampleMode??>value="AGIUSA19536"</#if>/>
 			</td>
 			
 			<td style="padding-left:10px;" width="50">
-				LOD threshold:<br /> <input title="LOD Score Threshold" id="lodThreshold2" name="lodThreshold" type="text" size="10"/>
+				LOD threshold:<br /> <input title="LOD Score Threshold" id="lodThreshold2" name="lodThreshold" type="text" size="10" <#if model.exampleMode??>value="50"</#if>/>
 			</td>
 			
 			<td style="padding-left:10px;" width="50">
@@ -40,9 +40,7 @@
 		</tr>
 		<tr>
 			<td colspan="4" height="10" align="center">
-				<br><span style="font-size:12px;">(<i>for example:</i> Probe = WSU3456, LOD threshold = 1, data set = age1_qtl)<br>
-				Gene hits, for example on <a href="http://www.geneontology.org/">Geno Ontology</a> or anatomy terms, will show the probes that are located inside the region
-				that is showing a QTL above the given threshold. 
+				<br><span style="font-size:12px;">Placeholder for text that is descriptive. Per datasource? Click <a href=""style="text-decoration:none;" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__loadExample';document.forms.${screen.name}.submit();">here</a> to load a tested example query.
 				</span>
 			</td>
 		</tr>		
