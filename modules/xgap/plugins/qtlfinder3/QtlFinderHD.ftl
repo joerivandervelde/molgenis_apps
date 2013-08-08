@@ -94,7 +94,7 @@
 <#macro browseBar model screen>
 	
 
-	<table align="center" id="browse" >
+	<table align="" id="browse" >
 		<tr>
 			<td style="vertical-align:middle;">
 				Select a disease datasource:<br>
@@ -120,7 +120,9 @@
 			<td align="center">
 				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=comparePhenotypes"><img height="50" width="50"  src="clusterdemo/wormqtl/ComparePhenotypes.png" /></a>
 			</td>	
-			<td style="vertical-align:middle;"><button style="height:20px;width:100px;float:right;vertical-align:middle;" type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__resetAll';document.forms.${screen.name}.submit();"><font style="color:#660033;">Reset All</font></button></td>	
+			
+				<button style="height:20px;width:100px;float:right;vertical-align:middle;margin-top:10px;margin-right:5px;" type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__resetAll';document.forms.${screen.name}.submit();"><font style="color:#660033;">Reset All</font></button>
+			
 		</tr>	
 		<tr>
 			<td colspan="1"></td>
