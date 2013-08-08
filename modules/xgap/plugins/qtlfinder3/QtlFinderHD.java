@@ -488,6 +488,7 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.getDiseaseSearchInputState().setSelectedDiseases(null);
 						this.model.getDiseaseSearchResults().setDiseaseSearchHits(null);
 						this.model.setShowAnyResultToUser(null);
+						this.model.setExampleMode(null);
 
 						if (this.model.getScreenType().equals("comparePhenotypes"))
 						{
@@ -530,6 +531,7 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.getPhenoCompareResults().setResults(null);
 						this.model.getRegionSearchResults().setResults(null);
 						this.model.getQtlSearchResults().setResults(null);
+						this.model.setExampleMode(null);
 					}
 				}
 
