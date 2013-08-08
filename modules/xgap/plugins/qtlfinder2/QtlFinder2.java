@@ -841,6 +841,7 @@ public class QtlFinder2 extends PluginModel<Entity>
 		{
 			if (model.getAnnotationTypeAndNr() == null)
 			{
+
 				int totalAmount = 0;
 
 				JDBCMetaDatabase metadb = new JDBCMetaDatabase();
@@ -880,8 +881,7 @@ public class QtlFinder2 extends PluginModel<Entity>
 
 			if (model.getShoppingCart() == null)
 			{
-				Map<String, Entity> shoppingCart = new HashMap<String, Entity>();
-				this.model.setShoppingCart(shoppingCart);
+				this.model.setShoppingCart(new HashMap<String, Entity>());
 			}
 
 			if (this.model.getCartView() == null)
