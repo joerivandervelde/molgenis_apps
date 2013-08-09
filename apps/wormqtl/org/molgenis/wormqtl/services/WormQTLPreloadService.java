@@ -35,38 +35,54 @@ public class WormQTLPreloadService implements MolgenisService
 
 	public WormQTLPreloadService(MolgenisContext mc) throws Exception
 	{
-		System.out.println("Preloading humanworm..");
+		System.out.println("Preloading human2worm..");
 		Connection conn = mc.getDataSource().getConnection();
 		//Database db = new app.JDBCDatabase(conn);
 		Database db = DatabaseFactory.create(conn);	
 
 		MolgenisFileHandler filehandle = new MolgenisFileHandler(db);
-		File storage = filehandle.getFileStorage(true, db);
-
-		GeneMappingDataSource omim = new GeneMappingDataSource(new File(storage, "human_disease_OMIM.csv"), "OMIM");
-		GeneMappingDataSource dga = new GeneMappingDataSource(new File(storage, "human_disease_DGA.csv"), "DGA");
-
-		GeneMappingDataSource gwascentral = new GeneMappingDataSource(
-				new File(storage, "human_disease_GWASCENTRAL.csv"), "GWAS Central");
-		GeneMappingDataSource gwascatalog = new GeneMappingDataSource(
-				new File(storage, "human_disease_GWASCATALOG.csv"), "GWAS Catalog");
-		GeneMappingDataSource wormPheno = new GeneMappingDataSource(new File(storage, "worm_disease.csv"), "WormBase");
-		GeneMappingDataSource humanToWorm = new GeneMappingDataSource(new File(storage, "orthologs.csv"), "INPARANOID");
-
-		List<GeneMappingDataSource> humanSources = new ArrayList<GeneMappingDataSource>();
-		humanSources.add(omim);
-		humanSources.add(dga);
-		humanSources.add(gwascentral);
-		humanSources.add(gwascatalog);
-
-		List<GeneMappingDataSource> wormSources = new ArrayList<GeneMappingDataSource>();
-		wormSources.add(wormPheno);
-
-		HumanToWorm h2w = new HumanToWorm(humanSources, wormSources, humanToWorm, db);
+		File storage = null;
 		
-		mc.getServletContext().setAttribute("humantoworm", h2w);
+		boolean continu = true;
 		
-		System.out.println("Preloading humanworm DONE");
+		try
+		{
+			storage = filehandle.getFileStorage(true, db);
+		}
+		catch(Exception e)
+		{
+			System.out.println("FAILED: Could not preload human2worm, please FIRST populate the database and setup the file storage location, THEN restart the application to preload!");
+			e.printStackTrace();
+			continu = false;
+		}
+
+		if(continu)
+		{
+			GeneMappingDataSource omim = new GeneMappingDataSource(new File(storage, "human_disease_OMIM.csv"), "OMIM");
+			GeneMappingDataSource dga = new GeneMappingDataSource(new File(storage, "human_disease_DGA.csv"), "DGA");
+	
+			GeneMappingDataSource gwascentral = new GeneMappingDataSource(
+					new File(storage, "human_disease_GWASCENTRAL.csv"), "GWAS Central");
+			GeneMappingDataSource gwascatalog = new GeneMappingDataSource(
+					new File(storage, "human_disease_GWASCATALOG.csv"), "GWAS Catalog");
+			GeneMappingDataSource wormPheno = new GeneMappingDataSource(new File(storage, "worm_disease.csv"), "WormBase");
+			GeneMappingDataSource humanToWorm = new GeneMappingDataSource(new File(storage, "orthologs.csv"), "INPARANOID");
+	
+			List<GeneMappingDataSource> humanSources = new ArrayList<GeneMappingDataSource>();
+			humanSources.add(omim);
+			humanSources.add(dga);
+			humanSources.add(gwascentral);
+			humanSources.add(gwascatalog);
+	
+			List<GeneMappingDataSource> wormSources = new ArrayList<GeneMappingDataSource>();
+			wormSources.add(wormPheno);
+	
+			HumanToWorm h2w = new HumanToWorm(humanSources, wormSources, humanToWorm, db);
+			
+			mc.getServletContext().setAttribute("humantoworm", h2w);
+			
+			System.out.println("Preloading human2worm SUCCESFUL!");
+		}
 	}
 
 	@Override
