@@ -52,8 +52,6 @@ public class QtlFinderHD extends QtlFinder2
 	public void handleRequest(Database db, MolgenisRequest request)
 	{
 		initIfNeeded(db);
-		
-		
 
 		if (request.getString("screen") != null)
 		{
@@ -286,14 +284,18 @@ public class QtlFinderHD extends QtlFinder2
 							this.model.setShowResults(true);
 							this.model.setCartView(false);
 
-							String trait = request.getString("traitInput");
-							String dataset = request.getString("regionDataSetSelect");
-							double threshold = request.getInt("lodThreshold");
+							this.model.getQtlSearchInputState().setTraitInput(request.getString("traitInput"));
+							this.model.getQtlSearchInputState().setSelectedDataSet(
+									request.getString("regionDataSetSelect"));
+
+							this.model.getQtlSearchInputState().setLodThreshold(request.getInt("lodThreshold"));
 
 							model.setHits(new HashMap<String, Entity>());
 							model.setProbeToGene(new HashMap<String, Gene>());
-							List<Probe> probesInQtlRegion = SearchFunctions.qtlRegionSearch(trait, dataset, threshold,
-									db);
+							List<Probe> probesInQtlRegion = SearchFunctions.qtlRegionSearch(this.model
+									.getQtlSearchInputState().getTraitInput(), this.model.getQtlSearchInputState()
+									.getSelectedDataSet(), this.model.getQtlSearchInputState().getLodThreshold(), db);
+
 							for (Probe p : probesInQtlRegion)
 							{
 								model.getHits().put(p.getName(), p);
@@ -411,8 +413,6 @@ public class QtlFinderHD extends QtlFinder2
 					// loads example per search function for reviewer to use
 					if (action.equals("loadExample"))
 					{
-						this.model.setExampleMode(true);
-
 						if (this.model.getScreenType().equals("humanDisease"))
 						{
 							System.out.println("Set example " + this.model.getScreenType());
@@ -444,6 +444,8 @@ public class QtlFinderHD extends QtlFinder2
 							System.out.println("Set example " + this.model.getScreenType());
 
 							this.model.getQtlSearchInputState().setSelectedDataSet("rock_qtl");
+							this.model.getQtlSearchInputState().setTraitInput("AGIUSA19536");
+							this.model.getQtlSearchInputState().setLodThreshold(Integer.parseInt("50"));
 						}
 
 						if (this.model.getScreenType().equals("genomicRegion"))
@@ -482,7 +484,6 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.getDiseaseSearchInputState().setSelectedDiseases(null);
 						this.model.getDiseaseSearchResults().setDiseaseSearchHits(null);
 						this.model.setShowAnyResultToUser(null);
-						this.model.setExampleMode(false);
 
 						if (this.model.getScreenType().equals("comparePhenotypes"))
 						{
@@ -525,7 +526,6 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.getPhenoCompareResults().setResults(null);
 						this.model.getRegionSearchResults().setResults(null);
 						this.model.getQtlSearchResults().setResults(null);
-						this.model.setExampleMode(false);
 					}
 				}
 
@@ -563,7 +563,8 @@ public class QtlFinderHD extends QtlFinder2
 		{
 			try
 			{
-				HumanToWorm h2w = (HumanToWorm)this.getApplicationController().getMolgenisContext().getServletContext().getAttribute("humantoworm");
+				HumanToWorm h2w = (HumanToWorm) this.getApplicationController().getMolgenisContext()
+						.getServletContext().getAttribute("humantoworm");
 				this.model = InitQtlFinderHDModel.init(db, h2w);
 			}
 			catch (Exception e)

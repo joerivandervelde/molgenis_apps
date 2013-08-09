@@ -8,11 +8,11 @@
 		</tr>
 		<tr >
 			<td style="padding-left:25px;" width="50">
-				Probe name:<br /> <input title="trait name" id="traitInput" name="traitInput" type="text" size="10" <#if model.exampleMode?? && model.exampleMode == true>value="AGIUSA19536"</#if>/>
+				Probe name:<br /> <input title="trait name" id="traitInput" name="traitInput" type="text" size="10" <#if model.qtlSearchInputState.traitInput??>value="${model.qtlSearchInputState.traitInput}"</#if>>
 			</td>
 			
 			<td style="padding-left:10px;" width="50">
-				LOD threshold:<br /> <input title="LOD Score Threshold" id="lodThreshold2" name="lodThreshold" type="text" size="10" <#if model.exampleMode?? && model.exampleMode == true>value="50"</#if>/>
+				LOD threshold:<br /> <input title="LOD Score Threshold" id="lodThreshold2" name="lodThreshold" type="text" size="10" <#if model.qtlSearchInputState.lodThreshold??>value="${model.qtlSearchInputState.lodThreshold}"</#if>>
 			</td>
 			
 			<td style="padding-left:10px;" width="50">

@@ -103,10 +103,6 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	// phenotype is set
 	private String diseaseMapping;
 
-	// With example mode on, freemarker can use the boolean to fill in example
-	// values
-	private Boolean exampleMode;
-
 	public HumanToWorm getHumanToWorm()
 	{
 		return humanToWorm;
@@ -135,15 +131,5 @@ public class QtlFinderHDModel extends QtlFinderModel2
 	public void setShowAnyResultToUser(String showAnyResultToUser)
 	{
 		this.showAnyResultToUser = showAnyResultToUser;
-	}
-
-	public Boolean getExampleMode()
-	{
-		return exampleMode;
-	}
-
-	public void setExampleMode(Boolean exampleMode)
-	{
-		this.exampleMode = exampleMode;
 	}
 }
