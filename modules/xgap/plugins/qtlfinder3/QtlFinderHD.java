@@ -24,6 +24,7 @@ import plugins.qtlfinder2.QtlFinder2;
 import plugins.qtlfinder3.methods.ComparePhenotypes;
 import plugins.qtlfinder3.methods.ComparePhenotypesResult;
 import plugins.qtlfinder3.methods.SearchFunctions;
+import plugins.qtlfinder3.resources.HumanToWorm;
 
 /**
  * @author Mark de Haan
@@ -51,6 +52,8 @@ public class QtlFinderHD extends QtlFinder2
 	public void handleRequest(Database db, MolgenisRequest request)
 	{
 		initIfNeeded(db);
+		
+		
 
 		if (request.getString("screen") != null)
 		{
@@ -560,7 +563,8 @@ public class QtlFinderHD extends QtlFinder2
 		{
 			try
 			{
-				this.model = InitQtlFinderHDModel.init(db);
+				HumanToWorm h2w = (HumanToWorm)this.getApplicationController().getMolgenisContext().getServletContext().getAttribute("humantoworm");
+				this.model = InitQtlFinderHDModel.init(db, h2w);
 			}
 			catch (Exception e)
 			{
