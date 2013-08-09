@@ -47,7 +47,7 @@
 			</tr>	
 			<tr>
 				<td colspan="4" height="70" align="center" style="padding-top:20px;">
-					<span style="font-size:12px;">Placeholder for text that is descriptive. Per datasource? Click <a href=""style="text-decoration:none;" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__loadExample';document.forms.${screen.name}.submit();">here</a> to load a tested example query.
+					<span style="font-size:12px;">Placeholder for text that is descriptive. Per datasource? Click <a href=""style="text-decoration:none;" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__loadExample';document.forms.${screen.name}.submit();return false;">here</a> to load a tested example query.
 					</span>
 				</td>
 			</tr>

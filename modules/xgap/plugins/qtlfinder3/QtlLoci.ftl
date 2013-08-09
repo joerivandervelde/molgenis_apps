@@ -8,11 +8,11 @@
 		</tr>
 		<tr >
 			<td style="padding-left:25px;" width="50">
-				Probe name:<br /> <input title="trait name" id="traitInput" name="traitInput" type="text" size="10" <#if model.exampleMode == true>value="AGIUSA19536"</#if>/>
+				Probe name:<br /> <input title="trait name" id="traitInput" name="traitInput" type="text" size="10" <#if model.exampleMode?? && model.exampleMode == true>value="AGIUSA19536"</#if>/>
 			</td>
 			
 			<td style="padding-left:10px;" width="50">
-				LOD threshold:<br /> <input title="LOD Score Threshold" id="lodThreshold2" name="lodThreshold" type="text" size="10" <#if model.exampleMode == true>value="50"</#if>/>
+				LOD threshold:<br /> <input title="LOD Score Threshold" id="lodThreshold2" name="lodThreshold" type="text" size="10" <#if model.exampleMode?? && model.exampleMode == true>value="50"</#if>/>
 			</td>
 			
 			<td style="padding-left:10px;" width="50">
@@ -40,7 +40,7 @@
 		</tr>
 		<tr>
 			<td colspan="4" height="10" align="center">
-				<br><span style="font-size:12px;">Placeholder for text that is descriptive. Per datasource? Click <a href=""style="text-decoration:none;" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__loadExample';document.forms.${screen.name}.submit();">here</a> to load a tested example query.
+				<br><span style="font-size:12px;">Placeholder for text that is descriptive. Per datasource? Click <a href=""style="text-decoration:none;" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__loadExample';document.forms.${screen.name}.submit();return false;">here</a> to load a tested example query.
 				</span>
 			</td>
 		</tr>		
