@@ -51,22 +51,38 @@ public class SearchFunctions
 
 		Data selectDataset = db.find(Data.class, new QueryRule(Data.NAME, Operator.EQUALS, dataset)).get(0);
 		DataMatrixInstance dataMatrix = dmh.createInstance(selectDataset, db);
-		String highestMarker = getProbeExpression(dataMatrix, trait, threshold);
+		String highestMarkerName = getPeakMarker(dataMatrix, trait, threshold);
 
-		List<Marker> highestProbe = db.find(Marker.class, new QueryRule(Marker.NAME, Operator.EQUALS, highestMarker));
+		Marker highestMarker = db.find(Marker.class, new QueryRule(Marker.NAME, Operator.EQUALS, highestMarkerName)).get(0);
 
-		List<Chromosome> chromosomes = db.find(Chromosome.class, new QueryRule(Chromosome.NAME, Operator.EQUALS,
-				highestProbe.get(0).getChromosome_Name()));
+//		Chromosome highestMarkerChromosome = db.find(Chromosome.class, new QueryRule(Chromosome.NAME, Operator.EQUALS,
+//				highestMarker.getChromosome_Name())).get(0);
 
 		// Once the marker has been determined, the region
 		// within the Qtl is determines by taking the
 		// starting position, and adding or retracting
 		// 10.000 (temporary solution)
-		Integer start = (int) (highestProbe.get(0).getBpStart() - 10000);
-		Integer end = (int) (highestProbe.get(0).getBpStart() + 10000);
-		Integer chromosome = chromosomes.get(0).getOrderNr();
-
-		return regionSearch(start, end, chromosome, db, false);
+//		Integer start = (int) (highestMarker.get(0).getBpStart() - 10000);
+//		Integer end = (int) (highestMarker.get(0).getBpStart() + 10000);
+//		Integer chromosome = chromosomes.get(0).getOrderNr();
+		
+		Query<Probe> fiftyBefore = db.query(Probe.class);
+		fiftyBefore.equals(Probe.CHROMOSOME_NAME, highestMarker.getChromosome_Name());
+		fiftyBefore.lessOrEqual(Probe.BPSTART, highestMarker.getBpStart());
+		fiftyBefore.sortDESC(Probe.BPSTART);
+		fiftyBefore.limit(50);
+		List<Probe> probes1 = fiftyBefore.find();
+		
+		Query<Probe> fiftyAfter = db.query(Probe.class);
+		fiftyAfter.equals(Probe.CHROMOSOME_NAME, highestMarker.getChromosome_Name());
+		fiftyAfter.greaterOrEqual(Probe.BPSTART, highestMarker.getBpStart());
+		fiftyAfter.sortASC(Probe.BPSTART);
+		fiftyAfter.limit(50);
+		List<Probe> probes2 = fiftyAfter.find();
+		
+		probes1.addAll(probes2);
+		
+		return probes1;
 	}
 
 	/**
@@ -115,26 +131,44 @@ public class SearchFunctions
 	 * 
 	 * @author Mark de Haan
 	 * @param dm
-	 * @param probe
+	 * @param trait
 	 * @param threshold
 	 * @param screenmodel
 	 * @return returns the name of the marker that has the highest scoring qtl
 	 * @throws Exception
 	 */
-	private static String getProbeExpression(DataMatrixInstance dm, String probe, double threshold) throws Exception
+	private static String getPeakMarker(DataMatrixInstance dm, String trait, double threshold) throws Exception
 	{
 		// TODO: Change method of determining region inside QTL
 		// Now: Highest scoring marker + / - 10.000 bp positions = Region
 
-		String bestMarker = "";
+		String bestMarker;
 		// Double flankLeft = 0.0;
 		// Double flankRight = 0.0;
 		Double highest = 0.0;
 		Integer highestIdx = 0;
-		Object[] myTraitQtlScore = dm.getRow(probe);
+		
+		Object[] myTraitQtlScore;
+		if(dm.getRowNames().contains(trait))
+		{
+			myTraitQtlScore = dm.getRow(trait);
+		}
+		else if(dm.getColNames().contains(trait))
+		{
+			myTraitQtlScore = dm.getCol(trait);
+		}
+		else
+		{
+			throw new Exception("There is no probe/trait named '" + trait+ "' in dataset '" + dm.getData().getName() + "'");
+		}
 
 		for (int i = 0; i < myTraitQtlScore.length; i++)
 		{
+			if(myTraitQtlScore[i] == null)
+			{
+				continue;
+			}
+			
 			if (highest == 0)
 			{
 				highest = (Double) myTraitQtlScore[i];
@@ -162,13 +196,20 @@ public class SearchFunctions
 			// System.out.println("Flanking left: " + flankLeft +
 			// " The highest QTL is: " + highest + " Flanking right: "
 			// + flankRight);
-
-			bestMarker = dm.getColNames().get(highestIdx);
+			
+			if(dm.getRowNames().contains(trait))
+			{
+				bestMarker = dm.getColNames().get(highestIdx);
+			}
+			else
+			{
+				bestMarker = dm.getRowNames().get(highestIdx);
+			}
 
 		}
 		else
 		{
-			throw new Exception("There was no QTL for this probe / trait that scored above the submitted threshold");
+			throw new Exception("There was no QTL for '" + trait+ "' above the LOD threshold of " + threshold);
 		}
 		return bestMarker;
 	}
