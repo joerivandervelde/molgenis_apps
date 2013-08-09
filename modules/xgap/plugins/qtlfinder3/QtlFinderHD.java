@@ -431,16 +431,7 @@ public class QtlFinderHD extends QtlFinder2
 							List<String> phenoDiseases = new ArrayList<String>();
 
 							// Disease(s) to load into input box as example
-							phenoDiseases.add("Breast cancer, early-onset, 114480 (3)");
-							phenoDiseases.add("Breast cancer, somatic, 114480 (3)");
-							phenoDiseases.add("Breast cancer, invasive ductal, 114480 (3)");
-							phenoDiseases.add("Breast cancer (3)");
-							phenoDiseases.add("{Breast-ovarian cancer, familial, 1}, 604370 (3)");
-							phenoDiseases.add("{Breast cancer, susceptibility to}, 114480 (3)");
-							phenoDiseases.add("{Breast and colorectal cancer, susceptibility to} (3)");
-							phenoDiseases.add("Ovarian cancer, 167000 (3)");
-							phenoDiseases.add("Ovarian cancer, somatic, 604370 (3)");
-							phenoDiseases.add("Adenocarcinoma, ovarian, somatic, 604370 (3)");
+							phenoDiseases.add("Zellweger syndrome, 214100 (3)");
 
 							this.model.getDiseaseSearchInputState().setSelectedDiseases(phenoDiseases);
 						}
@@ -488,7 +479,7 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.getDiseaseSearchInputState().setSelectedDiseases(null);
 						this.model.getDiseaseSearchResults().setDiseaseSearchHits(null);
 						this.model.setShowAnyResultToUser(null);
-						this.model.setExampleMode(null);
+						this.model.setExampleMode(false);
 
 						if (this.model.getScreenType().equals("comparePhenotypes"))
 						{
@@ -531,7 +522,7 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.getPhenoCompareResults().setResults(null);
 						this.model.getRegionSearchResults().setResults(null);
 						this.model.getQtlSearchResults().setResults(null);
-						this.model.setExampleMode(null);
+						this.model.setExampleMode(false);
 					}
 				}
 
