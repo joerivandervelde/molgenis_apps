@@ -21,162 +21,205 @@ import org.molgenis.framework.security.Login;
 import org.molgenis.framework.server.TokenFactory;
 import org.molgenis.util.HandleRequestDelegationException;
 
-import plugins.qtlfinder3.InitQtlFinderHDModel;
-import plugins.qtlfinder3.QtlFinderHDModel;
+import plugins.qtlfinder3.resources.GeneMappingDataSource;
 import plugins.qtlfinder3.resources.HumanToWorm;
 import app.DatabaseFactory;
+import decorators.MolgenisFileHandler;
 
 public class AllVsAll
 {
 	public AllVsAll(String usr, String pwd) throws HandleRequestDelegationException, Exception
 	{
 		boolean toFile = false;
-		
-		
+
 		Database db = getDb(usr, pwd);
-		QtlFinderHDModel model = InitQtlFinderHDModel.init(db);
-		HumanToWorm h2w = model.getHumanToWorm();
-		
-		
+
+		MolgenisFileHandler filehandle = new MolgenisFileHandler(db);
+		File storage = filehandle.getFileStorage(true, db);
+
+		GeneMappingDataSource omim = new GeneMappingDataSource(new File(storage, "human_disease_OMIM.csv"), "OMIM");
+		GeneMappingDataSource dga = new GeneMappingDataSource(new File(storage, "human_disease_DGA.csv"), "DGA");
+
+		GeneMappingDataSource gwascentral = new GeneMappingDataSource(
+				new File(storage, "human_disease_GWASCENTRAL.csv"), "GWAS Central");
+		GeneMappingDataSource gwascatalog = new GeneMappingDataSource(
+				new File(storage, "human_disease_GWASCATALOG.csv"), "GWAS Catalog");
+		GeneMappingDataSource wormPheno = new GeneMappingDataSource(new File(storage, "worm_disease.csv"), "WormBase");
+		GeneMappingDataSource humanToWorm = new GeneMappingDataSource(new File(storage, "orthologs.csv"), "INPARANOID");
+
+		List<GeneMappingDataSource> humanSources = new ArrayList<GeneMappingDataSource>();
+		humanSources.add(omim);
+		humanSources.add(dga);
+		humanSources.add(gwascentral);
+		humanSources.add(gwascatalog);
+
+		List<GeneMappingDataSource> wormSources = new ArrayList<GeneMappingDataSource>();
+		wormSources.add(wormPheno);
+
+		HumanToWorm h2w = new HumanToWorm(humanSources, wormSources, humanToWorm, db);
+
 		File out = new File("all_vs_all.tsv");
 		System.out.println("writing to: " + out.getAbsolutePath());
 		// if file doesnt exists, then create it
-//		if (!out.exists()) {
-//			out.createNewFile();
-//		}
+		// if (!out.exists()) {
+		// out.createNewFile();
+		// }
 		FileWriter fw = new FileWriter(out.getAbsoluteFile());
 		BufferedWriter bw = new BufferedWriter(fw);
-		
-		//header
-		if(toFile){
+
+		// header
+		if (toFile)
+		{
 			for (String sampleSource : h2w.allSources())
 			{
 				for (String sampleDisOrPheno : h2w.disOrPhenoWithOrthologyFromSource(sampleSource))
 				{
-					bw.write("\t\"" + sampleSource + "_" + sampleDisOrPheno+"\"");
+					bw.write("\t\"" + sampleSource + "_" + sampleDisOrPheno + "\"");
 				}
 			}
-		
+
 			bw.write("\n");
 		}
-		
+
 		int populationSize = h2w.numberOfOrthologsBetweenHumanAndWorm();
-		
+
 		System.out.println("Population size = " + h2w.numberOfOrthologsBetweenHumanAndWorm());
-		
-		//print bonferroni
+
+		// print bonferroni
 		for (String sampleSource : h2w.allSources())
-		{	
+		{
 			for (String source : h2w.allSources())
 			{
-				double bonferroniThreshold = 0.05 / (Math.max(h2w.disOrPhenoWithOrthologyFromSource(sampleSource).size(), h2w.disOrPhenoWithOrthologyFromSource(source).size()));
-				System.out.println("Bonferroni for " + sampleSource + " vs " + source + ": 0.05 / (Math.max(" +h2w.disOrPhenoWithOrthologyFromSource(sampleSource).size() +", "+ h2w.disOrPhenoWithOrthologyFromSource(source).size() + ") = "+ (Math.max(h2w.disOrPhenoWithOrthologyFromSource(sampleSource).size(), h2w.disOrPhenoWithOrthologyFromSource(source).size())) + ")  = " + bonferroniThreshold);
+				double bonferroniThreshold = 0.05 / (Math.max(h2w.disOrPhenoWithOrthologyFromSource(sampleSource)
+						.size(), h2w.disOrPhenoWithOrthologyFromSource(source).size()));
+				System.out.println("Bonferroni for "
+						+ sampleSource
+						+ " vs "
+						+ source
+						+ ": 0.05 / (Math.max("
+						+ h2w.disOrPhenoWithOrthologyFromSource(sampleSource).size()
+						+ ", "
+						+ h2w.disOrPhenoWithOrthologyFromSource(source).size()
+						+ ") = "
+						+ (Math.max(h2w.disOrPhenoWithOrthologyFromSource(sampleSource).size(), h2w
+								.disOrPhenoWithOrthologyFromSource(source).size())) + ")  = " + bonferroniThreshold);
 
 			}
 		}
-		
-		System.out.println("Phenotype1 (Ce)" + "\t" + "Phenotype2 (Hs)" + "\t" + "n1" + "\t" + "n2" + "\t" + "k" + "\t" + "P value");
-		
+
+		System.out.println("Phenotype1 (Ce)" + "\t" + "Phenotype2 (Hs)" + "\t" + "n1" + "\t" + "n2" + "\t" + "k" + "\t"
+				+ "P value");
+
 		TreeMap<Double, String> sortedResults = new TreeMap<Double, String>();
-		
+
 		List<String> combinationsAlreadySeen = new ArrayList<String>();
-		
-		//draw samples from 
+
+		// draw samples from
 		for (String sampleSource : h2w.allSources())
 		{
 			for (String sampleDisOrPheno : h2w.disOrPhenoWithOrthologyFromSource(sampleSource))
 			{
-			
+
 				Set<String> sampleGenes = new HashSet<String>(h2w.genesForDisOrPheno(sampleDisOrPheno, sampleSource));
 				sampleGenes.retainAll(h2w.allGenesInOrthologs());
 				int sampleSize = sampleGenes.size();
 
-				if(toFile){bw.write("\"" + sampleSource + "_" + sampleDisOrPheno + "\"");}
-				
+				if (toFile)
+				{
+					bw.write("\"" + sampleSource + "_" + sampleDisOrPheno + "\"");
+				}
+
 				for (String source : h2w.allSources())
 				{
-					
-					double bonferroniThreshold = 0.05 / (Math.max(h2w.disOrPhenoWithOrthologyFromSource(sampleSource).size(), h2w.disOrPhenoWithOrthologyFromSource(source).size()));
-					
+
+					double bonferroniThreshold = 0.05 / (Math.max(h2w.disOrPhenoWithOrthologyFromSource(sampleSource)
+							.size(), h2w.disOrPhenoWithOrthologyFromSource(source).size()));
+
 					for (String disOrPheno : h2w.disOrPhenoWithOrthologyFromSource(source))
 					{
-						
+
 						Set<String> genesForDisOrPheno = new HashSet<String>(h2w.genesForDisOrPheno(disOrPheno, source));
 						genesForDisOrPheno.retainAll(h2w.allGenesInOrthologs());
 						int successStates = genesForDisOrPheno.size();
-						
+
 						int overlap = h2w.overlap(sampleGenes, genesForDisOrPheno).keySet().size();
 						try
 						{
-							HypergeometricDistribution h = new HypergeometricDistribution(populationSize, successStates, sampleSize);
+							HypergeometricDistribution h = new HypergeometricDistribution(populationSize,
+									successStates, sampleSize);
 							double pval = h.upperCumulativeProbability(overlap);
-							
-							
-							
-							if(pval < 0.001)
+
+							if (pval < 0.001)
 							{
 								boolean humanSampleSource = h2w.humanSourceNames().contains(sampleSource);
 								boolean humanDisOrPhenSource = h2w.humanSourceNames().contains(source);
-								
-								if((!humanSampleSource && humanDisOrPhenSource) || (humanSampleSource && !humanDisOrPhenSource))
+
+								if ((!humanSampleSource && humanDisOrPhenSource)
+										|| (humanSampleSource && !humanDisOrPhenSource))
 								{
-									String sampleName = "\""+sampleSource + " " + sampleDisOrPheno+"\"";
-									String vsDisOrPheno = "\""+source + " " + disOrPheno+"\"";
-									
-									
-									
-									if(!sampleName.equals(vsDisOrPheno) && !combinationsAlreadySeen.contains(vsDisOrPheno+sampleName)){
-										
-										if(sampleSource.equals("WormBase"))
+									String sampleName = "\"" + sampleSource + " " + sampleDisOrPheno + "\"";
+									String vsDisOrPheno = "\"" + source + " " + disOrPheno + "\"";
+
+									if (!sampleName.equals(vsDisOrPheno)
+											&& !combinationsAlreadySeen.contains(vsDisOrPheno + sampleName))
+									{
+
+										if (sampleSource.equals("WormBase"))
 										{
-											sortedResults.put(pval, sampleDisOrPheno + "\t" + disOrPheno + " ["+source+"]" + "\t" + sampleSize + "\t" + successStates + "\t" + overlap + "\t" + pval);
+											sortedResults.put(pval, sampleDisOrPheno + "\t" + disOrPheno + " ["
+													+ source + "]" + "\t" + sampleSize + "\t" + successStates + "\t"
+													+ overlap + "\t" + pval);
 										}
 										else
 										{
-											sortedResults.put(pval, disOrPheno + "\t" + sampleDisOrPheno +  " ["+sampleSource+"]" + "\t" + successStates + "\t" + sampleSize + "\t" + overlap + "\t" + pval);
+											sortedResults.put(pval, disOrPheno + "\t" + sampleDisOrPheno + " ["
+													+ sampleSource + "]" + "\t" + successStates + "\t" + sampleSize
+													+ "\t" + overlap + "\t" + pval);
 										}
-										
-										//String res = sampleName + "\t" + vsDisOrPheno + "\t" + pval + "\t" + overlap + "\t" + successStates + "\t" + sampleSize;
-										//System.out.println(res);
-										combinationsAlreadySeen.add(sampleName+vsDisOrPheno);
-									
+
+										// String res = sampleName + "\t" +
+										// vsDisOrPheno + "\t" + pval + "\t" +
+										// overlap + "\t" + successStates + "\t"
+										// + sampleSize;
+										// System.out.println(res);
+										combinationsAlreadySeen.add(sampleName + vsDisOrPheno);
+
 									}
 								}
-								
-								
-								
+
 							}
-							
-							if(toFile){ bw.write("\t" + pval); }
-							
-							
+
+							if (toFile)
+							{
+								bw.write("\t" + pval);
+							}
+
 						}
-						catch(Exception e)
+						catch (Exception e)
 						{
-							System.out.println("ERROR FOR " + "\""+sampleSource + " " + sampleDisOrPheno+"\"" + " vs " + "\""+source + " " + disOrPheno+"\"" + " " + e.getMessage());
+							System.out.println("ERROR FOR " + "\"" + sampleSource + " " + sampleDisOrPheno + "\""
+									+ " vs " + "\"" + source + " " + disOrPheno + "\"" + " " + e.getMessage());
 						}
-						
-						
-						
+
 					}
 				}
-				
-				if(toFile){
+
+				if (toFile)
+				{
 					bw.write("\n");
 					bw.flush();
 				}
 
-				
 			}
 		}
 
 		bw.close();
-		
-		for(String res : sortedResults.values())
+
+		for (String res : sortedResults.values())
 		{
 			System.out.println(res);
 		}
-		
+
 	}
 
 	private Database getDb(String usr, String pwd) throws HandleRequestDelegationException, Exception
