@@ -1,6 +1,5 @@
 package plugins.qtlfinder3;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -14,14 +13,12 @@ import org.molgenis.framework.db.QueryRule.Operator;
 import org.molgenis.util.Entity;
 import org.molgenis.xgap.Chromosome;
 
-import plugins.qtlfinder3.resources.GeneMappingDataSource;
 import plugins.qtlfinder3.resources.HumanToWorm;
-import decorators.MolgenisFileHandler;
 
 public class InitQtlFinderHDModel
 {
 
-	public static QtlFinderHDModel init(Database db) throws Exception
+	public static QtlFinderHDModel init(Database db, HumanToWorm h2w) throws Exception
 	{
 		QtlFinderHDModel newModel = new QtlFinderHDModel();
 
@@ -47,38 +44,7 @@ public class InitQtlFinderHDModel
 		// list with datasets to be shown in dropdown menu
 		newModel.getQtlSearchInputState().setDataSets(dataNames);
 
-		/**
-		 * Pre-loads the hashmaps used by the HumanToWorm class by reading in
-		 * files
-		 * 
-		 * @author Mark de Haans
-		 */
-
-		MolgenisFileHandler filehandle = new MolgenisFileHandler(db);
-		File storage = filehandle.getFileStorage(true, db);
-
-		GeneMappingDataSource omim = new GeneMappingDataSource(new File(storage, "human_disease_OMIM.csv"), "OMIM");
-		GeneMappingDataSource dga = new GeneMappingDataSource(new File(storage, "human_disease_DGA.csv"), "DGA");
-
-		GeneMappingDataSource gwascentral = new GeneMappingDataSource(
-				new File(storage, "human_disease_GWASCENTRAL.csv"), "GWAS Central");
-		GeneMappingDataSource gwascatalog = new GeneMappingDataSource(
-				new File(storage, "human_disease_GWASCATALOG.csv"), "GWAS Catalog");
-		GeneMappingDataSource wormPheno = new GeneMappingDataSource(new File(storage, "worm_disease.csv"), "WormBase");
-		GeneMappingDataSource humanToWorm = new GeneMappingDataSource(new File(storage, "orthologs.csv"), "INPARANOID");
-
-		List<GeneMappingDataSource> humanSources = new ArrayList<GeneMappingDataSource>();
-		humanSources.add(omim);
-		humanSources.add(dga);
-		humanSources.add(gwascentral);
-		humanSources.add(gwascatalog);
-
-		List<GeneMappingDataSource> wormSources = new ArrayList<GeneMappingDataSource>();
-		wormSources.add(wormPheno);
-
-		HumanToWorm h2w2 = new HumanToWorm(humanSources, wormSources, humanToWorm, db);
-
-		newModel.setHumanToWorm(h2w2);
+		newModel.setHumanToWorm(h2w);
 
 		//
 		newModel.setDiseaseMapping(newModel.getHumanToWorm().humanSourceNames().toArray()[0].toString());
