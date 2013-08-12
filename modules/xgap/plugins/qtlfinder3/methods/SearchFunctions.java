@@ -53,35 +53,25 @@ public class SearchFunctions
 		DataMatrixInstance dataMatrix = dmh.createInstance(selectDataset, db);
 		String highestMarkerName = getPeakMarker(dataMatrix, trait, threshold);
 
-		Marker highestMarker = db.find(Marker.class, new QueryRule(Marker.NAME, Operator.EQUALS, highestMarkerName)).get(0);
+		Marker highestMarker = db.find(Marker.class, new QueryRule(Marker.NAME, Operator.EQUALS, highestMarkerName))
+				.get(0);
 
-//		Chromosome highestMarkerChromosome = db.find(Chromosome.class, new QueryRule(Chromosome.NAME, Operator.EQUALS,
-//				highestMarker.getChromosome_Name())).get(0);
-
-		// Once the marker has been determined, the region
-		// within the Qtl is determines by taking the
-		// starting position, and adding or retracting
-		// 10.000 (temporary solution)
-//		Integer start = (int) (highestMarker.get(0).getBpStart() - 10000);
-//		Integer end = (int) (highestMarker.get(0).getBpStart() + 10000);
-//		Integer chromosome = chromosomes.get(0).getOrderNr();
-		
 		Query<Probe> fiftyBefore = db.query(Probe.class);
 		fiftyBefore.equals(Probe.CHROMOSOME_NAME, highestMarker.getChromosome_Name());
 		fiftyBefore.lessOrEqual(Probe.BPSTART, highestMarker.getBpStart());
 		fiftyBefore.sortDESC(Probe.BPSTART);
 		fiftyBefore.limit(50);
 		List<Probe> probes1 = fiftyBefore.find();
-		
+
 		Query<Probe> fiftyAfter = db.query(Probe.class);
 		fiftyAfter.equals(Probe.CHROMOSOME_NAME, highestMarker.getChromosome_Name());
 		fiftyAfter.greaterOrEqual(Probe.BPSTART, highestMarker.getBpStart());
 		fiftyAfter.sortASC(Probe.BPSTART);
 		fiftyAfter.limit(50);
 		List<Probe> probes2 = fiftyAfter.find();
-		
+
 		probes1.addAll(probes2);
-		
+
 		return probes1;
 	}
 
