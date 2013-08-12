@@ -1,4 +1,4 @@
-<molgenis name="xqtl_panacea" label="WormQTL">
+<molgenis name="xqtl_panacea" label="WormQTL-HD">
 
 	<plugin name="MolgenisHeader" type="org.molgenis.wormqtl.header.MolgenisHeader" />
 	<plugin name="FeedbackForm" type="org.molgenis.feedback.FeedbackForm" />
