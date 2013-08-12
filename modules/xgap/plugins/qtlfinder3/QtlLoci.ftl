@@ -40,7 +40,7 @@
 		</tr>
 		<tr>
 			<td colspan="4" height="10" align="center">
-				<br><span style="font-size:12px;">Placeholder for text that is descriptive. Per datasource? Click <a href=""style="text-decoration:none;" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__loadExample';document.forms.${screen.name}.submit();return false;">here</a> to load a tested example query.
+				<br><span style="font-size:12px;">Submit a probe name with a lod threshold and a dataset. Click <a href=""style="text-decoration:none;" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__loadExample';document.forms.${screen.name}.submit();return false;">here</a> to load a tested example query.
 				</span>
 			</td>
 		</tr>		
