@@ -44,5 +44,5 @@
 			</td>
 		</tr>
 	</table>
-	<br>
+	
 </#macro>
