@@ -1,6 +1,7 @@
 package plugins.qtlfinder3.inputstate;
 
 import java.util.List;
+import java.util.Map;
 
 public class QtlSearchInputState
 {
@@ -15,6 +16,8 @@ public class QtlSearchInputState
 
 	// trait or probe name that was put in
 	private String traitInput;
+
+	private Map<String, List<String>> probesForSelectedDataset;
 
 	public List<String> getDataSets()
 	{
@@ -54,5 +57,15 @@ public class QtlSearchInputState
 	public void setTraitInput(String traitInput)
 	{
 		this.traitInput = traitInput;
+	}
+
+	public Map<String, List<String>> getProbesForSelectedDataset()
+	{
+		return probesForSelectedDataset;
+	}
+
+	public void setProbesForSelectedDataset(Map<String, List<String>> probesPerDataset)
+	{
+		this.probesForSelectedDataset = probesPerDataset;
 	}
 }

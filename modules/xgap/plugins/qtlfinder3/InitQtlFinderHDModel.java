@@ -4,8 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
+import matrix.DataMatrixInstance;
+import matrix.general.DataMatrixHandler;
 
 import org.molgenis.cluster.DataValue;
+import org.molgenis.data.Data;
 import org.molgenis.framework.db.Database;
 import org.molgenis.framework.db.DatabaseException;
 import org.molgenis.framework.db.QueryRule;
@@ -41,9 +46,33 @@ public class InitQtlFinderHDModel
 			dataNames.add(dv.getValue_Name());
 		}
 
+		// set a list of selectable probes for every dataset
+		DataMatrixHandler dmh = new DataMatrixHandler(db);
+		Map<String, List<String>> probesPerDataset = new HashMap<String, List<String>>();
+
+		for (String dataset : dataNames)
+		{
+			Data selectDataset = db.find(Data.class, new QueryRule(Data.NAME, Operator.EQUALS, dataset)).get(0);
+			DataMatrixInstance dataMatrix = dmh.createInstance(selectDataset, db);
+
+			if (dataMatrix.getData().getTargetType().equals("Marker"))
+			{
+				probesPerDataset.put(dataset, dataMatrix.getColNames());
+			}
+			else
+			{
+				probesPerDataset.put(dataset, dataMatrix.getRowNames());
+			}
+
+		}
+
 		// list with datasets to be shown in dropdown menu
 		newModel.getQtlSearchInputState().setDataSets(dataNames);
 
+		//
+		newModel.getQtlSearchInputState().setProbesForSelectedDataset(probesPerDataset);
+
+		//
 		newModel.setHumanToWorm(h2w);
 
 		//

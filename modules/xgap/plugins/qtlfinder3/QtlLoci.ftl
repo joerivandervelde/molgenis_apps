@@ -6,9 +6,14 @@
 				&nbsp;
 			</td>
 		</tr>
-		<tr >
+		<tr>
 			<td style="padding-left:25px;" width="50">
-				Probe name:<br /> <input title="trait name" id="traitInput" name="traitInput" type="text" size="10" <#if model.qtlSearchInputState.traitInput??>value="${model.qtlSearchInputState.traitInput}"</#if>>
+				probe/trait:<br /> 
+				<select data-placeholder="Select a probe" class=" ui-widget-content ui-corner-all" id="traitInput" name="traitInput"  style="width:50px;">
+				<#list model.qtlSearchInputState.probesForSelectedDataset[model.qtlSearchInputState.selectedDataSet] as probeName>
+					<option value="${probeName}" <#if model.qtlSearchInputState.traitInput?? && model.qtlSearchInputState.traitInput == probeName>selected="selected"</#if>
+					>${probeName}</option> 
+				</#list>
 			</td>
 			
 			<td style="padding-left:10px;" width="50">
@@ -17,7 +22,8 @@
 			
 			<td style="padding-left:10px;" width="50">
 			Dataset:<br/>
-			<select name="regionDataSetSelect"  style="width:30px;">
+			<select name="regionDataSetSelect"  style="width:30px;" onchange="document.forms.${screen.name}.__action.value = '__qtlfinderhd__changeDataset';
+					document.forms.${screen.name}.submit();">
 				<#list model.qtlSearchInputState.dataSets as dataset>
 					<option value="${dataset}" <#if model.qtlSearchInputState.selectedDataSet == dataset>selected="selected"</#if>
 					>${dataset}</option> 
@@ -40,7 +46,7 @@
 		</tr>
 		<tr>
 			<td colspan="4" height="10" align="center">
-				<br><span style="font-size:12px;">Submit a probe name with a lod threshold and a dataset. Click <a href=""style="text-decoration:none;" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__loadExample';document.forms.${screen.name}.submit();return false;">here</a> to load a tested example query.
+				<br><span style="font-size:12px;">Submit a probe/trait name, with a lod threshold and a dataset. Click <a href=""style="text-decoration:none;" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__loadExample';document.forms.${screen.name}.submit();return false;">here</a> to load a tested example query.
 				</span>
 			</td>
 		</tr>		

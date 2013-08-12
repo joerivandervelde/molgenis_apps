@@ -219,7 +219,7 @@ public class QtlFinderHD extends QtlFinder2
 
 							for (Probe p : probesInRegion)
 							{
-								model.getHits().put(p.getName(), p);
+								this.model.getHits().put(p.getName(), p);
 							}
 						}
 					}
@@ -265,7 +265,7 @@ public class QtlFinderHD extends QtlFinder2
 							{
 								this.model.getHits().put(t.get(ObservationElement.NAME).toString(), t);
 							}
-							model.setShowResults(true);
+							this.model.setShowResults(true);
 
 						}
 					}
@@ -290,15 +290,15 @@ public class QtlFinderHD extends QtlFinder2
 
 							this.model.getQtlSearchInputState().setLodThreshold(request.getInt("lodThreshold"));
 
-							model.setHits(new HashMap<String, Entity>());
-							model.setProbeToGene(new HashMap<String, Gene>());
+							this.model.setHits(new HashMap<String, Entity>());
+							this.model.setProbeToGene(new HashMap<String, Gene>());
 							List<Probe> probesInQtlRegion = SearchFunctions.qtlRegionSearch(this.model
 									.getQtlSearchInputState().getTraitInput(), this.model.getQtlSearchInputState()
 									.getSelectedDataSet(), this.model.getQtlSearchInputState().getLodThreshold(), db);
 
 							for (Probe p : probesInQtlRegion)
 							{
-								model.getHits().put(p.getName(), p);
+								this.model.getHits().put(p.getName(), p);
 							}
 						}
 					}
@@ -319,17 +319,17 @@ public class QtlFinderHD extends QtlFinder2
 							ComparePhenotypesResult res = ComparePhenotypes.compareGenesWorm(model.getHumanToWorm(),
 									cart);
 
-							if (model.getScreenType().equals("genomicRegion"))
+							if (this.model.getScreenType().equals("genomicRegion"))
 							{
 								res.setSampleInputs(new HashSet<String>(Arrays.asList(new String[]
-								{ "chr" + model.getRegionSearchInputState().getSelectedChromosome() + ":"
-										+ model.getRegionSearchInputState().getSelectedStartBp() + "-"
-										+ model.getRegionSearchInputState().getSelectedEndBp() })));
+								{ "chr" + this.model.getRegionSearchInputState().getSelectedChromosome() + ":"
+										+ this.model.getRegionSearchInputState().getSelectedStartBp() + "-"
+										+ this.model.getRegionSearchInputState().getSelectedEndBp() })));
 								res.setSampleSource("Region search");
 								this.model.getRegionSearchResults().setResults(res);
 
 							}
-							else if (model.getScreenType().equals("qtlLoci"))
+							else if (this.model.getScreenType().equals("qtlLoci"))
 							{
 								res.setSampleInputs(new HashSet<String>(Arrays.asList(new String[]
 								{ "todo" })));
@@ -349,23 +349,23 @@ public class QtlFinderHD extends QtlFinder2
 
 						ComparePhenotypesResult res = null;
 
-						if (model.getHumanToWorm().humanSourceNames().contains(model.getDiseaseMapping()))
+						if (this.model.getHumanToWorm().humanSourceNames().contains(this.model.getDiseaseMapping()))
 						{
-							res = ComparePhenotypes.comparePhenotypesHuman(model.getHumanToWorm(),
-									model.getDiseaseMapping(), phenoDiseases);
+							res = ComparePhenotypes.comparePhenotypesHuman(this.model.getHumanToWorm(),
+									this.model.getDiseaseMapping(), phenoDiseases);
 						}
-						else if (model.getHumanToWorm().wormSourceNames().contains(model.getDiseaseMapping()))
+						else if (this.model.getHumanToWorm().wormSourceNames().contains(this.model.getDiseaseMapping()))
 						{
-							res = ComparePhenotypes.comparePhenotypesWorm(model.getHumanToWorm(),
-									model.getDiseaseMapping(), phenoDiseases);
+							res = ComparePhenotypes.comparePhenotypesWorm(this.model.getHumanToWorm(),
+									this.model.getDiseaseMapping(), phenoDiseases);
 						}
 						else
 						{
-							throw new Exception("Source unknown: " + model.getDiseaseMapping());
+							throw new Exception("Source unknown: " + this.model.getDiseaseMapping());
 						}
 
 						res.setSampleInputs(phenoDiseases);
-						res.setSampleSource(model.getDiseaseMapping());
+						res.setSampleSource(this.model.getDiseaseMapping());
 						this.model.getPhenoCompareResults().setResults(res);
 					}
 
@@ -408,6 +408,12 @@ public class QtlFinderHD extends QtlFinder2
 							this.model.setDiseaseMapping(diseaseMapping);
 							this.setMessages(new ScreenMessage("Selected '" + diseaseMapping + "'.", true));
 						}
+					}
+
+					if (action.equals("changeDataset"))
+					{
+						this.model.getQtlSearchInputState()
+								.setSelectedDataSet(request.getString("regionDataSetSelect"));
 					}
 
 					// loads example per search function for reviewer to use
