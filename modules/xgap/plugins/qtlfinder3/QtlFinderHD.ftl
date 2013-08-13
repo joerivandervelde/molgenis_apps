@@ -163,6 +163,7 @@
         		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
     		};
 			
+			
 			<#-- TABLE WIDGET -->
 			$( "#wormHumanTable" ).dataTable( {
 			
@@ -210,7 +211,7 @@
 				            $( "#regionEnd" ).val( ui.values[ 1 ] );
 				        }
 				    });
-                    
+   	
 			<#-- DROPDOWN WIDGET -->
 			$("#diseaseSelect").chosen();
 			$("#comparePheno").chosen();
