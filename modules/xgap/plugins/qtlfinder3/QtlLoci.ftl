@@ -20,7 +20,7 @@
 			
 			<td style="padding-left:25px;" width="50">
 				Probe/trait:<br /> 
-				<select data-placeholder="Select a probe" class=" ui-widget-content ui-corner-all" id="traitInput" name="traitInput"  style="width:50px;">
+				<select id="traitInput" name="traitInput"  style="width:50px;">
 				<#list model.qtlSearchInputState.probesForSelectedDataset[model.qtlSearchInputState.selectedDataSet] as probeName>
 					<option value="${probeName}" <#if model.qtlSearchInputState.traitInput?? && model.qtlSearchInputState.traitInput == probeName>selected="selected"</#if>
 					>${probeName}</option> 
