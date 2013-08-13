@@ -111,14 +111,30 @@ public class HumanToWorm
 
 			String humanOrtholog = wormGeneToHumanGene(geneName);
 
-			if (humanOrtholog == null)
+			if (humanOrtholog != null)
 			{
-				continue;
+				for (String source : humanSourceNames())
+				{
+					List<String> diseases = humanGeneToHumanDisease(humanOrtholog, source);
+					if (diseases != null && diseases.size() > 0)
+					{
+						if (probeToSourceToDisease.keySet().contains(p.getName()))
+						{
+							probeToSourceToDisease.get(p.getName()).put(source, diseases);
+						}
+						else
+						{
+							Map<String, List<String>> sourceToDiseases = new HashMap<String, List<String>>();
+							sourceToDiseases.put(source, diseases);
+							probeToSourceToDisease.put(p.getName(), sourceToDiseases);
+						}
+					}
+				}
 			}
 
-			for (String source : humanSourceNames())
+			for (String source : wormSourceNames())
 			{
-				List<String> diseases = humanGeneToHumanDisease(humanOrtholog, source);
+				List<String> diseases = wormGeneToWormPhenotypes(p.getReportsFor_Name(), source);
 				if (diseases != null && diseases.size() > 0)
 				{
 					if (probeToSourceToDisease.keySet().contains(p.getName()))
@@ -368,8 +384,8 @@ public class HumanToWorm
 		if ((sampleIsHuman && genesForDisOrPhenoIsHuman) || (!sampleIsHuman && !genesForDisOrPhenoIsHuman))
 		{
 			genesForDisOrPheno.retainAll(sample);
-			Map<String, Set<String>> res = new HashMap<String,Set<String>>();
-			for(String s : genesForDisOrPheno)
+			Map<String, Set<String>> res = new HashMap<String, Set<String>>();
+			for (String s : genesForDisOrPheno)
 			{
 				res.put(s, null);
 			}
@@ -411,9 +427,10 @@ public class HumanToWorm
 				// one-to-many relations, because there is potentially more
 				// overlap than sample/draw size!
 				/** overlapTotal += orthoCopy.size() > 1 ? 1 : orthoCopy.size(); */
-				
-				//'equivalant' to counting only one is adding the orthoCopy list one 1 key entry
-				if(orthoCopy.size() > 0)
+
+				// 'equivalant' to counting only one is adding the orthoCopy
+				// list one 1 key entry
+				if (orthoCopy.size() > 0)
 				{
 					overlap.put(gene, orthoCopy);
 				}
@@ -709,6 +726,17 @@ public class HumanToWorm
 		{
 			return new HashMap<String, List<String>>();
 		}
+		return probeToSourceToDisease.get(probe);
+	}
+
+	public Map<String, List<String>> wormProbeToDataSourceToWormDiseases(String probe)
+	{
+		Map<String, List<String>> dataSourceToDiseases = probeToSourceToDisease.get(probe);
+		if (dataSourceToDiseases == null)
+		{
+			return new HashMap<String, List<String>>();
+		}
+
 		return probeToSourceToDisease.get(probe);
 	}
 }

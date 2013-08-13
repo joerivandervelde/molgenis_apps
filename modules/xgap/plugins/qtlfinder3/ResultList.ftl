@@ -130,6 +130,14 @@
 											</#list>
 											<br>
 										</#list>
+									<#elseif model.humanToWorm.wormProbeToDataSourceToWormDiseases(model.hits[name].name)?has_content>
+										<#list model.humanToWorm.wormProbeToDataSourceToWormDiseases(model.hits[name].name)?keys as source>
+											<b>${source}</b>:
+											<#list model.humanToWorm.wormProbeToDataSourceToWormDiseases(model.hits[name].name)[source] as disease>
+												${disease}<#if disease_has_next>, </#if> 
+											</#list>
+											<br>
+										</#list>		
 									<#else>
 										No disease associations
 									</#if>
