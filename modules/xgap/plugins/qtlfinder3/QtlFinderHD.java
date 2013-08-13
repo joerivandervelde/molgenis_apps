@@ -55,7 +55,8 @@ public class QtlFinderHD extends QtlFinder2
 
 		if (request.getString("screen") != null)
 		{
-			System.out.println("Screen change imminent! " + request.getString("screen"));
+			this.model.setCartView(false);
+			this.model.setShowResults(false);
 
 			if (this.model.getHits() != null)
 			{
@@ -65,17 +66,39 @@ public class QtlFinderHD extends QtlFinder2
 				{
 					this.model.getDiseaseSearchResults().setDiseaseSearchHits(this.model.getHits());
 					this.model.setHits(null);
+
+					if (this.model.getMultiplot() != null)
+					{
+						this.model.getDiseaseSearchResults().setMultiplot(this.model.getMultiplot());
+					}
+
+					this.model.setMultiplot(null);
+
 				}
 
 				else if (this.model.getScreenType().equals("genomicRegion"))
 				{
 					this.model.getRegionSearchResults().setRegionSearchHits(this.model.getHits());
 					this.model.setHits(null);
+
+					if (this.model.getMultiplot() != null)
+					{
+						this.model.getRegionSearchResults().setMultiplot(this.model.getMultiplot());
+					}
+
+					this.model.setMultiplot(null);
 				}
 				else if (this.model.getScreenType().equals("qtlLoci"))
 				{
 					this.model.getQtlSearchResults().setQtlSearchHits(this.model.getHits());
 					this.model.setHits(null);
+
+					if (this.model.getMultiplot() != null)
+					{
+						this.model.getQtlSearchResults().setMultiplot(this.model.getMultiplot());
+					}
+
+					this.model.setMultiplot(null);
 				}
 				else
 				{
@@ -101,13 +124,34 @@ public class QtlFinderHD extends QtlFinder2
 				if (this.model.getDiseaseSearchResults().getDiseaseSearchHits() != null)
 				{
 					this.model.setHits(this.model.getDiseaseSearchResults().getDiseaseSearchHits());
+
+					if (this.model.getDiseaseSearchResults().getMultiplot() == null)
+					{
+						this.model.setShowResults(true);
+					}
 				}
+
+				if (this.model.getDiseaseSearchResults().getMultiplot() != null)
+				{
+					this.model.setMultiplot(this.model.getDiseaseSearchResults().getMultiplot());
+				}
+
 			}
 			else if (this.model.getScreenType().equals("genomicRegion"))
 			{
 				if (this.model.getRegionSearchResults().getRegionSearchHits() != null)
 				{
 					this.model.setHits(this.model.getRegionSearchResults().getRegionSearchHits());
+
+					if (this.model.getRegionSearchResults().getMultiplot() == null)
+					{
+						this.model.setShowResults(true);
+					}
+				}
+
+				if (this.model.getRegionSearchResults().getMultiplot() != null)
+				{
+					this.model.setMultiplot(this.model.getRegionSearchResults().getMultiplot());
 				}
 			}
 			else if (this.model.getScreenType().equals("qtlLoci"))
@@ -115,15 +159,22 @@ public class QtlFinderHD extends QtlFinder2
 				if (this.model.getQtlSearchResults().getQtlSearchHits() != null)
 				{
 					this.model.setHits(this.model.getQtlSearchResults().getQtlSearchHits());
+
+					if (this.model.getQtlSearchResults().getMultiplot() == null)
+					{
+						this.model.setShowResults(true);
+					}
+				}
+
+				if (this.model.getQtlSearchResults().getMultiplot() != null)
+				{
+					this.model.setMultiplot(this.model.getQtlSearchResults().getMultiplot());
 				}
 			}
 			else
 			{
 				// TODO: nothing???
 			}
-
-			this.model.setCartView(false);
-			this.model.setShowResults(false);
 		}
 
 		if (request.getString("__action") != null)
