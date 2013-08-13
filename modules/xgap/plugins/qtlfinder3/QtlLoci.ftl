@@ -7,8 +7,19 @@
 			</td>
 		</tr>
 		<tr>
+			<td style="padding-left:10px;" width="50">
+				Dataset:<br/>
+				<select name="regionDataSetSelect"  style="width:30px;" onchange="document.forms.${screen.name}.__action.value = '__qtlfinderhd__changeDataset';
+						document.forms.${screen.name}.submit();">
+					<#list model.qtlSearchInputState.dataSets as dataset>
+						<option value="${dataset}" <#if model.qtlSearchInputState.selectedDataSet == dataset>selected="selected"</#if>
+						>${dataset}</option> 
+					</#list>
+				</select>
+			</td>
+			
 			<td style="padding-left:25px;" width="50">
-				probe/trait:<br /> 
+				Probe/trait:<br /> 
 				<select data-placeholder="Select a probe" class=" ui-widget-content ui-corner-all" id="traitInput" name="traitInput"  style="width:50px;">
 				<#list model.qtlSearchInputState.probesForSelectedDataset[model.qtlSearchInputState.selectedDataSet] as probeName>
 					<option value="${probeName}" <#if model.qtlSearchInputState.traitInput?? && model.qtlSearchInputState.traitInput == probeName>selected="selected"</#if>
@@ -18,17 +29,6 @@
 			
 			<td style="padding-left:10px;" width="50">
 				LOD threshold:<br /> <input title="LOD Score Threshold" id="lodThreshold2" name="lodThreshold" type="text" size="10" <#if model.qtlSearchInputState.lodThreshold??>value="${model.qtlSearchInputState.lodThreshold}"</#if>>
-			</td>
-			
-			<td style="padding-left:10px;" width="50">
-			Dataset:<br/>
-			<select name="regionDataSetSelect"  style="width:30px;" onchange="document.forms.${screen.name}.__action.value = '__qtlfinderhd__changeDataset';
-					document.forms.${screen.name}.submit();">
-				<#list model.qtlSearchInputState.dataSets as dataset>
-					<option value="${dataset}" <#if model.qtlSearchInputState.selectedDataSet == dataset>selected="selected"</#if>
-					>${dataset}</option> 
-				</#list>
-			</select>
 			</td>
 			
 			<td width="290" style="padding-top:10px;padding-left:10px;">
