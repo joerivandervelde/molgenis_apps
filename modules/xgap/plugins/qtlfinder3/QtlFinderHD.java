@@ -16,6 +16,7 @@ import org.molgenis.framework.ui.ScreenController;
 import org.molgenis.framework.ui.ScreenMessage;
 import org.molgenis.pheno.ObservationElement;
 import org.molgenis.util.Entity;
+import org.molgenis.wormqtl.services.WormQTLPreloadService;
 import org.molgenis.xgap.Chromosome;
 import org.molgenis.xgap.Gene;
 import org.molgenis.xgap.Probe;
@@ -625,6 +626,17 @@ public class QtlFinderHD extends QtlFinder2
 			{
 				HumanToWorm h2w = (HumanToWorm) this.getApplicationController().getMolgenisContext()
 						.getServletContext().getAttribute("humantoworm");
+
+				// only on first startup, when DB has just been created
+				// and h2w has NOT been loaded in the app context
+				if (h2w == null)
+				{
+					System.out.println("HumanToWorm is null (first time start of app?), going to create it now..");
+					h2w = WormQTLPreloadService.createHumanToWorm(db);
+					this.getApplicationController().getMolgenisContext().getServletContext()
+							.setAttribute("humantoworm", h2w);
+				}
+
 				this.model = InitQtlFinderHDModel.init(db, h2w);
 			}
 			catch (Exception e)
