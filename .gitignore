@@ -65,3 +65,5 @@ logger.out*
 /apps/catalogue/plugins/hl7parser/PropertiesPath.java
 runmij*
 modules/compute/protocols/ngsWorkflowRealignmentAndSnpCalling/output/
+processedGeneList.tsv
+processedGeneList.txt
