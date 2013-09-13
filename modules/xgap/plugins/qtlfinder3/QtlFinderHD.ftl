@@ -103,7 +103,7 @@
 	
 
 	<table align="" id="browse" >
-		<tr>
+		<tr>	
 			<#if model.screenType == "genomicRegion" || model.screenType == "qtlLoci">
 				<td style="vertical-align:middle;">
 					<div style="width:175px;"></div>
@@ -231,22 +231,13 @@
 			<#-- DROPDOWN WIDGET -->
 			$("#diseaseSelect").chosen( {enable_split_word_search:true,search_contains:true} );
 			$("#comparePheno").chosen( {enable_split_word_search:true,search_contains:true} );
-			
-			<#-- FUNCTION FOR DISPLAYING CONFIRM BOX -->
-			function disp_confirm(){
-				var r=confirm("Press a button!")
-				if (r==true){
-  					alert("You pressed OK!")
-  				}else{
-  					alert("You pressed Cancel!")
-  				}
-			}
 		
 		});		
 	</script>
 	
 	<#-- STYLES -->
 	<style> 
+	
 		table.dataTable tr.odd{
 			background:#EAEAEA;
 		}
