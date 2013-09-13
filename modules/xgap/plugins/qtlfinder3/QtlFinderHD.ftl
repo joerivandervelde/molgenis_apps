@@ -104,17 +104,24 @@
 
 	<table align="" id="browse" >
 		<tr>
-			<td style="vertical-align:middle;">
-				Select a disease datasource:<br>
-				<select id="diseaseMapping" name="diseaseMapping" style="width:175px;float:left;" onchange="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();">
-					<#list model.humanToWorm.humanSourceNames() as source>
-						<option value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Human: ${source}</option>
-					</#list>
-					<#list model.humanToWorm.wormSourceNames() as source>
-						<option value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Worm: ${source}</option>
-					</#list>
-				</select>
-			</td>
+			<#if model.screenType == "genomicRegion" || model.screenType == "qtlLoci">
+				<td style="vertical-align:middle;">
+					<div style="width:175px;"></div>
+					
+				</td>
+			<#else>
+				<td style="vertical-align:middle;">
+					Select a disease datasource:<br>
+					<select id="diseaseMapping" name="diseaseMapping" style="width:175px;float:left;" onchange="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();">
+						<#list model.humanToWorm.humanSourceNames() as source>
+							<option value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Human: ${source}</option>
+						</#list>
+						<#list model.humanToWorm.wormSourceNames() as source>
+							<option value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Worm: ${source}</option>
+						</#list>
+					</select>
+				</td>
+			</#if>
 			<td colspan="1"></td>
 			<td align="center" style="padding-left:0px;">
 				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease"><img height="50" width="50"  src="clusterdemo/wormqtl/humanDisease.png" /></a>
