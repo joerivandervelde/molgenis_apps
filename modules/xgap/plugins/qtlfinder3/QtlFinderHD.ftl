@@ -59,33 +59,41 @@
 			<#import "../qtlfinder3/MultiPlot.ftl" as mp>
 			<#import "../qtlfinder3/CompareResults.ftl" as cr>
 			<#import "../qtlfinder3/ReportScreen.ftl" as report>
+			<#import "../qtlfinder3/help.ftl" as help>
 			
 			<#-- macro's-->	
 			<@styleAndScript />
 			
-			<@browseBar model = model screen = screen/>
+			<#if model.screenType == "showHelp">
+				<@help.helpScreen />
+			<#else>
 			
-			<#if model.screenType == "humanDisease">
-				<@hd.humanDisease model = model screen = screen />
-			</#if>
+				<@browseBar model = model screen = screen/>
+				
+				<#if model.screenType == "humanDisease">
+					<@hd.humanDisease model = model screen = screen />
+				</#if>
+				
+				<#if model.screenType == "genomicRegion">
+					<@rs.regionSearch model = model screen = screen />
+				</#if>
+				
+				<#if model.screenType == "qtlLoci">
+					<@ql.qtlLoci model = model screen = screen />
+				</#if>
 			
-			<#if model.screenType == "genomicRegion">
-				<@rs.regionSearch model = model screen = screen />
-			</#if>
+				<#if model.screenType == "comparePhenotypes">
+					<@cp.comparePhenotypes model = model screen = screen /> 				
+				</#if>
+				
+				<@report.reportScreen model = model screen = screen />
+				
+				<#if model.multiplot??>
+					<@mp.multiPlot model=model screen=screen />
+				</#if>
 			
-			<#if model.screenType == "qtlLoci">
-				<@ql.qtlLoci model = model screen = screen />
-			</#if>
-		
-			<#if model.screenType == "comparePhenotypes">
-				<@cp.comparePhenotypes model = model screen = screen /> 				
-			</#if>
-			
-			<@report.reportScreen model = model screen = screen />
-			
-			<#if model.multiplot??>
-				<@mp.multiPlot model=model screen=screen />
-			</#if>
+			</#if>	
+				
 			
 		</div>
 	</form>
@@ -214,10 +222,18 @@
 				    });
    	
 			<#-- DROPDOWN WIDGET -->
-			$("#diseaseSelect").chosen();
-			$("#comparePheno").chosen();
+			$("#diseaseSelect").chosen( {enable_split_word_search:true,search_contains:true} );
+			$("#comparePheno").chosen( {enable_split_word_search:true,search_contains:true} );
 			
-			
+			<#-- FUNCTION FOR DISPLAYING CONFIRM BOX -->
+			function disp_confirm(){
+				var r=confirm("Press a button!")
+				if (r==true){
+  					alert("You pressed OK!")
+  				}else{
+  					alert("You pressed Cancel!")
+  				}
+			}
 		
 		});		
 	</script>
