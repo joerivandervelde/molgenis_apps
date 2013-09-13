@@ -22,6 +22,8 @@ import org.molgenis.xgap.Gene;
 import org.molgenis.xgap.Probe;
 
 import plugins.qtlfinder2.QtlFinder2;
+import plugins.qtlfinder3.InitQtlFinderHDModel;
+import plugins.qtlfinder3.QtlFinderHDModel;
 import plugins.qtlfinder3.methods.ComparePhenotypes;
 import plugins.qtlfinder3.methods.ComparePhenotypesResult;
 import plugins.qtlfinder3.methods.SearchFunctions;
