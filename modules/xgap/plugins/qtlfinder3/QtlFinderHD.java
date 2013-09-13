@@ -22,8 +22,6 @@ import org.molgenis.xgap.Gene;
 import org.molgenis.xgap.Probe;
 
 import plugins.qtlfinder2.QtlFinder2;
-import plugins.qtlfinder3.InitQtlFinderHDModel;
-import plugins.qtlfinder3.QtlFinderHDModel;
 import plugins.qtlfinder3.methods.ComparePhenotypes;
 import plugins.qtlfinder3.methods.ComparePhenotypesResult;
 import plugins.qtlfinder3.methods.SearchFunctions;
@@ -61,8 +59,11 @@ public class QtlFinderHD extends QtlFinder2
 			this.model.setCartView(false);
 			this.model.setShowResults(false);
 
+			System.out.println(request.getString("screen"));
+
 			if (this.model.getScreenType().equals("showHelp"))
 			{
+				System.out.println(this.model.getScreenType());
 				this.model.setScreenType("humanDisease");
 			}
 
@@ -123,6 +124,8 @@ public class QtlFinderHD extends QtlFinder2
 			{
 				this.model.getDiseaseSearchInputState().setSelectedDiseases(null);
 			}
+
+			this.model.setScreenType(request.getString("screen"));
 
 			// Load the correct hits when a certain search function is selected
 			if (this.model.getScreenType().equals("humanDisease"))
