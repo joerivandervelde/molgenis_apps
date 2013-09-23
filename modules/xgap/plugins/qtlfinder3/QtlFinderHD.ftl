@@ -228,10 +228,14 @@
 				        }
 				    });
    	
-			<#-- DROPDOWN WIDGET -->
+			<#-- DROPDOWN WIDGET-->
 			$("#diseaseSelect").chosen( {enable_split_word_search:true,search_contains:true} );
 			$("#comparePheno").chosen( {enable_split_word_search:true,search_contains:true} );
-		
+		 	
+		 	<#-- DROPDOWN WIDGET Doesnt work, header links??
+		 	$("#diseaseSelect").select2();
+		 	$("#comparePheno").select2();
+		 	-->
 		});		
 	</script>
 	

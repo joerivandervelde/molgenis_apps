@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.molgenis.framework.db.Database;
 import org.molgenis.xgap.Probe;
@@ -541,7 +542,10 @@ public class HumanToWorm
 	 */
 	public Set<String> humanDiseasesWithOrthology(String dataSource)
 	{
-		return this.humanDiseasesHavingOrthologyPerSource.get(dataSource);
+		TreeSet<String> orderedSetOfDiseases = new TreeSet<String>(
+				this.humanDiseasesHavingOrthologyPerSource.get(dataSource));
+		return orderedSetOfDiseases;
+
 	}
 
 	/**
@@ -551,7 +555,9 @@ public class HumanToWorm
 	 */
 	public Set<String> wormPhenotypesWithOrthology(String dataSource)
 	{
-		return this.wormPhenotypeHavingOrthologyPerSource.get(dataSource);
+		TreeSet<String> orderedSetOfPhenotypes = new TreeSet<String>(
+				this.wormPhenotypeHavingOrthologyPerSource.get(dataSource));
+		return orderedSetOfPhenotypes;
 	}
 
 	/**
