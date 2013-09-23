@@ -28,11 +28,13 @@
 			
 	<div id="listOfHits" style="display:block;">	
 		<#if model.showResults>	
-			<@rl.resultList model = model screen = screen/>		
+			<@rl.resultList model = model screen = screen/>
+			<br><br>		
 		</#if>	
 			
 		<#if model.cartView>
 			<@sc.shoppingCart model = model screen = screen />
+			<br><br>
 		</#if>
 	
 		<#if model.phenoCompareResults.results?? && model.screenType="comparePhenotypes">
