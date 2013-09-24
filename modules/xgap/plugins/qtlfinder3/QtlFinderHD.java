@@ -245,11 +245,13 @@ public class QtlFinderHD extends QtlFinder2
 
 						if (gene == null)
 						{
-							this.setMessages(new ScreenMessage("Please enter a gene, like daf or WBGene00002045", false));
+							this.setMessages(new ScreenMessage("Please enter a gene, like daf-16 or WBGene00002045",
+									false));
 						}
 						else
 						{
 							List<Gene> genes = new ArrayList<Gene>();
+
 							// TODO Is there a better way to do this?
 							genes.addAll(db.find(Gene.class, new QueryRule(Gene.SYMBOL, Operator.EQUALS, gene.trim())));
 							genes.addAll(db.find(Gene.class, new QueryRule(Gene.NAME, Operator.EQUALS, gene.trim())));
