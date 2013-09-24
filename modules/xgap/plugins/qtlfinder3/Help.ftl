@@ -1,6 +1,6 @@
 <#macro helpScreen>
 <div id="help" align="left" style="padding-left:10px;">	
-	<nobr><a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease" style="float:right;padding-right:10px;">Back to Disease2QTL</a></nobr>
+	<nobr style="float:right;padding-right:10px;">Continue on to the first tool: <a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease">Disease2QTL</a></nobr>
 	<h2>Help</h2>
 
 	<h3>For biologists:</h3>
