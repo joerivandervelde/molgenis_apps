@@ -1,13 +1,23 @@
 <#macro helpScreen>
 <div id="help" align="left" style="padding-left:10px;">	
+	<nobr><a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease" style="float:right;padding-right:10px;">Back to Disease2QTL</a></nobr>
 	<h2>Help</h2>
 
 	<h3>For biologists:</h3>
 	
 	<ul>
 		<li>
-			Download the tutorials for WormQTL-HD.org <a target="_blank" href="SupplementaryTutorial_S1_S2_S3.pdf">here</a>. The tutorials
-			cover the tools found on this website step by step. 
+			Download the supplementary materials for WormQTL-HD.org <a target="_blank" href="SupplementaryTutorial_S1_S2_S3.pdf">here</a>. The supplementaries
+			cover the use cases described in the manuscript. 
+		</li>
+		<li>
+			For a description on pvalues and other statistical information, see Gene Networks <a target="_blank" href="http://www.genenetwork.org/glossary.html#Permutation">glossary of terms and features<a>.
+		</li>
+		<li>
+			Download a pdf with a step by step explanation on all tools <a target="_blank" href="WormQTLHD_toolTutorial.pdf">here</a>. This tutorial explains every tools functionality.
+		</li>
+		<li>
+			For information on the the QTL finder tool, please refer to <a target="_blank" href="http://www.ncbi.nlm.nih.gov/pubmed/23180786">Snoek & Van der velde et al. (2012)</a>, or its original site: <a target="_blank" href="http://www.wormqtl.org">www.wormqtl.org</a>
 		</li>
 	</ul>
 
@@ -31,7 +41,7 @@
 		<li>
 			<a target="_blank" href="downloadmatrixascsv">Matrix CSV downloader</a> to download all experimental data programmatically. Includes options for subsets and streaming.
 			<br>
-			Some concrete xamples:
+			Some concrete examples:
 			<ul>
 				<li>
 					Genotypes: <a target="_blank" href="downloadmatrixascsv?id=24&download=all&stream=false">CBxN2_WUR_RILs</a> (Panel x Marker) / <a href="downloadmatrixascsv?id=22&download=all&stream=false">CBxN2_USA_RILs</a> (Marker x Panel)
