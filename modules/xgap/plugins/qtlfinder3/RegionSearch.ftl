@@ -57,10 +57,12 @@
 	<br>
 	
 	<hr></hr>
+	<br>
+	
 	
 	<table align="center" width="800">
 		<tr>
-			<td colspan="3" align="center">
+			<td colspan="3" align="center" style="font-size:10px">
 			Set the positions for your search by entering a gene name. Use this if you do not know a genes location.
 			<br><br>
 			<input id="geneInputForRegion" name="geneInputForRegion" <#if model.regionSearchInputState.inputGene??>value="${model.regionSearchInputState.inputGene}"</#if>></input>
@@ -71,7 +73,7 @@
 		</tr>
 		<tr>
 			<td colspan="3" align="center">
-				<span style="font-size:12px;">(<i>for example:</i> daf-16, pgp-7, gst-27, WBGene00021562, WBGene00006727, ... )
+				<span style="font-size:10px;">(<i>for example:</i> daf-16, pgp-7, gst-27, WBGene00021562, WBGene00006727, ... )
 				<br>Choosing a gene and pressing 'Set region' will fill in the chromosome and start and stop positions for you.
 				</span>
 			</tr>
