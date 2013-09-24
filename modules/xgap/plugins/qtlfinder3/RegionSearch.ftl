@@ -1,12 +1,35 @@
 <#macro regionSearch model screen>
 <#---------------------WORM REGION SEARCH-------------------->
+	
+	<table align="center" width="800">
+		<tr>
+			<td colspan="3" align="center">
+			Search for a gene directly if you do not know their position
+			<br>
+			<input id="geneInputForRegion" name="geneInputForRegion"></input>
+			
+			<button id="regionSetWithGeneInput" type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__regionSetWithGeneInput';
+					document.forms.${screen.name}.submit();"">Set region</button>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" align="center">
+				<span style="font-size:12px;">(<i>for example:</i> daf-16, pgp-7, gst-27, WBGene00021562, WBGene00006727, ... )
+				<br>Choosing a gene and pressing 'Set region' will fill in the chromosome and start and stop positions for you.
+				</span>
+			</tr>
+		</tr>	
+	</table>
+	
+	<br>
+	
 	<table align="center" width="800">
 		<tr>
 			<td colspan="4" height="10" align="center">
 				&nbsp;
 			</td>
 		</tr>
-		<tr>
+		<tr align="center">
 			<td style="padding-left:10px;" width="50">
 				Chromosome:<br> 
 				<select id="regionChr" name="regionChr">
@@ -15,7 +38,7 @@
 					</#list>
 				</select>
 			</td>
-			<td style="padding-left:25px;" width="50">
+			<td style="padding-left:25px;" width="50" >
 				Start bp:<br> <input title="starting index" id="regionStart" name="regionStart" type="text" value="${model.regionSearchInputState.selectedStartBp?c}" size="10"/>
 			</td>
 			<td style="padding-left:10px;" width="50">

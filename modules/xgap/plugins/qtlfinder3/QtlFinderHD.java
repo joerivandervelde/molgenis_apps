@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.molgenis.framework.db.Database;
+import org.molgenis.framework.db.QueryRule;
+import org.molgenis.framework.db.QueryRule.Operator;
 import org.molgenis.framework.server.MolgenisRequest;
 import org.molgenis.framework.ui.ScreenController;
 import org.molgenis.framework.ui.ScreenMessage;
@@ -236,6 +238,35 @@ public class QtlFinderHD extends QtlFinder2
 					}
 
 					// Region search
+					if (action.equals("regionSetWithGeneInput"))
+					{
+						String gene = request.getString("geneInputForRegion");
+						this.model.getRegionSearchInputState().setInputGene(gene);
+
+						if (gene == null)
+						{
+							this.setMessages(new ScreenMessage("Please enter a gene, like daf or WBGene00002045", false));
+						}
+						else
+						{
+							List<Gene> genes = new ArrayList<Gene>();
+							// TODO Is there a better way to do this?
+							genes.addAll(db.find(Gene.class, new QueryRule(Gene.SYMBOL, Operator.EQUALS, gene.trim())));
+							genes.addAll(db.find(Gene.class, new QueryRule(Gene.NAME, Operator.EQUALS, gene.trim())));
+							genes.addAll(db.find(Gene.class, new QueryRule(Gene.SEQ, Operator.EQUALS, gene.trim())));
+
+							for (Gene g : genes)
+							{
+								this.model.getRegionSearchInputState().setSelectedStartBp(
+										Integer.parseInt(g.get("bpstart").toString()));
+								this.model.getRegionSearchInputState().setSelectedEndBp(
+										Integer.parseInt((g.get("bpend").toString())));
+								this.model.getRegionSearchInputState().setSelectedChromosome(
+										g.get("chromosome_name").toString());
+							}
+						}
+					}
+
 					if (action.equals("regionSearch"))
 					{
 						if (request.getString("regionStart") == null || request.getString("regionEnd") == null)

@@ -9,6 +9,8 @@ public class RegionSearchInputState
 	private Integer selectedStartBp;
 	private Integer selectedEndBp;
 	private String selectedChromosome;
+	private String inputGene;
+
 	private LinkedHashMap<String, Chromosome> chromosomes;
 
 	public Integer getSelectedStartBp()
@@ -44,6 +46,16 @@ public class RegionSearchInputState
 	public LinkedHashMap<String, Chromosome> getChromosomes()
 	{
 		return chromosomes;
+	}
+
+	public String getInputGene()
+	{
+		return inputGene;
+	}
+
+	public void setInputGene(String inputGene)
+	{
+		this.inputGene = inputGene;
 	}
 
 	public void setChromosomes(LinkedHashMap<String, Chromosome> chromosomes)
