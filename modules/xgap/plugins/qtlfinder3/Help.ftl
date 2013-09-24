@@ -17,7 +17,7 @@
 			Download a pdf with a step by step explanation on all tools <a target="_blank" href="WormQTLHD_toolTutorial.pdf">here</a>. This tutorial explains every tools functionality.
 		</li>
 		<li>
-			For information on the the QTL finder tool, please refer to <a target="_blank" href="http://www.ncbi.nlm.nih.gov/pubmed/23180786">Snoek & Van der velde et al. (2012)</a>, or its original site: <a target="_blank" href="http://www.wormqtl.org">www.wormqtl.org</a>
+			For information on the the QTL finder tool, please refer to <a target="_blank" href="http://www.ncbi.nlm.nih.gov/pubmed/23180786">Snoek et al. (2012)</a>, or its original site: <a target="_blank" href="http://www.wormqtl.org">www.wormqtl.org</a>
 		</li>
 	</ul>
 
