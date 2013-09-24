@@ -257,6 +257,13 @@ public class QtlFinderHD extends QtlFinder2
 							genes.addAll(db.find(Gene.class, new QueryRule(Gene.NAME, Operator.EQUALS, gene.trim())));
 							genes.addAll(db.find(Gene.class, new QueryRule(Gene.SEQ, Operator.EQUALS, gene.trim())));
 
+							if (genes.isEmpty())
+							{
+								this.setMessages(new ScreenMessage(
+										"Sorry, your input was not found in our gene database, please search for another gene, or make it more specific e.g. daf-16 instead of daf",
+										false));
+							}
+
 							for (Gene g : genes)
 							{
 								this.model.getRegionSearchInputState().setSelectedStartBp(
