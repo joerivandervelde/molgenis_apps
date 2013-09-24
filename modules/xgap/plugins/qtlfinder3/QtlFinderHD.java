@@ -600,6 +600,7 @@ public class QtlFinderHD extends QtlFinder2
 						if (this.model.getScreenType().equals("genomicRegion"))
 						{
 							this.model.getRegionSearchResults().setResults(null);
+							this.model.getRegionSearchInputState().setInputGene(null);
 						}
 
 					}
@@ -628,6 +629,7 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.getPhenoCompareResults().setResults(null);
 						this.model.getRegionSearchResults().setResults(null);
 						this.model.getQtlSearchResults().setResults(null);
+						this.model.getRegionSearchInputState().setInputGene(null);
 					}
 				}
 
