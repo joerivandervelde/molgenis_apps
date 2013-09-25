@@ -6,7 +6,7 @@
 				&nbsp;
 			</td>
 		</tr>
-		<tr>
+		<tr align="center" style="margin-right:-50px;">
 			<td style="padding-left:10px;" width="50">
 				Dataset:<br/>
 				<select name="regionDataSetSelect"  style="width:30px;" onchange="document.forms.${screen.name}.__action.value = '__qtlfinderhd__changeDataset';
@@ -46,7 +46,8 @@
 		</tr>
 		<tr>
 			<td colspan="4" height="10" align="center">
-				<br><span style="font-size:12px;">Submit a probe/trait name, with a lod threshold and a dataset. Click <a href=""style="text-decoration:none;" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__loadExample';document.forms.${screen.name}.submit();return false;">here</a> to load a tested example query.
+				<span style="font-size:12px;">Submit a probe/trait name, with a lod threshold and a dataset. Click <a href=""style="text-decoration:none;" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__loadExample';document.forms.${screen.name}.submit();return false;">here</a> to load a tested example query.
+				<br>Click <a target="_blank" href="WormQTLHD_toolTutorial.pdf#page=5">here</a> to see a tutorial on how to get results from this tool.
 				</span>
 			</td>
 		</tr>		
