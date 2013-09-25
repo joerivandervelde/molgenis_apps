@@ -27,6 +27,7 @@ The p-value threshold for when only one test would be performed
 The p-value threshold after multiple testing correction. 
 
 - Single test significant
-
+Says if the p-value is significant for single test threshold
 
 - Bonferroni significant
+Says if the p-value is significant after multiple testing correction
