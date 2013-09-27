@@ -373,10 +373,9 @@ public class QtlFinderHD extends QtlFinder2
 					// QTL search per probe
 					if (action.equals("traitRegionSearch"))
 					{
-						if (request.getString("traitInput") == null)
+						if (request.getString("lodThreshold") == null)
 						{
-							this.setMessages(new ScreenMessage("Please fill in a trait in the form"
-									+ "of a probe name.", false));
+							this.setMessages(new ScreenMessage("Please enter a LOD threshold", false));
 						}
 						else
 						{
