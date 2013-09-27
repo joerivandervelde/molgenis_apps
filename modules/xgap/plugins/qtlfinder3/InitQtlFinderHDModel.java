@@ -115,7 +115,7 @@ public class InitQtlFinderHDModel
 		model.getRegionSearchInputState().setChromosomes(chrs);
 		model.getRegionSearchInputState().setSelectedChromosome(chromosomes.get(0).getName());
 		int startBp = (int) (((double) chromosomes.get(0).getBpLength()) / 10.0);
-		int endBp = (int) (((double) chromosomes.get(0).getBpLength()) / 6.0);
+		int endBp = (int) (((double) chromosomes.get(0).getBpLength()) / 9.0);
 		model.getRegionSearchInputState().setSelectedStartBp(startBp);
 		model.getRegionSearchInputState().setSelectedEndBp(endBp);
 	}
