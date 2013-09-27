@@ -441,9 +441,7 @@ public class QtlFinder2 extends PluginModel<Entity>
 		if (probeRefsFromGeneToQuery.size() > 0)
 		{
 			QueryRule r = new QueryRule(Probe.REPORTSFOR_NAME, Operator.IN, probeRefsFromGeneToQuery);
-			QueryRule o = new QueryRule(Operator.OR);
-			QueryRule s = new QueryRule(Probe.SYMBOL, Operator.IN, probeRefsFromGeneToQuery);
-			probes = db.find(Probe.class, r, o, s);
+			probes = db.find(Probe.class, r);
 		}
 
 		outer: for (String name : hits.keySet())
