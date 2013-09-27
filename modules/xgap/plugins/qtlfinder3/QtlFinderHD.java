@@ -561,9 +561,9 @@ public class QtlFinderHD extends QtlFinder2
 						{
 							System.out.println("Set example " + this.model.getScreenType());
 
-							this.model.getRegionSearchInputState().setSelectedStartBp(Integer.parseInt("15430739"));
-							this.model.getRegionSearchInputState().setSelectedEndBp(Integer.parseInt("16430739"));
-							this.model.getRegionSearchInputState().setSelectedChromosome("V");
+							this.model.getRegionSearchInputState().setSelectedStartBp(Integer.parseInt("10864904"));
+							this.model.getRegionSearchInputState().setSelectedEndBp(Integer.parseInt("10870172"));
+							this.model.getRegionSearchInputState().setSelectedChromosome("X");
 
 							System.out.println(this.model.getRegionSearchInputState().getSelectedChromosome() + " "
 									+ this.model.getRegionSearchInputState().getSelectedEndBp() + " "

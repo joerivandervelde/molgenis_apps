@@ -50,7 +50,7 @@
 			<td colspan="4" height="10" align="center">
 				<br>
 				<span style="font-size:12px;">Select a region of the <i>C. elegans</i> genome by submitting a chromosome and a start and end position(bp) via the slider or by typing it manually. Click <a href=""style="text-decoration:none;" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__loadExample';document.forms.${screen.name}.submit();return false;">here</a> to load a tested example query.
-				Click <a target="_blank" href="WormQTLHD_toolTutorial.pdf#page=3">here</a> to see a tutorial on how to get results from this tool.
+				A <a target="_blank" href="WormQTLHD_toolTutorial.pdf#page=3">tutorial</a> is available on how to get results from this tool.
 				</span>
 			</td>
 		</tr>
