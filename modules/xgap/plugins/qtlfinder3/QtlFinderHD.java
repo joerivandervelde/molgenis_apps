@@ -373,10 +373,9 @@ public class QtlFinderHD extends QtlFinder2
 					// QTL search per probe
 					if (action.equals("traitRegionSearch"))
 					{
-						if (request.getString("traitInput") == null)
+						if (request.getString("lodThreshold") == null)
 						{
-							this.setMessages(new ScreenMessage("Please fill in a trait in the form"
-									+ "of a probe name.", false));
+							this.setMessages(new ScreenMessage("Please enter a LOD threshold", false));
 						}
 						else
 						{
@@ -561,9 +560,9 @@ public class QtlFinderHD extends QtlFinder2
 						{
 							System.out.println("Set example " + this.model.getScreenType());
 
-							this.model.getRegionSearchInputState().setSelectedStartBp(Integer.parseInt("15430739"));
-							this.model.getRegionSearchInputState().setSelectedEndBp(Integer.parseInt("16430739"));
-							this.model.getRegionSearchInputState().setSelectedChromosome("V");
+							this.model.getRegionSearchInputState().setSelectedStartBp(Integer.parseInt("10864904"));
+							this.model.getRegionSearchInputState().setSelectedEndBp(Integer.parseInt("10870172"));
+							this.model.getRegionSearchInputState().setSelectedChromosome("X");
 
 							System.out.println(this.model.getRegionSearchInputState().getSelectedChromosome() + " "
 									+ this.model.getRegionSearchInputState().getSelectedEndBp() + " "

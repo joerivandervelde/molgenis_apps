@@ -20,12 +20,9 @@
 		<br>
 	</#if>	
 	
-	<br>
-
 	<div id="imageSpace" align="center" style="display:none;"><img src="clusterdemo/icons/spinner.gif" width="200px" height="200px"/></div>
-	
 	<br>
-			
+		
 	<div id="listOfHits" style="display:block;">	
 		<#if model.showResults>	
 			<@rl.resultList model = model screen = screen/>
