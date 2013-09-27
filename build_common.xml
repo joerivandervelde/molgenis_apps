@@ -507,6 +507,12 @@ It should be used via 'import' plus passing of properties
 
 		<ivy:retrieve pattern="${lib.dir}/[artifact].[ext]" type="jar,bundle" sync="true" />
 
+		<!-- Delete fileupload because it conflicts with other RequestContext related JARs:
+			java.lang.NoSuchMethodError: org.apache.commons.fileupload.servlet.ServletFileUpload.parseRequest(Lorg/apache/commons/fileupload/RequestContext;)Ljava/util/List;
+			at org.apache.commons.fileupload.servlet.ServletFileUpload.parseRequest(ServletFileUpload.java:116)
+		 -->
+		<delete file="WebContent/WEB-INF/lib/commons-fileupload.jar" />
+		
 	</target>
 
 </project>
