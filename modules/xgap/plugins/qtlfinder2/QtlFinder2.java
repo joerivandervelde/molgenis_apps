@@ -458,8 +458,7 @@ public class QtlFinder2 extends PluginModel<Entity>
 				List<Probe> probesForThisGene = new ArrayList<Probe>();
 				for (Probe p : probes)
 				{
-					if ((p.getReportsFor_Name() != null && p.getSymbol() != null)
-							&& p.getReportsFor_Name().equals(name) || p.getSymbol().equals(name))
+					if (p.getReportsFor_Name() != null && p.getReportsFor_Name().equals(name))
 					{
 						probesForThisGene.add(p);
 					}
