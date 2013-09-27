@@ -37,48 +37,32 @@
 			</td>
 		</tr>
 		<tr>
-			<td>
-			</td>
-			<td colspan="2">
+	
+			<td colspan="3" style="padding-top:20px">
 				<div id="slider"></div>
 			</td>
-			<td>
-			</td>
-		</tr>	
-		
-		<tr>
-			<td colspan="4" height="10" align="center">
-				<br>
-				<span style="font-size:12px;">Select a region of the <i>C. elegans</i> genome by submitting a chromosome and a start and end position(bp) via the slider or by typing it manually. Click <a href=""style="text-decoration:none;" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__loadExample';document.forms.${screen.name}.submit();return false;">here</a> to load a tested example query.
-				A <a target="_blank" href="WormQTLHD_toolTutorial.pdf#page=3">tutorial</a> is available on how to get results from this tool.
-				</span>
-			</td>
-		</tr>
-	</table>
-	<br>
-	
-	<hr></hr>
-	<br>
-	
-	
-	<table align="center" width="800">
-		<tr>
-			<td colspan="3" align="center" style="font-size:10px">
-			Set the positions for your search by entering a gene name. Use this if you do not know a genes location.
-			<br><br>
+			<td colspan="2" align="center" style="font-size:10px;padding-top:20px">
 			<input id="geneInputForRegion" name="geneInputForRegion" <#if model.regionSearchInputState.inputGene??>value="${model.regionSearchInputState.inputGene}"</#if>></input>
 			
 			<button id="regionSetWithGeneInput" type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__regionSetWithGeneInput';
 					document.forms.${screen.name}.submit();"">Set region</button>
 			</td>
-		</tr>
-		<tr>
-			<td colspan="3" align="center">
-				<span style="font-size:10px;">(<i>for example:</i> daf-16, pgp-7, gst-27, WBGene00021562, WBGene00006727, ... )
-				<br>Choosing a gene and pressing 'Set region' will fill in the chromosome and start and stop positions for you.
-				</span>
-			</tr>
 		</tr>	
+		
+		<tr>
+			
+		</tr>
+		
+		<tr>
+			<td colspan="4" height="10" align="center">
+				<br>
+				<span style="font-size:12px;">Select a region of the <i>C. elegans</i> genome by submitting a chromosome and a start and end position(bp). This can be done via the slider, by typing it manually or by entering a gene so the positions and chromosome are set automatically. Click <a href=""style="text-decoration:none;" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__loadExample';document.forms.${screen.name}.submit();return false;">here</a> to load a tested example query.
+				A <a target="_blank" href="WormQTLHD_toolTutorial.pdf#page=3">tutorial</a> is available on how to get results from this tool.
+				</span>
+			</td>
+		</tr>
+		
+		
 	</table>
 	
 	
