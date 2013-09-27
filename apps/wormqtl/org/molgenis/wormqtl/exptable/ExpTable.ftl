@@ -459,6 +459,44 @@
             <a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=49">49</a>
         </td>
     </tr>
+    <tr>
+	    <td>
+	       NEMADAPT
+	    </td>
+	    <td>
+	        4 x 44K Agilent AGIWUR
+	    </td>
+	    <td>
+	        48 Wild-Isolates
+	    </td>
+	    <td>
+	       JU1511; JU1516; JU1522; JU1523; JU1545; JU1581; JU1582; JU1807; JU1937; JU1938; JU1939; JU1940; JU1941; JU1942; JU1943; JU1944; JU1945; JU1946; JU1947; JU1948; JU1949; JU1918; JU1919; JU1793; JU1920; JU1921; JU1922; JU1923; JU1924; JU1925; JU1926; JU1927; JU1928; JU1929; JU1930; JU1931; JU1932; JU1933; JU1934; JU1935; JU1936; JU314; JU396; WN2001; WN2002; WN2003
+	    </td>
+	    <td>
+	        <b>Volkers & Snoek et al. 2013;</b> Gene-environment and protein degradation signatures characterize genomic and phenotypic diversity in wild Caenorhabditis elegans populations.
+	    </td>
+	    <td>
+	        <a target="_blank" href="http://www.ncbi.nlm.nih.gov/pubmed/23957880">23957880</a>
+	    </td>
+	    <td>
+	        20oC
+	    </td>
+	    <td>
+	        L4
+	    </td>
+	    <td>
+	        OP50
+	    </td>
+	    <td>
+	        NGM Plate
+	    </td>
+	    <td>
+	        <a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=50">50</a>,
+	        <a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=51">51</a>,
+	        <a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=52">52</a>,
+	        <a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=53">53</a>
+	    </td>
+	</tr>
 </table>
 <br>
 

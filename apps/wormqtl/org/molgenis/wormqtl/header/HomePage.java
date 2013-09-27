@@ -16,6 +16,7 @@ import org.molgenis.data.Data;
 import org.molgenis.framework.db.Database;
 import org.molgenis.framework.db.Database.DatabaseAction;
 import org.molgenis.framework.db.EntitiesImporter;
+import org.molgenis.framework.db.EntityImportReport;
 import org.molgenis.framework.server.MolgenisRequest;
 import org.molgenis.framework.ui.ScreenController;
 import org.molgenis.framework.ui.ScreenMessage;
@@ -146,23 +147,38 @@ public class HomePage extends plugins.cluster.demo.ClusterDemo
 
 				// excel with everything minus USA probes
 				File wormQtlAnnotations = new File(importDir + File.separator
-						+ "wormqtl_set1_annotations_minusUSAprobes.xls");
+						+ "wormqtl_annotations.xls");
 				if (!wormQtlAnnotations.exists())
 				{
 					throw new Exception("Annotation Excel file is missing!");
 				}
-
-				// USA probes (original name: 'probes_usa.txt', but renamed for
-				// CsvImport)
-				File usaProbes = new File(importDir, "probe.tsv");
-				if (!usaProbes.exists())
+				
+				// AGI USA probes
+				File agiusaProbes = new File(importDir, "AGI_USA_probes.tsv");
+				if (!agiusaProbes.exists())
 				{
-					throw new Exception("USA probe file is missing!");
+					throw new Exception("AGI USA probe file is missing!");
 				}
+				
+				// AGI WUR probes
+//				File agiwurProbes = new File(importDir, "AGI_WUR_probes.tsv");
+//				if (!agiwurProbes.exists())
+//				{
+//					throw new Exception("AGI WUR probe file is missing!");
+//				}
 
 				EntitiesImporter entitiesImporter = new EntitiesImporterImpl(db);
-				entitiesImporter.importEntities(wormQtlAnnotations, DatabaseAction.ADD);
-				entitiesImporter.importEntities(usaProbes, DatabaseAction.ADD);
+				
+				EntityImportReport er = entitiesImporter.importEntities(wormQtlAnnotations, DatabaseAction.ADD);
+				System.out.println("imported " + er.getNrImported() + " wormqtl annotations");
+				
+				er = entitiesImporter.importEntities(agiusaProbes, "probe", DatabaseAction.ADD);
+				System.out.println("imported " + er.getNrImported() + " agi usa probes");
+				
+//				er = entitiesImporter.importEntities(agiwurProbes, "probe", DatabaseAction.ADD);
+//				System.out.println("imported " + er.getNrImported() + " agi wur probes");
+				
+				
 
 				// relink datasets
 				relinkDatasets(db, dmh);
