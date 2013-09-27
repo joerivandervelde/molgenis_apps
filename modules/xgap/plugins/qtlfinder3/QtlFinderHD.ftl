@@ -59,33 +59,41 @@
 			<#import "../qtlfinder3/MultiPlot.ftl" as mp>
 			<#import "../qtlfinder3/CompareResults.ftl" as cr>
 			<#import "../qtlfinder3/ReportScreen.ftl" as report>
+			<#import "../qtlfinder3/help.ftl" as help>
 			
 			<#-- macro's-->	
 			<@styleAndScript />
 			
-			<@browseBar model = model screen = screen/>
+			<#if model.screenType == "showHelp">
+				<@help.helpScreen />
+			<#else>
 			
-			<#if model.screenType == "humanDisease">
-				<@hd.humanDisease model = model screen = screen />
-			</#if>
+				<@browseBar model = model screen = screen/>
+				
+				<#if model.screenType == "humanDisease">
+					<@hd.humanDisease model = model screen = screen />
+				</#if>
+				
+				<#if model.screenType == "genomicRegion">
+					<@rs.regionSearch model = model screen = screen />
+				</#if>
+				
+				<#if model.screenType == "qtlLoci">
+					<@ql.qtlLoci model = model screen = screen />
+				</#if>
 			
-			<#if model.screenType == "genomicRegion">
-				<@rs.regionSearch model = model screen = screen />
-			</#if>
+				<#if model.screenType == "comparePhenotypes">
+					<@cp.comparePhenotypes model = model screen = screen /> 				
+				</#if>
+				
+				<@report.reportScreen model = model screen = screen />
+				
+				<#if model.multiplot??>
+					<@mp.multiPlot model=model screen=screen />
+				</#if>
 			
-			<#if model.screenType == "qtlLoci">
-				<@ql.qtlLoci model = model screen = screen />
-			</#if>
-		
-			<#if model.screenType == "comparePhenotypes">
-				<@cp.comparePhenotypes model = model screen = screen /> 				
-			</#if>
-			
-			<@report.reportScreen model = model screen = screen />
-			
-			<#if model.multiplot??>
-				<@mp.multiPlot model=model screen=screen />
-			</#if>
+			</#if>	
+				
 			
 		</div>
 	</form>
@@ -95,18 +103,25 @@
 	
 
 	<table align="" id="browse" >
-		<tr>
-			<td style="vertical-align:middle;">
-				Select a disease datasource:<br>
-				<select id="diseaseMapping" name="diseaseMapping" style="width:175px;float:left;" onchange="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();">
-					<#list model.humanToWorm.humanSourceNames() as source>
-						<option value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Human: ${source}</option>
-					</#list>
-					<#list model.humanToWorm.wormSourceNames() as source>
-						<option value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Worm: ${source}</option>
-					</#list>
-				</select>
-			</td>
+		<tr>	
+			<#if model.screenType == "genomicRegion" || model.screenType == "qtlLoci">
+				<td style="vertical-align:middle;">
+					<div style="width:175px;"></div>
+					
+				</td>
+			<#else>
+				<td style="vertical-align:middle;">
+					Select a disease datasource:<br>
+					<select id="diseaseMapping" name="diseaseMapping" style="width:175px;float:left;" onchange="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();">
+						<#list model.humanToWorm.humanSourceNames() as source>
+							<option value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Human: ${source}</option>
+						</#list>
+						<#list model.humanToWorm.wormSourceNames() as source>
+							<option value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Worm: ${source}</option>
+						</#list>
+					</select>
+				</td>
+			</#if>
 			<td colspan="1"></td>
 			<td align="center" style="padding-left:0px;">
 				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease"><img height="50" width="50"  src="clusterdemo/wormqtl/humanDisease.png" /></a>
@@ -213,17 +228,20 @@
 				        }
 				    });
    	
-			<#-- DROPDOWN WIDGET -->
-			$("#diseaseSelect").chosen();
-			$("#comparePheno").chosen();
-			
-			
-		
+			<#-- DROPDOWN WIDGET-->
+			$("#diseaseSelect").chosen( {enable_split_word_search:true,search_contains:true} );
+			$("#comparePheno").chosen( {enable_split_word_search:true,search_contains:true} );
+		 	
+		 	<#-- DROPDOWN WIDGET Doesnt work, header links??
+		 	$("#diseaseSelect").select2();
+		 	$("#comparePheno").select2();
+		 	-->
 		});		
 	</script>
 	
 	<#-- STYLES -->
 	<style> 
+	
 		table.dataTable tr.odd{
 			background:#EAEAEA;
 		}

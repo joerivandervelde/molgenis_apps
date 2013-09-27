@@ -21,7 +21,13 @@
 							</span>
 							</@compress>
 							</h3>
-		<hr style="border-color:#13507A;border-width:thin;">
+	
+						
+		<a target="_blank" href="comparePhenoTableLegend.txt" style="float:right;padding-right:10px;display:inline;"><img height="40" width="40" src="res/img/designgg/helpicon.gif" /></a>
+		<br>
+		<hr style="border-color:#13507A;border-width:thin;" />
+		<br>
+		
 			<table id="wormHumanTable" width="850" align="center"> 
 				<thead> 
 					<th>Vs. phenotype</th>

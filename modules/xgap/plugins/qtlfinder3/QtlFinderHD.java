@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.molgenis.framework.db.Database;
+import org.molgenis.framework.db.QueryRule;
+import org.molgenis.framework.db.QueryRule.Operator;
 import org.molgenis.framework.server.MolgenisRequest;
 import org.molgenis.framework.ui.ScreenController;
 import org.molgenis.framework.ui.ScreenMessage;
@@ -58,6 +60,14 @@ public class QtlFinderHD extends QtlFinder2
 		{
 			this.model.setCartView(false);
 			this.model.setShowResults(false);
+
+			System.out.println(request.getString("screen"));
+
+			if (this.model.getScreenType().equals("showHelp"))
+			{
+				System.out.println(this.model.getScreenType());
+				this.model.setScreenType("humanDisease");
+			}
 
 			if (this.model.getHits() != null)
 			{
@@ -228,6 +238,44 @@ public class QtlFinderHD extends QtlFinder2
 					}
 
 					// Region search
+					if (action.equals("regionSetWithGeneInput"))
+					{
+						String gene = request.getString("geneInputForRegion");
+						this.model.getRegionSearchInputState().setInputGene(gene);
+
+						if (gene == null)
+						{
+							this.setMessages(new ScreenMessage("Please enter a gene, like daf-16 or WBGene00002045",
+									false));
+						}
+						else
+						{
+							List<Gene> genes = new ArrayList<Gene>();
+
+							// TODO Is there a better way to do this?
+							genes.addAll(db.find(Gene.class, new QueryRule(Gene.SYMBOL, Operator.EQUALS, gene.trim())));
+							genes.addAll(db.find(Gene.class, new QueryRule(Gene.NAME, Operator.EQUALS, gene.trim())));
+							genes.addAll(db.find(Gene.class, new QueryRule(Gene.SEQ, Operator.EQUALS, gene.trim())));
+
+							if (genes.isEmpty())
+							{
+								this.setMessages(new ScreenMessage(
+										"Sorry, your input was not found in our gene database, please search for another gene, or make it more specific e.g. daf-16 instead of daf",
+										false));
+							}
+
+							for (Gene g : genes)
+							{
+								this.model.getRegionSearchInputState().setSelectedStartBp(
+										Integer.parseInt(g.get("bpstart").toString()));
+								this.model.getRegionSearchInputState().setSelectedEndBp(
+										Integer.parseInt((g.get("bpend").toString())));
+								this.model.getRegionSearchInputState().setSelectedChromosome(
+										g.get("chromosome_name").toString());
+							}
+						}
+					}
+
 					if (action.equals("regionSearch"))
 					{
 						if (request.getString("regionStart") == null || request.getString("regionEnd") == null)
@@ -559,6 +607,7 @@ public class QtlFinderHD extends QtlFinder2
 						if (this.model.getScreenType().equals("genomicRegion"))
 						{
 							this.model.getRegionSearchResults().setResults(null);
+							this.model.getRegionSearchInputState().setInputGene(null);
 						}
 
 					}
@@ -587,6 +636,7 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.getPhenoCompareResults().setResults(null);
 						this.model.getRegionSearchResults().setResults(null);
 						this.model.getQtlSearchResults().setResults(null);
+						this.model.getRegionSearchInputState().setInputGene(null);
 					}
 				}
 

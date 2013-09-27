@@ -1,49 +1,55 @@
 <#macro QtlFinder2 screen>
-<!-- normally you make one big form for the whole plugin-->
-<form method="post" enctype="multipart/form-data" name="${screen.name}" action="">
-	<!--needed in every form: to redirect the request to the right screen-->
-	<input type="hidden" name="__target" value="${screen.name}">
-	<!--needed in every form: to define the action. This can be set by the submit button-->
-	<input type="hidden" name="__action">
-	<!--need to be set to "true" in order to force a download-->
-	<input type="hidden" name="__show">
+<#-- normally you make one big form for the whole plugin -->
+	<form method="post" enctype="multipart/form-data" name="${screen.name}" action="">
 	
-	<input type="hidden" name="__shopMeName">
-	<input type="hidden" name="__shopMeId">
-	
-<!-- this shows a title and border -->
-	<div class="formscreen">
-		<div class="form_header" id="${screen.getName()}">
-		${screen.label}
-		</div>
+		<#-- needed in every form: to redirect the request to the right screen -->
+		<input type="hidden" name="__target" value="${screen.name}">
 		
-		<#--optional: mechanism to show messages-->
-		<#list screen.getMessages() as message>
-			<#if message.success>
-		<p class="successmessage">${message.text}</p>
+		<#--needed in every form: to define the action. This can be set by the submit button -->
+		<input type="hidden" name="__action">
+		
+		<#-- need to be set to "true" in order to force a download -->
+		<input type="hidden" name="__show">
+		
+		<input type="hidden" name="__shopMeName">
+		<input type="hidden" name="__shopMeId">
+		
+		<#-- this shows a title and border -->
+		<div class="formscreen">
+			<div class="form_header" id="${screen.getName()}">
+				${screen.label}
+			</div>
+			
+			<#--optional: mechanism to show messages-->
+			<#list screen.getMessages() as message>
+				<#if message.success>
+					<p class="successmessage">${message.text}</p>
+				<#else>
+					<p class="errormessage">${message.text}</p>
+				</#if>
+			</#list>		 
+			
+			<#--====================================-->
+			<#if screen.myModel?exists>
+				<#assign modelExists = true>
+				<#assign model = screen.myModel>
 			<#else>
-		<p class="errormessage">${message.text}</p>
+				No model. An error has occurred.
+				<#assign modelExists = false>
 			</#if>
-		</#list>
 		
-<#if screen.myModel?exists>
-	<#assign modelExists = true>
-	<#assign model = screen.myModel>
-<#else>
-	No model. An error has occurred.
-	<#assign modelExists = false>
-</#if>
+			<#if model.query??>
+				<#assign query = model.query>
+			<#else>
+				<#assign query = "">
+			</#if>
+			
+			<#assign plotWidth = (1024+50)>
+			<#assign plotHeight = (768+50)>
+			<#assign allDataTypes = "__ALL__DATATYPES__SEARCH__KEY">
+			<#--====================================-->	
 
-<#assign plotWidth = (1024+50)>
-<#assign plotHeight = (768+50)>
 
-<#if model.query??>
-	<#assign query = model.query>
-<#else>
-	<#assign query = "">
-</#if>
-
-<#assign allDataTypes = "__ALL__DATATYPES__SEARCH__KEY">
 
 <br><br>
 
@@ -126,7 +132,7 @@
 		
 		<#if model.shoppingCart[name].description??> <br> <#if model.shoppingCart[name].description?length gt 60>${model.shoppingCart[name].description?substring(0, 60)} <#else>${model.shoppingCart[name].description}</#if> <a target="_blank" href="molgenis.do?select=${model.shoppingCart[name].get(typefield)}s&__target=${model.shoppingCart[name].get(typefield)}s&__comebacktoscreen=${screen.name}&__action=filter_set&__filter_attribute=${model.shoppingCart[name].get(typefield)}_name&__filter_operator=EQUALS&__filter_value=${name}">...more</a><#else> <br> </#if></div>
 	
-		<#if (model.shoppingCart[name].get('ReportsFor_name')?? && model.shoppingCart[name].get('ReportsFor_name')?is_string && model.shoppingCart[name].get('ReportsFor_name')?length gt 0) || (model.shoppingCart[name].symbol?? && model.shoppingCart[name].symbol?length gt 0)><#if model.probeToGene[name]?? && model.probeToGene[name]?length gt 0><div style="text-align: center; float:right; padding-left:30px; position:relative; right:10px;" onmouseover="return overlib('<#if model.probeToGene[name].description??>${model.probeToGene[name].description?replace("'", "")?replace(" / ", "<br>")}<#else>No data available</#if>', CAPTION, 'Ontological terms')" onmouseout="return nd();"><img src="res/img/designgg/helpicon.gif" width="25" height="25"/><br><b>Ontologies</b></div></#if></#if>
+		<#if (model.shoppingCart[name].get('ReportsFor_name')?? && model.shoppingCart[name].get('ReportsFor_name')?is_string && model.shoppingCart[name].get('ReportsFor_name')?length gt 0) || (model.shoppingCart[name].symbol?? && model.shoppingCart[name].symbol?length gt 0)><#if model.probeToGene[name]?? && model.probeToGene[name]?length gt 0><div style="text-align: center; float:right; padding-left:30px; position:relative; right:10px;" onmouseover="return overlib('${model.probeToGene[name].description?replace("'", "")?replace(" / ", "<br>")}', CAPTION, 'Ontological terms')" onmouseout="return nd();"><img src="res/img/designgg/helpicon.gif" width="25" height="25"/><br><b>Ontologies</b></div></#if></#if>
 	
 		<br><br>
 		
@@ -731,7 +737,7 @@
 			
 			<#if model.hits[name].description??> <br> <#if model.hits[name].description?length gt 60>${model.hits[name].description?substring(0, 60)} <#else>${model.hits[name].description}</#if> <a target="_blank" href="molgenis.do?select=${model.hits[name].get(typefield)}s&__target=${model.hits[name].get(typefield)}s&__comebacktoscreen=${screen.name}&__action=filter_set&__filter_attribute=${model.hits[name].get(typefield)}_name&__filter_operator=EQUALS&__filter_value=${name}">...more</a><#else> <br> </#if></div>
 
-			<#if (model.hits[name].get('ReportsFor_name')?? && model.hits[name].get('ReportsFor_name')?is_string && model.hits[name].get('ReportsFor_name')?length gt 0) || (model.hits[name].symbol?? && model.hits[name].symbol?length gt 0)><#if model.probeToGene[name]?? && model.probeToGene[name]?length gt 0><div style=" text-align: center; float:right; padding-left:30px; position:relative; right:10px;" onmouseover="return overlib('<#if model.probeToGene[name].description??>${model.probeToGene[name].description?replace("'", "")?replace(" / ", "<br>")}<#else>No data available</#if>', CAPTION, 'Ontological terms')" onmouseout="return nd();"><img src="res/img/designgg/helpicon.gif" width="25" height="25"/><br><b>Ontologies</b></div></#if></#if>
+			<#if (model.hits[name].get('ReportsFor_name')?? && model.hits[name].get('ReportsFor_name')?is_string && model.hits[name].get('ReportsFor_name')?length gt 0) || (model.hits[name].symbol?? && model.hits[name].symbol?length gt 0)><#if model.probeToGene[name]?? && model.probeToGene[name]?length gt 0><div style=" text-align: center; float:right; padding-left:30px; position:relative; right:10px;" onmouseover="return overlib('${model.probeToGene[name].description?replace("'", "")?replace(" / ", "<br>")}', CAPTION, 'Ontological terms')" onmouseout="return nd();"><img src="res/img/designgg/helpicon.gif" width="25" height="25"/><br><b>Ontologies</b></div></#if></#if>
 
 
 			<br>

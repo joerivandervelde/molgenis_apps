@@ -1,0 +1,33 @@
+ComparePheno Table Tutorial
+
+- Vs. phenotype
+This is the phenotype for which this row is reporting. Your selected phenotype(s)
+showed overlap (in any degree) with this Vs. phenotype
+
+- From source
+The source from which the Vs. phenotype is from. 
+
+- Genes overlap
+x Vs. y -> x is the number of genes with an ortholog for your selected phenotype(s).
+y is the number of genes with an ortholog for this Vs. phenotype
+
+- Overlap details
+Shows which genes are associated with the selected phenotype(s) 
+and the Vs. phenotype. It also shows which genes are overlapping. View of genes 
+is capped at max 25.
+
+- P-value
+This value indicates whether the gene overlap is significant or not based on a 
+hypergeometric test.
+
+- Single test threshold
+The p-value threshold for when only one test would be performed
+
+- Bonferroni threshold
+The p-value threshold after multiple testing correction. 
+
+- Single test significant
+Says if the p-value is significant for single test threshold
+
+- Bonferroni significant
+Says if the p-value is significant after multiple testing correction

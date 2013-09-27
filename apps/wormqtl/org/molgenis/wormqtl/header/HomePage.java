@@ -38,7 +38,7 @@ public class HomePage extends plugins.cluster.demo.ClusterDemo
 			"app.ui.QtlFinderHDPlugin",
 
 			// allow to see genome browser
-			// "app.ui.GenomeBrowserPlugin",
+			"app.ui.GenomeBrowserPlugin",
 
 			// allow to see experiment overview
 			"app.ui.ExpTablePlugin",
