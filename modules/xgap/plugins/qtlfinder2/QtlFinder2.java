@@ -68,9 +68,6 @@ public class QtlFinder2 extends PluginModel<Entity>
 	public QtlFinder2(String name, ScreenController<?> parent)
 	{
 		super(name, parent);
-		this.model.setCartView(false);
-		this.model.setMultiplot(null);
-		this.model.setShowResults(false);
 	}
 
 	@Override
@@ -87,14 +84,6 @@ public class QtlFinder2 extends PluginModel<Entity>
 
 	public void handleRequest(Database db, MolgenisRequest request)
 	{
-
-		if (request.getString("screen") != null)
-		{
-			this.model.setScreenType(request.getString("screen"));
-			this.model.setCartView(true);
-			this.model.setMultiplot(null);
-			this.model.setShowResults(false);
-		}
 
 		if (request.getString("__action") != null)
 		{
@@ -118,7 +107,6 @@ public class QtlFinder2 extends PluginModel<Entity>
 							ObservationElement.NAME, Operator.EQUALS, shopMeName));
 					input = db.load((Class) ObservationElement.class, input);
 
-					this.model.setShowResults(true);
 					this.model.getShoppingCart().put(shopMeName, input.get(0));
 				}
 
@@ -151,8 +139,7 @@ public class QtlFinder2 extends PluginModel<Entity>
 				}
 
 				if (action.equals("gotoSearch"))
-				{
-					this.model.setShowResults(true);
+				{;
 					this.model.setCartView(false);
 					this.model.setMultiplot(null);
 				}
@@ -189,7 +176,6 @@ public class QtlFinder2 extends PluginModel<Entity>
 							permaLink.deleteCharAt(permaLink.length() - 1);
 							this.model.setPermaLink(permaLink.toString());
 
-							model.setShowResults(false);
 							model.setCartView(false);
 						}
 					}
@@ -272,7 +258,6 @@ public class QtlFinder2 extends PluginModel<Entity>
 					System.out.println("after converting genes to probes, number of hits: " + hits.size());
 					// printResults(hits);
 
-					this.model.setShowResults(true);
 					this.model.setHits(hits);
 
 				}
@@ -879,7 +864,7 @@ public class QtlFinder2 extends PluginModel<Entity>
 
 			if (model.getShoppingCart() == null)
 			{
-				this.model.setShoppingCart(new HashMap<String, Entity>());
+				this.model.setShoppingCart(null);
 			}
 
 			if (this.model.getCartView() == null)
@@ -889,19 +874,8 @@ public class QtlFinder2 extends PluginModel<Entity>
 
 			if (this.model.getHits() == null)
 			{
-				this.model.setHits(new HashMap<String, Entity>());
+				this.model.setHits(null);
 			}
-
-			if (this.model.getShowResults() == null)
-			{
-				this.model.setShowResults(false);
-			}
-
-			if (this.model.getScreenType() == null)
-			{
-				this.model.setScreenType("");
-			}
-
 		}
 		catch (Exception e)
 		{
