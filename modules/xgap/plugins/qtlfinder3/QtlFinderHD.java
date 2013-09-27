@@ -252,10 +252,24 @@ public class QtlFinderHD extends QtlFinder2
 						{
 							List<Gene> genes = new ArrayList<Gene>();
 
-							// TODO Is there a better way to do this?
 							genes.addAll(db.find(Gene.class, new QueryRule(Gene.SYMBOL, Operator.EQUALS, gene.trim())));
-							genes.addAll(db.find(Gene.class, new QueryRule(Gene.NAME, Operator.EQUALS, gene.trim())));
-							genes.addAll(db.find(Gene.class, new QueryRule(Gene.SEQ, Operator.EQUALS, gene.trim())));
+							
+							if(genes.size() == 0)
+							{
+								genes.addAll(db.find(Gene.class, new QueryRule(Gene.NAME, Operator.EQUALS, gene.trim())));
+								
+								if(genes.size() == 0)
+								{
+									genes.addAll(db.find(Gene.class, new QueryRule(Gene.SEQ, Operator.EQUALS, gene.trim())));
+								}
+							}
+							
+							if(genes.size() > 1)
+							{
+								this.setMessages(new ScreenMessage(
+										"Your gene identifier was ambiguous! We only show the first one.",
+										false));
+							}
 
 							if (genes.isEmpty())
 							{
@@ -263,15 +277,14 @@ public class QtlFinderHD extends QtlFinder2
 										"Sorry, your input was not found in our gene database, please search for another gene, or make it more specific e.g. daf-16 instead of daf",
 										false));
 							}
-
-							for (Gene g : genes)
+							else
 							{
 								this.model.getRegionSearchInputState().setSelectedStartBp(
-										Integer.parseInt(g.get("bpstart").toString()));
+										Integer.parseInt(genes.get(0).get("bpstart").toString()));
 								this.model.getRegionSearchInputState().setSelectedEndBp(
-										Integer.parseInt((g.get("bpend").toString())));
+										Integer.parseInt((genes.get(0).get("bpend").toString())));
 								this.model.getRegionSearchInputState().setSelectedChromosome(
-										g.get("chromosome_name").toString());
+										genes.get(0).get("chromosome_name").toString());
 							}
 						}
 					}
@@ -486,7 +499,7 @@ public class QtlFinderHD extends QtlFinder2
 						else
 						{
 							startBp = (int) (((double) selectedChr.getBpLength()) / 10.0);
-							endBp = (int) (((double) selectedChr.getBpLength()) / 6.0);
+							endBp = (int) (((double) selectedChr.getBpLength()) / 9.0);
 						}
 
 						this.model.getRegionSearchInputState().setSelectedStartBp(startBp);
