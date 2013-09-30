@@ -165,7 +165,7 @@
 <#--- SCRIPTS --->
 	<script>
 		$(document).ready(function(){
-			
+
 			<#-- CUSTOM JQUERY SORTING FOR SCIENTIFIC ANNOTATION -->
 			jQuery.fn.dataTableExt.oSort["scientific-pre"] = function ( a ) {
         		return parseFloat(a);
@@ -181,15 +181,31 @@
 			
 			
 			<#-- TABLE WIDGET -->
-			$( "#wormHumanTable" ).dataTable( {
-			
+			var oTable = $( "#wormHumanTable" ).dataTable( {
+
 				"oLanguage": {
          			"sSearch": "Filter:"
        			},
-			 
+       			
 				"aaSorting": [[4, "asc" ]],
 				"aoColumns":[null, null, null, null, {"sType" : "scientific" }, null, null, null, null], 
 				
+			});
+			
+			oTable.fnFilter('YES', 7);
+
+			$("#setFilterToNo").click(function(){
+				oTable.fnFilter('', 7);
+				document.getElementById('setFilterToYes').style.display='inline';
+				document.getElementById('setFilterToNo').style.display='none'; 
+				return false;
+			});
+			
+			$("#setFilterToYes").click(function(){
+				oTable.fnFilter('YES', 7);
+				document.getElementById('setFilterToNo').style.display='inline';
+				document.getElementById('setFilterToYes').style.display='none'; 
+				return false;
 			});
 			
 			$( "#hitList" ).dataTable({

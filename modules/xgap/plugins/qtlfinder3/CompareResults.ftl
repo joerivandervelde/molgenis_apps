@@ -22,7 +22,10 @@
 							</@compress>
 							</h3>
 	
+			<hr style="border-color:#13507A;border-width:thin;" />
 			<div id="hiddenTableColumnExplanation" style="display:none">
+				<a onclick="document.getElementById('notHiddenTableColumnExplanation').style.display='inline';document.getElementById('hiddenTableColumnExplanation').style.display='none';" style="float:right;padding-right:12px;"><img height="40" width="40" src="res/img/designgg/helpicon.gif" /></a>
+				
 				<ul>
 					<li>
 								<b>Vs. phenotype</b> <br>
@@ -75,23 +78,22 @@
 								Says if the p-value is significant after multiple testing correction
 					</li>
 				</ul>
-				
-				<a onclick="document.getElementById('notHiddenTableColumnExplanation').style.display='inline';document.getElementById('hiddenTableColumnExplanation').style.display='none';" style="float:right;padding-right:10px;display:inline;"><img height="40" width="40" src="res/img/designgg/helpicon.gif" /></a>
-								
+						
 			</div>
 			
+			
 			<div id="notHiddenTableColumnExplanation" style="display:inline;">
-				<a onclick="document.getElementById('hiddenTableColumnExplanation').style.display='inline';document.getElementById('notHiddenTableColumnExplanation').style.display='none';" style="float:right;padding-right:10px;display:inline;"><img height="40" width="40" src="res/img/designgg/helpicon.gif" /></a>	
+				<a onclick="document.getElementById('hiddenTableColumnExplanation').style.display='inline';document.getElementById('notHiddenTableColumnExplanation').style.display='none';" style="float:right;padding-right:12px;"><img height="40" width="40" src="res/img/designgg/helpicon.gif" /></a>	
 			</div>
+		
+			<div class="buttons">
+			 	<button  id="setFilterToYes" style="margin-left:10px;float:left;display:none;cursor:pointer;">Hide non-significant hits</button>			 	
+	    	</div>	
+	    	
+	    	<div class="buttons">
+			 	<button  id="setFilterToNo" style="margin-left:10px;display:inline;float:left;cursor:pointer;">Show all hits</button>			 	
+	    	</div>
 				
-			<br>
-			<hr style="border-color:#13507A;border-width:thin;" />
-			<br>			
-					
-		
-		
-		
-		
 			<table id="wormHumanTable" width="850" align="center"> 
 				<thead> 
 					<th>Vs. phenotype</th>
