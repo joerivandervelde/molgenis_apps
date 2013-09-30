@@ -7,7 +7,7 @@
 				&nbsp;
 			</td>
 		</tr>
-		<tr align="center">
+		<tr align="left">
 			<td style="padding-left:10px;" width="50">
 				Chromosome:<br> 
 				<select id="regionChr" name="regionChr">
@@ -22,7 +22,21 @@
 			<td style="padding-left:10px;" width="50">
 				End bp:<br> <input title="ending index" id="regionEnd" name="regionEnd" type="text" value="${model.regionSearchInputState.selectedEndBp?c}" size="10"/>
 			</td>
-			<td style="padding-left: 10px;padding-top:10px;" width="200">
+			
+			<td "padding-left:25px;" width="50" >
+			Use gene location:<br> <input id="geneInputForRegion" name="geneInputForRegion" placeholder="pgp-7, WBGene00000023" <#if model.regionSearchInputState.inputGene??>value="${model.regionSearchInputState.inputGene}"</#if>></input>
+			<button id="regionSetWithGeneInput" type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__regionSetWithGeneInput';
+					document.forms.${screen.name}.submit();"">Set</button>
+			</td>
+		</tr>
+		
+		<tr><td>&nbsp;</td></tr>
+		
+		<tr>
+		<td colspan="3" style="padding-top:20px">
+				<div id="slider"></div>
+			</td>
+			<td style="padding-left:40px;padding-top:10px;" width="200" colspan="1">
 				<div class="buttons">
 					<button style="color:blue;" type="submit" onclick="document.getElementById('listOfHits').style.display = 'none';document.getElementById('imageSpace').style.display = 'block';
 					document.forms.${screen.name}.__action.value = '__qtlfinderhd__regionSearch';
@@ -35,23 +49,7 @@
 			 		document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset</button>			 	
 	    		</div>			
 			</td>
-		</tr>
-		<tr>
-	
-			<td colspan="3" style="padding-top:20px">
-				<div id="slider"></div>
-			</td>
-			<td colspan="2" align="center" style="font-size:10px;padding-top:20px">
-			<input id="geneInputForRegion" name="geneInputForRegion" <#if model.regionSearchInputState.inputGene??>value="${model.regionSearchInputState.inputGene}"</#if>></input>
-			
-			<button id="regionSetWithGeneInput" type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__regionSetWithGeneInput';
-					document.forms.${screen.name}.submit();"">Set region</button>
-			</td>
 		</tr>	
-		
-		<tr>
-			
-		</tr>
 		
 		<tr>
 			<td colspan="4" height="10" align="center">
