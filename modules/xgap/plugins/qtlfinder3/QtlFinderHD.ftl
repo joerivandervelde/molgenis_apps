@@ -62,7 +62,7 @@
 			<#import "../qtlfinder3/help.ftl" as help>
 			
 			<#-- macro's-->	
-			<@styleAndScript />
+			<@styleAndScript model = model />
 			
 			<#if model.screenType == "showHelp">
 				<@help.helpScreen />
@@ -161,7 +161,7 @@
 	<hr style="border-color:#13507A;border-width:thin;">
 </#macro>
 
-<#macro styleAndScript>
+<#macro styleAndScript model>
 <#--- SCRIPTS --->
 	<script>
 		$(document).ready(function(){
@@ -181,6 +181,7 @@
 			
 			
 			<#-- TABLE WIDGET -->
+			<#if model.phenoCompareResults.results?? && model.screenType="comparePhenotypes">
 			var oTable = $( "#wormHumanTable" ).dataTable( {
 
 				"oLanguage": {
@@ -191,6 +192,7 @@
 				"aoColumns":[null, null, null, null, {"sType" : "scientific" }, null, null, null, null], 
 				
 			});
+			
 			
 			oTable.fnFilter('YES', 7);
 
@@ -207,6 +209,8 @@
 				document.getElementById('setFilterToYes').style.display='none'; 
 				return false;
 			});
+			
+			</#if>
 			
 			$( "#hitList" ).dataTable({
 			
