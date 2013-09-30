@@ -23,8 +23,8 @@
 				End bp:<br> <input title="ending index" id="regionEnd" name="regionEnd" type="text" value="${model.regionSearchInputState.selectedEndBp?c}" size="10"/>
 			</td>
 			
-			<td "padding-left:25px;" width="50" >
-			Use gene location:<br> <input id="geneInputForRegion" name="geneInputForRegion" placeholder="pgp-7, WBGene00000023" <#if model.regionSearchInputState.inputGene??>value="${model.regionSearchInputState.inputGene}"</#if>></input>
+			<td "padding-left:25px;" width="80px">
+			Use gene location:<br> <input id="geneInputForRegion" name="geneInputForRegion" placeholder="e.g. pgp-7, C50F2.9, WBGenes, " <#if model.regionSearchInputState.inputGene??>value="${model.regionSearchInputState.inputGene}"</#if>></input>
 			<button id="regionSetWithGeneInput" type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__regionSetWithGeneInput';
 					document.forms.${screen.name}.submit();"">Set</button>
 			</td>
