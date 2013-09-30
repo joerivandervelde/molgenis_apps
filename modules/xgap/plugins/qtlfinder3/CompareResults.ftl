@@ -22,11 +22,75 @@
 							</@compress>
 							</h3>
 	
-						
-		<a target="_blank" href="comparePhenoTableLegend.txt" style="float:right;padding-right:10px;display:inline;"><img height="40" width="40" src="res/img/designgg/helpicon.gif" /></a>
-		<br>
-		<hr style="border-color:#13507A;border-width:thin;" />
-		<br>
+			<div id="hiddenTableColumnExplanation" style="display:none">
+				<ul>
+					<li>
+								<b>Vs. phenotype</b> <br>
+								
+								This is the phenotype for which this row is reporting.<br> 
+								Your selected phenotype(s) showed overlap (in any degree) with this Vs. phenotype
+					</li>			
+								<br>
+					<li>			
+								<b>From source </b> <br>
+								The source from which the Vs. phenotype is from. 
+					</li>			
+								<br>
+					<li>		
+								<b>Genes overlap </b> <br>
+								x Vs. y -> x is the number of genes with an ortholog for your selected phenotype(s).
+								y is the number of genes with an ortholog for this Vs. phenotype
+					</li>			
+								<br>			
+					<li>		
+								<b>Overlap details </b> <br>
+								Shows which genes are associated with the selected phenotype(s) 
+								and the Vs. phenotype. It also shows which genes are overlapping. View of genes 
+								is capped at max 25.
+					</li>			
+								<br>
+					<li>		
+								<b>P-value </b> <br>
+								This value indicates whether the gene overlap is significant or not based on a 
+								hypergeometric test.
+					</li>			
+								<br>
+					<li>		
+								<b>Single test threshold </b> <br>
+								The p-value threshold for when only one test would be performed
+					</li>			
+								<br>
+					<li>		
+								<b>Bonferroni threshold </b> <br>
+								The p-value threshold after multiple testing correction. 
+					</li>			
+								<br>
+					<li>		
+								<b>Single test significant </b> <br>
+								Says if the p-value is significant for single test threshold
+					</li>			
+								<br>
+					<li>		
+								<b>Bonferroni significant </b> <br>
+								Says if the p-value is significant after multiple testing correction
+					</li>
+				</ul>
+				
+				<a onclick="document.getElementById('notHiddenTableColumnExplanation').style.display='inline';document.getElementById('hiddenTableColumnExplanation').style.display='none';" style="float:right;padding-right:10px;display:inline;"><img height="40" width="40" src="res/img/designgg/helpicon.gif" /></a>
+								
+			</div>
+			
+			<div id="notHiddenTableColumnExplanation" style="display:inline;">
+				<a onclick="document.getElementById('hiddenTableColumnExplanation').style.display='inline';document.getElementById('notHiddenTableColumnExplanation').style.display='none';" style="float:right;padding-right:10px;display:inline;"><img height="40" width="40" src="res/img/designgg/helpicon.gif" /></a>	
+			</div>
+				
+			<br>
+			<hr style="border-color:#13507A;border-width:thin;" />
+			<br>			
+					
+		
+		
+		
 		
 			<table id="wormHumanTable" width="850" align="center"> 
 				<thead> 
