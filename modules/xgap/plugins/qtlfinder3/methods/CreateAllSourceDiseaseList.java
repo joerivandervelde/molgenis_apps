@@ -5,12 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.molgenis.framework.server.MolgenisRequest;
-
 public class CreateAllSourceDiseaseList
 {
 	
-	public Map<String, List<String>> createAllSourceDiseaseList(MolgenisRequest request){
+	public static Map<String, List<String>> createAllSourceDiseaseList(List<String> list){
 
 		Map<String, List<String>> sourcesAndDiseases = new HashMap<String, List<String>>();
 		
@@ -18,7 +16,7 @@ public class CreateAllSourceDiseaseList
 		String source = new String();
 		String[] split = null;
 		
-		for(String diseaseInput : request.getList("diseaseSelect")){
+		for(String diseaseInput : list){
 
 			split = diseaseInput.toString().split("\\|\\|\\%\\|\\|");
 			

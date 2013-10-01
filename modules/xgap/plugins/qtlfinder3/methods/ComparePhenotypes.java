@@ -34,6 +34,25 @@ public class ComparePhenotypes
 	}
 
 	/**
+	 * 
+	 * @param human2worm
+	 * @param Map
+	 * @throws Exception
+	 */
+	public static ComparePhenotypesResult ComparePhenotypesHumanMultiSource(HumanToWorm h2w, Map<String, List<String>> sourcesAndDiseases)
+			throws Exception
+	{
+		Set<String> humanGenesForThisHumanDisease = new HashSet<String>();
+		for (String source : sourcesAndDiseases.keySet())
+			for(String p : sourcesAndDiseases.get(source))
+		{
+			humanGenesForThisHumanDisease.addAll(h2w.humanDiseaseToHumanGenes(p, source));
+		}
+		
+		return compare(h2w, humanGenesForThisHumanDisease);
+	}
+	
+	/**
 	 * compare a custom list of worm probes (e.g. as result from a region
 	 * select) vs. human diseases
 	 * 

@@ -215,8 +215,7 @@ public class QtlFinderHD extends QtlFinder2
 						if(this.model.getDiseaseMapping().equals("All Human Sources")){
 							List<String> diseases = new ArrayList<String>();
 							
-							CreateAllSourceDiseaseList call = new CreateAllSourceDiseaseList();
-							Map<String, List<String>> sourcesAndDiseases = call.createAllSourceDiseaseList(request);
+							Map<String, List<String>> sourcesAndDiseases = CreateAllSourceDiseaseList.createAllSourceDiseaseList(request.getList("diseaseSelect"));
 							
 							for(String key : sourcesAndDiseases.keySet()){
 								for(String disease : sourcesAndDiseases.get(key)){
@@ -507,6 +506,22 @@ public class QtlFinderHD extends QtlFinder2
 						if(this.model.getDiseaseMapping().equals("All Human Sources")){
 							
 							
+							Map<String, List<String>> sourcesAndDiseases = CreateAllSourceDiseaseList.createAllSourceDiseaseList(request.getList("comparePheno"));
+							
+							Set<String> phenoDiseases = new HashSet<String>(request.getList("comparePheno"));
+							for(String key : sourcesAndDiseases.keySet()){
+								for(String disease : sourcesAndDiseases.get(key)){
+									phenoDiseases.add(disease);
+								}
+							}
+							
+							ComparePhenotypesResult res = null;	
+							res = ComparePhenotypes.ComparePhenotypesHumanMultiSource(this.model.getHumanToWorm(), sourcesAndDiseases);		
+	
+							res.setSampleInputs(phenoDiseases);
+							res.setSampleSource(this.model.getDiseaseMapping());
+							this.model.getPhenoCompareResults().setResults(res);
+							
 						}else{
 						
 							Set<String> phenoDiseases = new HashSet<String>(request.getList("comparePheno"));
@@ -517,8 +532,7 @@ public class QtlFinderHD extends QtlFinder2
 	
 							if (this.model.getHumanToWorm().humanSourceNames().contains(this.model.getDiseaseMapping()))
 							{
-								res = ComparePhenotypes.comparePhenotypesHuman(this.model.getHumanToWorm(),
-										this.model.getDiseaseMapping(), phenoDiseases);
+								res = ComparePhenotypes.comparePhenotypesHuman(this.model.getHumanToWorm(), this.model.getDiseaseMapping(), phenoDiseases);
 							}
 							else if (this.model.getHumanToWorm().wormSourceNames().contains(this.model.getDiseaseMapping()))
 							{
