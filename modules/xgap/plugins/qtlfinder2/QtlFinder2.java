@@ -139,7 +139,8 @@ public class QtlFinder2 extends PluginModel<Entity>
 				}
 
 				if (action.equals("gotoSearch"))
-				{;
+				{
+					this.model.setShowResults(true);
 					this.model.setCartView(false);
 					this.model.setMultiplot(null);
 				}
@@ -176,7 +177,8 @@ public class QtlFinder2 extends PluginModel<Entity>
 							permaLink.deleteCharAt(permaLink.length() - 1);
 							this.model.setPermaLink(permaLink.toString());
 
-							model.setCartView(false);
+							this.model.setCartView(false);
+							this.model.setShowResults(true);
 						}
 					}
 				}
