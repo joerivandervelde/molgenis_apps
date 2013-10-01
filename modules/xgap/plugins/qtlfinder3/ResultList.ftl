@@ -13,16 +13,19 @@
 			<h3>Found <#if model.hits?? && model.hits?size == 100>many<#else>${model.hits?size}</#if> hits.</h3>
 			
 			<h4>
-				<#if model.shortenedQuery??>
-					<br>Your query was too specific for any hits, so it was shortened to <u>${model.shortenedQuery}</u>.
-				</#if>
-				
-				<#if model.hits?? && model.hits?size == 100 && model.shortenedQuery??>
-					<br>These results were limited to the first 100.
-				<#elseif model.hits?? && model.hits?size == 100>
-					<br>Your results were limited to the first 100. Please be more specific.
+				<#if model.screenType == "qtlLoci">
+					<#-- do nothing -->
 				<#else>
-			
+					<#if model.shortenedQuery??>
+						<br>Your query was too specific for any hits, so it was shortened to <u>${model.shortenedQuery}</u>.
+					</#if>
+					<#if model.hits?? && model.hits?size == 100 && model.shortenedQuery??>
+						<br>These results were limited to the first 100.
+					<#elseif model.hits?? && model.hits?size == 100>
+						<br>Your results were limited to the first 100. Please be more specific.
+					<#else>
+				
+					</#if>
 				</#if>
 			</h4>
 			
