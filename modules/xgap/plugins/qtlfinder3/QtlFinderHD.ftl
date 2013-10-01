@@ -113,6 +113,7 @@
 				<td style="vertical-align:middle;">
 					Select a disease datasource:<br>
 					<select id="diseaseMapping" name="diseaseMapping" style="width:175px;float:left;" onchange="document.forms.${screen.name}.__action.value = '__qtlfinderhd__mappingChange';document.forms.${screen.name}.submit();">
+						<option value="All Human Sources" <#if model.diseaseMapping?? && model.diseaseMapping == "allHumanSources">selected="selected"</#if>>Misc: All Human Sources</option>
 						<#list model.humanToWorm.humanSourceNames() as source>
 							<option value="${source}" <#if model.diseaseMapping?? && model.diseaseMapping == "${source}">selected="selected"</#if>>Human: ${source}</option>
 						</#list>
