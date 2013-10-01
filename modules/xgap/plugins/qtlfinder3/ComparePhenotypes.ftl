@@ -16,7 +16,11 @@
 				<td width="200" style="padding-left:25px;">
 					<select data-placeholder="Select one or multiple diseases" multiple class=" ui-widget-content ui-corner-all" id="comparePheno" name="comparePheno"  style="width:500px;">
 					<#if model.diseaseMapping == "All Human Sources">
-						Nothing to do here OMG
+						<#list model.humanToWorm.humanSourceNames() as source>
+							<#list model.humanToWorm.humanDiseasesWithOrthology(source) as disease>
+								<option value="${disease}||%||${source}" <#if model.diseaseSearchInputState.selectedDiseases?? && model.diseaseSearchInputState.selectedDiseases?seq_contains(disease)>SELECTED</#if>>[${source}] ${disease}</option>
+							</#list>
+						</#list>
 					<#elseif model.humanToWorm.humanSourceNames()?seq_contains(model.diseaseMapping)>
 						<#list model.humanToWorm.humanDiseasesWithOrthology(model.diseaseMapping) as phenotype>
 							<option value="${phenotype}" <#if model.diseaseSearchInputState.selectedDiseases?? && model.diseaseSearchInputState.selectedDiseases?seq_contains(phenotype)>SELECTED</#if>>${phenotype} </option>
