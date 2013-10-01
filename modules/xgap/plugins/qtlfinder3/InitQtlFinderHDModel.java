@@ -76,7 +76,7 @@ public class InitQtlFinderHDModel
 		newModel.setHumanToWorm(h2w);
 
 		//
-		newModel.setDiseaseMapping(newModel.getHumanToWorm().humanSourceNames().toArray()[0].toString());
+		newModel.setDiseaseMapping("All Human Sources");
 
 		//
 		newModel.getQtlSearchInputState().setSelectedDataSet(newModel.getQtlSearchInputState().getDataSets().get(0));
