@@ -24,7 +24,7 @@
 	
 			<hr style="border-color:#13507A;border-width:thin;" />
 			<div id="hiddenTableColumnExplanation" style="display:none">
-				<a onclick="document.getElementById('notHiddenTableColumnExplanation').style.display='inline';document.getElementById('hiddenTableColumnExplanation').style.display='none';" style="float:right;padding-right:12px;"><img height="40" width="40" src="res/img/designgg/helpicon.gif" /></a>
+				<a onclick="document.getElementById('notHiddenTableColumnExplanation').style.display='inline';document.getElementById('hiddenTableColumnExplanation').style.display='none';" style="float:right;padding-right:12px;cursor:pointer;"><img style="cursor:pointer;" height="40" width="40" src="res/img/designgg/helpicon.gif" /></a>
 				
 				<ul>
 					<li>
@@ -83,7 +83,7 @@
 			
 			
 			<div id="notHiddenTableColumnExplanation" style="display:inline;">
-				<a onclick="document.getElementById('hiddenTableColumnExplanation').style.display='inline';document.getElementById('notHiddenTableColumnExplanation').style.display='none';" style="float:right;padding-right:12px;"><img height="40" width="40" src="res/img/designgg/helpicon.gif" /></a>	
+				<a onclick="document.getElementById('hiddenTableColumnExplanation').style.display='inline';document.getElementById('notHiddenTableColumnExplanation').style.display='none';" style="float:right;padding-right:12px;cursor:pointer;"><img style="cursor:pointer;" height="40" width="40" src="res/img/designgg/helpicon.gif" /></a>	
 			</div>
 		
 			<div class="buttons">
@@ -93,6 +93,8 @@
 	    	<div class="buttons">
 			 	<button  id="setFilterToNo" style="margin-left:10px;display:inline;float:left;cursor:pointer;">Show all hits</button>			 	
 	    	</div>
+				
+			<br><br><br>
 				
 			<table id="wormHumanTable" width="850" align="center"> 
 				<thead> 
