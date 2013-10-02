@@ -40,11 +40,11 @@
 			<br><br>
 		</#if>	
 		<#if model.regionSearchResults.results?? && model.screenType="genomicRegion">
-			<@cr.compareResults results = model.regionSearchResults.results />
+			<@cr.compareResults results = model.regionSearchResults.results model = model />
 			<br><br>
 		</#if>
 		<#if model.qtlSearchResults.results?? && model.screenType="qtlLoci">
-			<@cr.compareResults results = model.qtlSearchResults.results />
+			<@cr.compareResults results = model.qtlSearchResults.results model = model />
 			<br><br>
 		</#if>
 				
