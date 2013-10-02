@@ -437,6 +437,10 @@ public class QtlFinderHD extends QtlFinder2
 						{
 							this.setMessages(new ScreenMessage("Please enter a LOD threshold", false));
 						}
+						else if(request.getString("lodThreshold").contains("-"))
+						{
+							this.setMessages(new ScreenMessage("Negative LOD thresholds are not handled, please remove the '-'", false));
+						}
 						else
 						{
 							this.model.getQtlSearchInputState().setTraitInput(request.getString("traitInput"));
