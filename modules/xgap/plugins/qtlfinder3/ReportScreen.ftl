@@ -3,6 +3,7 @@
 	<#if model.hits??>
 		
 		<#if model.shoppingCart?size gt 100><div align="center"><h3><font>Attention, you have selected many probes: ${model.shoppingCart?size}. This will take approximately ${model.shoppingCart?size * 0.6} seconds.  </font> </h3></div></#if>
+		<br>
 		
 		<div class="buttons"><button type="submit" onclick="document.forms.${screen.name}.__action.value = 'gotoSearch'; document.forms.${screen.name}.submit();"><img src="generated-res/img/listview.png" alt=""/> View hits (${model.hits?size})</button></div>
 		<div class="buttons"><button type="submit" onclick="document.forms.${screen.name}.__action.value = 'gotoCart'; document.forms.${screen.name}.submit();"><img src="generated-res/img/listview.png" alt=""/> View cart (${model.shoppingCart?keys?size})</button></div>
