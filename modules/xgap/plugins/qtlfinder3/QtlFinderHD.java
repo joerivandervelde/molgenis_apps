@@ -358,8 +358,6 @@ public class QtlFinderHD extends QtlFinder2
 
 						else
 						{
-							this.model.setShowAnyResultToUser("show");
-							this.model.setShowResults(true);
 
 							Integer start = request.getInt("regionStart");
 							Integer end = request.getInt("regionEnd");
@@ -379,6 +377,9 @@ public class QtlFinderHD extends QtlFinder2
 							{
 								this.model.getHits().put(p.getName(), p);
 							}
+							
+							this.model.setShowAnyResultToUser("show");
+							this.model.setShowResults(true);
 						}
 					}
 
