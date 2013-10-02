@@ -504,50 +504,55 @@ public class QtlFinderHD extends QtlFinder2
 					// Phenotype comparison with worm list selection
 					if (action.equals("comparePhenotypes"))
 					{
-						if(this.model.getDiseaseMapping().equals("All Human Sources")){
-							
-							
-							Map<String, List<String>> sourcesAndDiseases = CreateAllSourceDiseaseList.createAllSourceDiseaseList(request.getList("comparePheno"));
-							
-							Set<String> phenoDiseases = new HashSet<String>();
-							for(String key : sourcesAndDiseases.keySet()){
-								for(String disease : sourcesAndDiseases.get(key)){
-									phenoDiseases.add(disease + " [" + key + "]");
-								}
-							}
-							
-							ComparePhenotypesResult res = null;	
-							res = ComparePhenotypes.ComparePhenotypesHumanMultiSource(this.model.getHumanToWorm(), sourcesAndDiseases);		
-	
-							res.setSampleInputs(phenoDiseases);
-							res.setSampleSource(this.model.getDiseaseMapping());
-							this.model.getPhenoCompareResults().setResults(res);
-							
+						if(request.getList("comparePheno") == null){
+							this.setMessages(new ScreenMessage("Please select a disease to compare", false));
 						}else{
 						
-							Set<String> phenoDiseases = new HashSet<String>(request.getList("comparePheno"));
-	
-							this.model.setShowAnyResultToUser("show");
-	
-							ComparePhenotypesResult res = null;
-	
-							if (this.model.getHumanToWorm().humanSourceNames().contains(this.model.getDiseaseMapping()))
-							{
-								res = ComparePhenotypes.comparePhenotypesHuman(this.model.getHumanToWorm(), this.model.getDiseaseMapping(), phenoDiseases);
+							if(this.model.getDiseaseMapping().equals("All Human Sources")){
+								
+								
+								Map<String, List<String>> sourcesAndDiseases = CreateAllSourceDiseaseList.createAllSourceDiseaseList(request.getList("comparePheno"));
+								
+								Set<String> phenoDiseases = new HashSet<String>();
+								for(String key : sourcesAndDiseases.keySet()){
+									for(String disease : sourcesAndDiseases.get(key)){
+										phenoDiseases.add(disease + " [" + key + "]");
+									}
+								}
+								
+								ComparePhenotypesResult res = null;	
+								res = ComparePhenotypes.ComparePhenotypesHumanMultiSource(this.model.getHumanToWorm(), sourcesAndDiseases);		
+		
+								res.setSampleInputs(phenoDiseases);
+								res.setSampleSource(this.model.getDiseaseMapping());
+								this.model.getPhenoCompareResults().setResults(res);
+								
+							}else{
+							
+								Set<String> phenoDiseases = new HashSet<String>(request.getList("comparePheno"));
+		
+								this.model.setShowAnyResultToUser("show");
+		
+								ComparePhenotypesResult res = null;
+		
+								if (this.model.getHumanToWorm().humanSourceNames().contains(this.model.getDiseaseMapping()))
+								{
+									res = ComparePhenotypes.comparePhenotypesHuman(this.model.getHumanToWorm(), this.model.getDiseaseMapping(), phenoDiseases);
+								}
+								else if (this.model.getHumanToWorm().wormSourceNames().contains(this.model.getDiseaseMapping()))
+								{
+									res = ComparePhenotypes.comparePhenotypesWorm(this.model.getHumanToWorm(),
+											this.model.getDiseaseMapping(), phenoDiseases);
+								}
+								else
+								{
+									throw new Exception("Source unknown: " + this.model.getDiseaseMapping());
+								}
+		
+								res.setSampleInputs(phenoDiseases);
+								res.setSampleSource(this.model.getDiseaseMapping());
+								this.model.getPhenoCompareResults().setResults(res);
 							}
-							else if (this.model.getHumanToWorm().wormSourceNames().contains(this.model.getDiseaseMapping()))
-							{
-								res = ComparePhenotypes.comparePhenotypesWorm(this.model.getHumanToWorm(),
-										this.model.getDiseaseMapping(), phenoDiseases);
-							}
-							else
-							{
-								throw new Exception("Source unknown: " + this.model.getDiseaseMapping());
-							}
-	
-							res.setSampleInputs(phenoDiseases);
-							res.setSampleSource(this.model.getDiseaseMapping());
-							this.model.getPhenoCompareResults().setResults(res);
 						}
 					}
 
