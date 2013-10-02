@@ -671,7 +671,8 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.getDiseaseSearchInputState().setSelectedDiseases(null);
 						this.model.getDiseaseSearchResults().setDiseaseSearchHits(null);
 						this.model.setShowAnyResultToUser(null);
-
+						this.model.setDiseaseMapping("All Human Sources");
+						
 						if (this.model.getScreenType().equals("comparePhenotypes"))
 						{
 							this.model.getPhenoCompareResults().setResults(null);
@@ -715,6 +716,7 @@ public class QtlFinderHD extends QtlFinder2
 						this.model.getRegionSearchResults().setResults(null);
 						this.model.getQtlSearchResults().setResults(null);
 						this.model.getRegionSearchInputState().setInputGene(null);
+						this.model.setDiseaseMapping("All Human Sources");
 					}
 				}
 
