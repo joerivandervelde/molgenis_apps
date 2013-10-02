@@ -87,10 +87,6 @@
 				</#if>
 				
 				<@report.reportScreen model = model screen = screen />
-				
-				<#if model.multiplot??>
-					<@mp.multiPlot model=model screen=screen />
-				</#if>
 			
 			</#if>	
 				
@@ -182,35 +178,39 @@
 			
 			
 			<#-- TABLE WIDGET -->
-			<#if model.screenType != "humanDisease"> 
-				<#if model.phenoCompareResults.results?? || model.regionSearchResults.results?? || model.qtlSearchResults.results??>
-					var oTable = $( "#wormHumanTable" ).dataTable( {
-		
-						"oLanguage": {
-		         			"sSearch": "Filter:"
-		       			},
-		       			
-						"aaSorting": [[4, "asc" ]],
-						"aoColumns":[null, null, null, null, {"sType" : "scientific" }, null, null, null, null], 
+			<#if model.multiplot?? || model.showResults || model.cartView>
+				<#-- We do not use this JQuery when this is the case -->
+			<#else>
+				<#if model.screenType != "humanDisease"> 
+					<#if model.phenoCompareResults.results?? || model.regionSearchResults.results?? || model.qtlSearchResults.results??>
+						var oTable = $( "#wormHumanTable" ).dataTable( {
+			
+							"oLanguage": {
+			         			"sSearch": "Filter:"
+			       			},
+			       			
+							"aaSorting": [[4, "asc" ]],
+							"aoColumns":[null, null, null, null, {"sType" : "scientific" }, null, null, null, null], 
+							
+						});
 						
-					});
-					
-					
-					oTable.fnFilter('YES', 7);
-		
-					$("#setFilterToNo").click(function(){
-						oTable.fnFilter('', 7);
-						document.getElementById('setFilterToYes').style.display='inline';
-						document.getElementById('setFilterToNo').style.display='none'; 
-						return false;
-					});
-					
-					$("#setFilterToYes").click(function(){
+						
 						oTable.fnFilter('YES', 7);
-						document.getElementById('setFilterToNo').style.display='inline';
-						document.getElementById('setFilterToYes').style.display='none'; 
-						return false;
-					});
+			
+						$("#setFilterToNo").click(function(){
+							oTable.fnFilter('', 7);
+							document.getElementById('setFilterToYes').style.display='inline';
+							document.getElementById('setFilterToNo').style.display='none'; 
+							return false;
+						});
+						
+						$("#setFilterToYes").click(function(){
+							oTable.fnFilter('YES', 7);
+							document.getElementById('setFilterToNo').style.display='inline';
+							document.getElementById('setFilterToYes').style.display='none'; 
+							return false;
+						});
+					</#if>
 				</#if>
 			</#if>
 			

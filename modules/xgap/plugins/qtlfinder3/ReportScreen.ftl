@@ -29,25 +29,27 @@
 		<#if model.showResults>	
 			<@rl.resultList model = model screen = screen/>
 			<br><br>		
-		</#if>	
 			
-		<#if model.cartView>
+		<#elseif model.cartView>
 			<@sc.shoppingCart model = model screen = screen />
 			<br><br>
-		</#if>
-	
-		<#if model.phenoCompareResults.results?? && model.screenType="comparePhenotypes">
+			
+		<#elseif model.multiplot??>
+			<@mp.multiPlot model=model screen=screen />
+			<br><br>
+			
+		<#elseif model.phenoCompareResults.results?? && model.screenType="comparePhenotypes">
 			<@cr.compareResults results = model.phenoCompareResults.results model = model />
 			<br><br>
-		</#if>	
-		<#if model.regionSearchResults.results?? && model.screenType="genomicRegion">
+
+		<#elseif model.regionSearchResults.results?? && model.screenType="genomicRegion">
 			<@cr.compareResults results = model.regionSearchResults.results model = model />
 			<br><br>
-		</#if>
-		<#if model.qtlSearchResults.results?? && model.screenType="qtlLoci">
+		
+		<#elseif model.qtlSearchResults.results?? && model.screenType="qtlLoci">
 			<@cr.compareResults results = model.qtlSearchResults.results model = model />
 			<br><br>
 		</#if>
-				
+			
 	</div>				
 </#macro>
