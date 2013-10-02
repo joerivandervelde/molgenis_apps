@@ -228,7 +228,7 @@ public class QtlFinderHD extends QtlFinder2
 							if (diseases.size() > 25)
 							{
 								this.setMessages(new ScreenMessage("You selected " + diseases.size()
-										+ " diseases. There is a limit of 15. " + "Please narrow down your search.", false));
+										+ " diseases. There is a limit of 25. " + "Please narrow down your search.", false));
 							}
 							else
 							{
