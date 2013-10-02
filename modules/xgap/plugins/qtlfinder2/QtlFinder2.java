@@ -309,9 +309,9 @@ public class QtlFinder2 extends PluginModel<Entity>
 						}
 					}
 
-					plotFromShoppingCart(db);
 					this.model.setShoppingCart(hits);
 					this.model.setHits(hits);
+					plotFromShoppingCart(db);
 					this.model.setPermaLink(permaLinkIds);
 					this.model.setCartView(false);
 				}
