@@ -28,7 +28,7 @@
 			</td>
 			
 			<td style="padding-left:10px;" width="50">
-				LOD threshold:<br /> <input title="LOD Score Threshold" id="lodThreshold2" placeholder="e.g. 3.5"  name="lodThreshold" type="text" size="10" <#if model.qtlSearchInputState.lodThreshold??>value="${model.qtlSearchInputState.lodThreshold}"</#if>>
+				LOD threshold:<br /> <input title="LOD Score Threshold" id="lodThreshold2" name="lodThreshold" type="text" size="10" <#if model.qtlSearchInputState.lodThreshold??>value="${model.qtlSearchInputState.lodThreshold}"<#else>value="3.5"</#if>>
 			</td>
 			
 			<td width="290" style="padding-top:10px;padding-left:10px;">

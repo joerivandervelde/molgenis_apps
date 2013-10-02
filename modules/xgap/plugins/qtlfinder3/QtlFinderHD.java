@@ -451,13 +451,14 @@ public class QtlFinderHD extends QtlFinder2
 									request.getString("regionDataSetSelect"));
 
 							this.model.getQtlSearchInputState().setLodThreshold(request.getDouble("lodThreshold"));
-
-							this.model.setHits(new HashMap<String, Entity>());
-							this.model.setProbeToGene(new HashMap<String, Gene>());
+							
 							List<Probe> probesInQtlRegion = SearchFunctions.qtlRegionSearch(this.model
 									.getQtlSearchInputState().getTraitInput(), this.model.getQtlSearchInputState()
 									.getSelectedDataSet(), this.model.getQtlSearchInputState().getLodThreshold(), db);
 
+							this.model.setHits(new HashMap<String, Entity>());
+							this.model.setProbeToGene(new HashMap<String, Gene>());
+							
 							for (Probe p : probesInQtlRegion)
 							{
 								this.model.getHits().put(p.getName(), p);
