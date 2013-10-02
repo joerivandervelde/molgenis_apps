@@ -450,7 +450,7 @@ public class QtlFinderHD extends QtlFinder2
 							this.model.getQtlSearchInputState().setSelectedDataSet(
 									request.getString("regionDataSetSelect"));
 
-							this.model.getQtlSearchInputState().setLodThreshold(request.getInt("lodThreshold"));
+							this.model.getQtlSearchInputState().setLodThreshold(request.getDouble("lodThreshold"));
 
 							this.model.setHits(new HashMap<String, Entity>());
 							this.model.setProbeToGene(new HashMap<String, Gene>());
@@ -645,7 +645,7 @@ public class QtlFinderHD extends QtlFinder2
 
 							this.model.getQtlSearchInputState().setSelectedDataSet("rock_qtl");
 							this.model.getQtlSearchInputState().setTraitInput("AGIUSA19536");
-							this.model.getQtlSearchInputState().setLodThreshold(Integer.parseInt("50"));
+							this.model.getQtlSearchInputState().setLodThreshold(Double.parseDouble("50"));
 						}
 
 						if (this.model.getScreenType().equals("genomicRegion"))

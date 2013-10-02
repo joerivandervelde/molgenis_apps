@@ -12,7 +12,7 @@ public class QtlSearchInputState
 	private String selectedDataSet;
 
 	// threshold that is set for the qtl search
-	private Integer lodThreshold;
+	private Double lodThreshold;
 
 	// trait or probe name that was put in
 	private String traitInput;
@@ -39,14 +39,14 @@ public class QtlSearchInputState
 		this.selectedDataSet = selectedDataSet;
 	}
 
-	public Integer getLodThreshold()
+	public Double getLodThreshold()
 	{
 		return lodThreshold;
 	}
 
-	public void setLodThreshold(Integer lodThreshold)
+	public void setLodThreshold(Double double1)
 	{
-		this.lodThreshold = lodThreshold;
+		this.lodThreshold = double1;
 	}
 
 	public String getTraitInput()
