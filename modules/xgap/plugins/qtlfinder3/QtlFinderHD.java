@@ -479,10 +479,9 @@ public class QtlFinderHD extends QtlFinder2
 
 						else
 						{
-							this.model.setCartView(false);
-							this.model.setShowResults(false);
 
 							List<Entity> cart = new ArrayList<Entity>(this.model.getShoppingCart().values());
+							
 							ComparePhenotypesResult res = ComparePhenotypes.compareGenesWorm(model.getHumanToWorm(),
 									cart);
 
@@ -506,6 +505,10 @@ public class QtlFinderHD extends QtlFinder2
 								res.setSampleSource("QTL search");
 								this.model.getQtlSearchResults().setResults(res);
 							}
+							
+							this.model.setCartView(false);
+							this.model.setShowResults(false);
+							this.model.setMultiplot(null);
 
 						}
 					}
