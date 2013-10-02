@@ -508,10 +508,10 @@ public class QtlFinderHD extends QtlFinder2
 							
 							Map<String, List<String>> sourcesAndDiseases = CreateAllSourceDiseaseList.createAllSourceDiseaseList(request.getList("comparePheno"));
 							
-							Set<String> phenoDiseases = new HashSet<String>(request.getList("comparePheno"));
+							Set<String> phenoDiseases = new HashSet<String>();
 							for(String key : sourcesAndDiseases.keySet()){
 								for(String disease : sourcesAndDiseases.get(key)){
-									phenoDiseases.add(disease);
+									phenoDiseases.add(disease + " [" + key + "]");
 								}
 							}
 							

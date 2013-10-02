@@ -1,4 +1,4 @@
-<#macro compareResults results>
+<#macro compareResults results model>
 		<div>
 		<h3 style="padding-left:25px">Overlap test for
 						<@compress single_line=true>
@@ -16,7 +16,9 @@
 										<#list results.sampleInputs as sampleInput>
 											${sampleInput}<#if sampleInput_has_next>; </#if>
 										</#list>
+										<#if model.diseaseMapping != "All Human Sources">
 										[${results.sampleSource}]
+										</#if>
 									</u></font>
 							</span>
 							</@compress>
@@ -113,7 +115,11 @@
 							<#list results.sourceToPhenoToSuccessStatesPruned[source]?keys as disease>
 											
 								<tr> 
-								    <td><a style="text-decoration:none;" href="${results.sourceToPhenoToDetails[source][disease][0]}" target="__blank"><#if results.sampleInputs?seq_contains(disease)><font color="gray">${disease}</font><#else>${disease}</#if></td>
+								    <#if model.diseaseMapping == "All Human Sources">
+								    	<td><a style="text-decoration:none;" href="${results.sourceToPhenoToDetails[source][disease][0]}" target="__blank"><#if results.sampleInputs?seq_contains(disease + ' [' + source + ']')><font color="gray">${disease}</font><#else>${disease}</#if></td>
+								    <#else>
+								    	<td><a style="text-decoration:none;" href="${results.sourceToPhenoToDetails[source][disease][0]}" target="__blank"><#if results.sampleInputs?seq_contains(disease)><font color="gray">${disease}</font><#else>${disease}</#if></td>
+								    </#if>	
 								    <td>${source}</td> 
 								    <td>${results.sourceToPhenoToSuccesses[source][disease]?c}</td>
 								   <td>

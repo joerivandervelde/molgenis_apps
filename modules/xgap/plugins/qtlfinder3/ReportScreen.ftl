@@ -36,7 +36,7 @@
 		</#if>
 	
 		<#if model.phenoCompareResults.results?? && model.screenType="comparePhenotypes">
-			<@cr.compareResults results = model.phenoCompareResults.results />
+			<@cr.compareResults results = model.phenoCompareResults.results model = model />
 			<br><br>
 		</#if>	
 		<#if model.regionSearchResults.results?? && model.screenType="genomicRegion">
