@@ -232,10 +232,6 @@ public class QtlFinderHD extends QtlFinder2
 							}
 							else
 							{
-								this.model.setShowAnyResultToUser("show");
-								this.model.setShowResults(true);
-								this.model.setCartView(false);
-
 								this.model.setHits(new HashMap<String, Entity>());
 								this.model.setProbeToGene(new HashMap<String, Gene>());
 
@@ -250,6 +246,10 @@ public class QtlFinderHD extends QtlFinder2
 								{
 									this.model.getHits().put(p.getName(), p);
 								}
+								
+								this.model.setShowAnyResultToUser("show");
+								this.model.setShowResults(true);
+								this.model.setCartView(false);
 							}
 		
 						}else{
@@ -264,10 +264,7 @@ public class QtlFinderHD extends QtlFinder2
 							}
 							else
 							{
-								this.model.setShowAnyResultToUser("show");
-								this.model.setShowResults(true);
-								this.model.setCartView(false);
-	
+							
 								this.model.setHits(new HashMap<String, Entity>());
 								this.model.setProbeToGene(new HashMap<String, Gene>());
 								
@@ -278,6 +275,10 @@ public class QtlFinderHD extends QtlFinder2
 								{
 									this.model.getHits().put(p.getName(), p);
 								}
+								
+								this.model.setShowAnyResultToUser("show");
+								this.model.setShowResults(true);
+								this.model.setCartView(false);
 							}
 						}
 					}
@@ -406,10 +407,6 @@ public class QtlFinderHD extends QtlFinder2
 						}
 						else
 						{
-							this.model.setShowAnyResultToUser("show");
-							this.model.setShowResults(true);
-							this.model.setCartView(false);
-
 							String dataset = request.getString("dataSetSelect");
 							Integer start = request.getInt("QtlRegionStart");
 							Integer end = request.getInt("QtlRegionEnd");
@@ -424,7 +421,11 @@ public class QtlFinderHD extends QtlFinder2
 							{
 								this.model.getHits().put(t.get(ObservationElement.NAME).toString(), t);
 							}
+							
 							this.model.setShowResults(true);
+							this.model.setShowAnyResultToUser("show");
+							this.model.setShowResults(true);
+							this.model.setCartView(false);
 
 						}
 					}
@@ -438,10 +439,6 @@ public class QtlFinderHD extends QtlFinder2
 						}
 						else
 						{
-							this.model.setShowAnyResultToUser("show");
-							this.model.setShowResults(true);
-							this.model.setCartView(false);
-
 							this.model.getQtlSearchInputState().setTraitInput(request.getString("traitInput"));
 							this.model.getQtlSearchInputState().setSelectedDataSet(
 									request.getString("regionDataSetSelect"));
@@ -458,6 +455,10 @@ public class QtlFinderHD extends QtlFinder2
 							{
 								this.model.getHits().put(p.getName(), p);
 							}
+							
+							this.model.setShowAnyResultToUser("show");
+							this.model.setShowResults(true);
+							this.model.setCartView(false);
 						}
 					}
 
