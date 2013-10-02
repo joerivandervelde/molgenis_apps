@@ -705,28 +705,8 @@ public class QtlFinderHD extends QtlFinder2
 					{
 						System.out.println("Go go reset all!");
 
-						// reset region search
-						InitQtlFinderHDModel.freshRegionSearch(this.model, db);
-
-						this.model.setShowResults(false);
-						this.model.setQuery(null);
-						this.model.setHits(null);
-						this.model.setShortenedQuery(null);
-						this.model.setShoppingCart(new HashMap<String, Entity>());
-						this.model.setMultiplot(null);
-						this.model.setReport(null);
-						this.model.setQtls(null);
-						this.model.setCartView(false);
-						this.model.setProbeToGene(null);
-						this.model.setShowResults(false);
-						this.model.getDiseaseSearchInputState().setSelectedDiseases(null);
-						this.model.getDiseaseSearchResults().setDiseaseSearchHits(null);
-						this.model.setShowAnyResultToUser(null);
-						this.model.getPhenoCompareResults().setResults(null);
-						this.model.getRegionSearchResults().setResults(null);
-						this.model.getQtlSearchResults().setResults(null);
-						this.model.getRegionSearchInputState().setInputGene(null);
-						this.model.setDiseaseMapping("All Human Sources");
+						// reset the model
+						this.model = InitQtlFinderHDModel.init(db, model.getHumanToWorm());
 					}
 				}
 
