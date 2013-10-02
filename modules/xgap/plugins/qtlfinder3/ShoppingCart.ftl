@@ -40,26 +40,11 @@
 						
 						<td width="175	px" style="padding-bottom:10px;vertical-align:middle;">
 							<#if model.shoppingCart[name].get('ReportsFor_name')?? && model.shoppingCart[name].get('ReportsFor_name')?is_string && model.shoppingCart[name].get('ReportsFor_name')?length gt 0>
-								Ce: <a style="text-decoration:none;" href="http://www.wormbase.org/species/c_elegans/gene/${model.hits[name].reportsFor_name}" target="__blank">${model.hits[name].reportsFor_name}</a><br>
-							<#elseif model.shoppingCart[name].symbol?? && model.shoppingCart[name].symbol?length gt 0>
-								Ce: <a style="text-decoration:none;" href="http://www.wormbase.org/species/c_elegans/gene/${model.hits[name].symbol}" target="__blank">${model.hits[name].symbol}</a><br>
+								Ce: <a style="text-decoration:none;" href="http://www.wormbase.org/species/c_elegans/gene/${model.shoppingCart[name].get('ReportsFor_name')}" target="__blank">${model.shoppingCart[name].get('ReportsFor_name')}</a><br>
 							</#if>
 							<#if model.shoppingCart[name].get('ReportsFor_name')?? && model.shoppingCart[name].get('ReportsFor_name')?is_string && model.shoppingCart[name].get('ReportsFor_name')?length gt 0>
 								<#if model.humanToWorm.wormGeneToHumanGene(model.shoppingCart[name].reportsFor_name)??>
 									<#assign humanOrtho = model.humanToWorm.wormGeneToHumanGene(model.shoppingCart[name].reportsFor_name)>
-								<#else>
-									<#assign humanOrtho = "No ortholog">
-								</#if>
-								<#if humanOrtho??>
-									<#if humanOrtho?is_string && humanOrtho?contains("ortholog")>
-										Hs: ${humanOrtho}
-									<#else>
-										Hs: <a style="text-decoration:none;" href="http://www.genenames.org/data/hgnc_data.php?match=${humanOrtho}" target="__blank">${humanOrtho}</a>
-									</#if>
-								</#if>
-							<#elseif model.shoppingCart[name].symbol?? && model.shoppingCart[name].symbol?length gt 0>
-								<#if model.humanToWorm.wormGeneToHumanGene(model.shoppingCart[name].symbol)??>
-									<#assign humanOrtho = model.humanToWorm.wormGeneToHumanGene(model.shoppingCart[name].symbol)>
 								<#else>
 									<#assign humanOrtho = "No ortholog">
 								</#if>
