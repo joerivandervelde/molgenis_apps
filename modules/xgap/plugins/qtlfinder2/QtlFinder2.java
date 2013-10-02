@@ -168,6 +168,12 @@ public class QtlFinder2 extends PluginModel<Entity>
 						{
 							plotFromShoppingCart(db);
 
+							if(this.model.getShoppingCart().values().isEmpty())
+							{
+								this.model.setMultiplot(null);
+								throw new Exception("Error: The shopping cart was emptied while processing your request.");
+							}	
+							
 							StringBuilder permaLink = new StringBuilder();
 							for (Entity e : this.model.getShoppingCart().values())
 							{
@@ -303,10 +309,11 @@ public class QtlFinder2 extends PluginModel<Entity>
 						}
 					}
 
+					plotFromShoppingCart(db);
 					this.model.setShoppingCart(hits);
 					this.model.setHits(hits);
 					this.model.setPermaLink(permaLinkIds);
-					plotFromShoppingCart(db);
+					this.model.setCartView(false);
 				}
 				catch (Exception e)
 				{
@@ -560,8 +567,6 @@ public class QtlFinder2 extends PluginModel<Entity>
 		{
 			throw new Exception("You cannot plot more than 500 items.");
 		}
-
-		this.model.setCartView(false);
 
 		QTLMultiPlotResult res = multiplot(new ArrayList<Entity>(this.model.getShoppingCart().values()), db);
 		this.model.setReport(null);
