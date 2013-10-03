@@ -59,7 +59,7 @@
 			<#import "../qtlfinder3/MultiPlot.ftl" as mp>
 			<#import "../qtlfinder3/CompareResults.ftl" as cr>
 			<#import "../qtlfinder3/ReportScreen.ftl" as report>
-			<#import "../qtlfinder3/help.ftl" as help>
+			<#import "../qtlfinder3/Help.ftl" as help>
 			
 			<#-- macro's-->	
 			<@styleAndScript model = model />
