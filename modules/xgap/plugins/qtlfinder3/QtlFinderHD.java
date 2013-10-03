@@ -337,50 +337,42 @@ public class QtlFinderHD extends QtlFinder2
 
 					if (action.equals("regionSearch"))
 					{
-						if (request.getString("regionStart") == null || request.getString("regionEnd") == null)
+						if (request.getInt("regionStart") == null || request.getInt("regionEnd") == null)
 						{
 							this.setMessages(new ScreenMessage("Please fill in a starting and ending point "
 									+ "for your region search. An entire chromosome selection will result in to "
 									+ "many hits, overloading your browser", false));
 						}
-
-						else if (request.getString("regionStart").contains(" ")
-								|| request.getString("regionEnd").contains(" "))
-						{
-							this.setMessages(new ScreenMessage("Make sure there are no spaces or tabs in your input",
-									false));
-
-						}
-						else if (request.getString("regionStart").contains("\\w")
-								|| request.getString("regionEnd").contains("\\w"))
-						{
-							this.setMessages(new ScreenMessage("Please fill in numbers, not letters", false));
-						}
-
 						else
 						{
-
 							Integer start = request.getInt("regionStart");
 							Integer end = request.getInt("regionEnd");
-							Integer chromosomeOrderNr = this.model.getRegionSearchInputState().getChromosomes()
-									.get(request.getString("regionChr")).getOrderNr();
-
-							this.model.getRegionSearchInputState().setSelectedStartBp(start);
-							this.model.getRegionSearchInputState().setSelectedEndBp(end);
-
-							model.setHits(new HashMap<String, Entity>());
-							model.setProbeToGene(new HashMap<String, Gene>());
-
-							List<Probe> probesInRegion = SearchFunctions.regionSearch(start, end, chromosomeOrderNr,
-									db, true);
-
-							for (Probe p : probesInRegion)
-							{
-								this.model.getHits().put(p.getName(), p);
-							}
 							
-							this.model.setShowAnyResultToUser("show");
-							this.model.setShowResults(true);
+							if(start > end)
+							{
+								this.setMessages(new ScreenMessage("Make sure your start position is lower then your end position", false));
+								
+							}else{
+								Integer chromosomeOrderNr = this.model.getRegionSearchInputState().getChromosomes()
+										.get(request.getString("regionChr")).getOrderNr();
+	
+								this.model.getRegionSearchInputState().setSelectedStartBp(start);
+								this.model.getRegionSearchInputState().setSelectedEndBp(end);
+	
+								model.setHits(new HashMap<String, Entity>());
+								model.setProbeToGene(new HashMap<String, Gene>());
+	
+								List<Probe> probesInRegion = SearchFunctions.regionSearch(start, end, chromosomeOrderNr,
+										db, true);
+	
+								for (Probe p : probesInRegion)
+								{
+									this.model.getHits().put(p.getName(), p);
+								}
+								
+								this.model.setShowAnyResultToUser("show");
+								this.model.setShowResults(true);
+							}
 						}
 					}
 
@@ -721,7 +713,7 @@ public class QtlFinderHD extends QtlFinder2
 			catch (Exception e)
 			{
 				e.printStackTrace();
-				this.setMessages(new ScreenMessage(e.getMessage() != null ? e.getMessage() : "null", false));
+				this.setMessages(new ScreenMessage(e.getMessage() != null ? e.getMessage() + ", an exception was thrown. Please make sure your input is correct." : "null", false));
 			}
 		}
 	}
