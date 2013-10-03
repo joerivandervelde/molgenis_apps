@@ -212,73 +212,80 @@ public class QtlFinderHD extends QtlFinder2
 					// Human Disease search
 					if (action.equals("diseaseSearch"))
 					{
-						if(this.model.getDiseaseMapping().equals("All Human Sources")){
-							List<String> diseases = new ArrayList<String>();
-							
-							Map<String, List<String>> sourcesAndDiseases = CreateAllSourceDiseaseList.createAllSourceDiseaseList(request.getList("diseaseSelect"));
-							
-							for(String key : sourcesAndDiseases.keySet()){
-								for(String disease : sourcesAndDiseases.get(key)){
-									diseases.add(disease);
-								}
-							}
-							
-							this.model.getDiseaseSearchInputState().setSelectedDiseases(diseases);
-							
-							if (diseases.size() > 25)
-							{
-								this.setMessages(new ScreenMessage("You selected " + diseases.size()
-										+ " diseases. There is a limit of 25. " + "Please narrow down your search.", false));
-							}
-							else
-							{
-								this.model.setHits(new HashMap<String, Entity>());
-								this.model.setProbeToGene(new HashMap<String, Gene>());
-
-								List<Probe> hits = new ArrayList<Probe>(); 				
-
+						if(request.getList("diseaseSelect").isEmpty()){
+							this.model.getDiseaseSearchInputState().setSelectedDiseases(null);
+							this.setMessages(new ScreenMessage("Please select a disease to search for", false));
+						}
+						else
+						{
+							if(this.model.getDiseaseMapping().equals("All Human Sources")){
+								List<String> diseases = new ArrayList<String>();
+								
+								Map<String, List<String>> sourcesAndDiseases = CreateAllSourceDiseaseList.createAllSourceDiseaseList(request.getList("diseaseSelect"));
+								
 								for(String key : sourcesAndDiseases.keySet()){
-									hits.addAll(SearchFunctions.diseaseSearch(db, key,
-											sourcesAndDiseases.get(key), this.model.getHumanToWorm()));
-								}
-
-								for (Probe p : hits)
-								{
-									this.model.getHits().put(p.getName(), p);
+									for(String disease : sourcesAndDiseases.get(key)){
+										diseases.add(disease);
+									}
 								}
 								
-								this.model.setShowAnyResultToUser("show");
-								this.model.setShowResults(true);
-								this.model.setCartView(false);
-							}
+								this.model.getDiseaseSearchInputState().setSelectedDiseases(diseases);
+								
+								if (diseases.size() > 25)
+								{
+									this.setMessages(new ScreenMessage("You selected " + diseases.size()
+											+ " diseases. There is a limit of 25. " + "Please narrow down your search.", false));
+								}
+								else
+								{
+									this.model.setHits(new HashMap<String, Entity>());
+									this.model.setProbeToGene(new HashMap<String, Gene>());
+	
+									List<Probe> hits = new ArrayList<Probe>(); 				
+	
+									for(String key : sourcesAndDiseases.keySet()){
+										hits.addAll(SearchFunctions.diseaseSearch(db, key,
+												sourcesAndDiseases.get(key), this.model.getHumanToWorm()));
+									}
+	
+									for (Probe p : hits)
+									{
+										this.model.getHits().put(p.getName(), p);
+									}
+									
+									this.model.setShowAnyResultToUser("show");
+									this.model.setShowResults(true);
+									this.model.setCartView(false);
+								}
+			
+							}else{
+								
+								List<String> diseases = new ArrayList<String>(request.getList("diseaseSelect"));
+								this.model.getDiseaseSearchInputState().setSelectedDiseases(diseases);
 		
-						}else{
-							
-							List<String> diseases = new ArrayList<String>(request.getList("diseaseSelect"));
-							this.model.getDiseaseSearchInputState().setSelectedDiseases(diseases);
-	
-							if (diseases.size() > 25)
-							{
-								this.setMessages(new ScreenMessage("You selected " + diseases.size()
-										+ " diseases. There is a limit of 15. " + "Please narrow down your search.", false));
-							}
-							else
-							{
-							
-								this.model.setHits(new HashMap<String, Entity>());
-								this.model.setProbeToGene(new HashMap<String, Gene>());
-								
-								List<Probe> hits = SearchFunctions.diseaseSearch(db, this.model.getDiseaseMapping(),
-										diseases, this.model.getHumanToWorm());
-	
-								for (Probe p : hits)
+								if (diseases.size() > 25)
 								{
-									this.model.getHits().put(p.getName(), p);
+									this.setMessages(new ScreenMessage("You selected " + diseases.size()
+											+ " diseases. There is a limit of 15. " + "Please narrow down your search.", false));
 								}
+								else
+								{
 								
-								this.model.setShowAnyResultToUser("show");
-								this.model.setShowResults(true);
-								this.model.setCartView(false);
+									this.model.setHits(new HashMap<String, Entity>());
+									this.model.setProbeToGene(new HashMap<String, Gene>());
+									
+									List<Probe> hits = SearchFunctions.diseaseSearch(db, this.model.getDiseaseMapping(),
+											diseases, this.model.getHumanToWorm());
+		
+									for (Probe p : hits)
+									{
+										this.model.getHits().put(p.getName(), p);
+									}
+									
+									this.model.setShowAnyResultToUser("show");
+									this.model.setShowResults(true);
+									this.model.setCartView(false);
+								}
 							}
 						}
 					}
@@ -510,7 +517,9 @@ public class QtlFinderHD extends QtlFinder2
 					{
 						if(request.getList("comparePheno") == null){
 							this.setMessages(new ScreenMessage("Please select a disease to compare", false));
-						}else{
+						}
+						else
+						{
 						
 							if(this.model.getDiseaseMapping().equals("All Human Sources")){
 								
