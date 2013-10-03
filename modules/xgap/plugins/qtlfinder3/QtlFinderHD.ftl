@@ -132,10 +132,11 @@
 			<td align="center">
 				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=comparePhenotypes"><img height="50" width="50"  src="clusterdemo/wormqtl/ComparePhenotypes.png" /></a>
 			</td>	
-			
+			<td>
 			<div class="buttons">
 				<button style="height:30px;width:110px;float:right;vertical-align:middle;margin-top:5px;margin-right:5px;font-size:80%;" type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__resetAll';document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset All</button>
 			</div>
+			</td>
 		</tr>	
 		<tr>
 			<td colspan="1"></td>
