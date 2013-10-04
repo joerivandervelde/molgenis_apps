@@ -212,7 +212,7 @@ public class QtlFinderHD extends QtlFinder2
 					// Human Disease search
 					if (action.equals("diseaseSearch"))
 					{
-						if(request.getList("diseaseSelect").isEmpty()){
+						if(request.getList("diseaseSelect") == null){
 							this.model.getDiseaseSearchInputState().setSelectedDiseases(null);
 							this.setMessages(new ScreenMessage("Please select a disease to search for", false));
 						}
