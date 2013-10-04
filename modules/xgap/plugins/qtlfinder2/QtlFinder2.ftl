@@ -654,8 +654,7 @@
 	
 	
 	
-	<#if model.hits??>
-	
+	<#if model.hits?? && model.hits?size gt 0>
 	<#--find out how many items have been 'shopped'-->
 	<#assign shopped = 0>
 	<#list model.hits?keys as name>
