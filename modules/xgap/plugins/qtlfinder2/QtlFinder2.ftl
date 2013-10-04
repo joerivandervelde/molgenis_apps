@@ -77,7 +77,7 @@
 			<#--<input type="submit" id="search" onclick="$(this).closest('form').find('input[name=__action]').val('search');" value="Search" /><script>$("#search").addClass('grayButton').button();</script>-->
 			 <div class="buttons"><button style="color:blue;" type="submit" id="search" onclick="document.getElementById('imageSpace').style.display = 'block';document.forms.${screen.name}.__action.value = 'search'; document.forms.${screen.name}.submit();"><img src="generated-res/img/recordview.png" alt=""/>Search</button></div>
 			 
-			 <div class="buttons"><button type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = 'reset'; document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset</button></div>
+			 <div class="buttons"><button type="button" id="search" onclick="document.forms.${screen.name}.__action.value = 'reset'; document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset</button></div>
     </button>
 		</td>
 	</tr>
