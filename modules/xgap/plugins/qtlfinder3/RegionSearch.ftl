@@ -25,7 +25,7 @@
 			
 			<td "padding-left:25px;" width="80px">
 			Use gene location:<br> <input id="geneInputForRegion" name="geneInputForRegion" placeholder="e.g. pgp-7, C50F2.9, WBGenes, " <#if model.regionSearchInputState.inputGene??>value="${model.regionSearchInputState.inputGene}"</#if>></input>
-			<button id="regionSetWithGeneInput" type="submit" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__regionSetWithGeneInput';
+			<button id="regionSetWithGeneInput" type="button" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__regionSetWithGeneInput';
 					document.forms.${screen.name}.submit();"">Set</button>
 			</td>
 		</tr>
@@ -38,7 +38,7 @@
 			</td>
 			<td style="padding-left:40px;padding-top:10px;" width="200" colspan="1">
 				<div class="buttons">
-					<button style="color:blue;" type="submit" onclick="document.getElementById('listOfHits').style.display = 'none';document.getElementById('imageSpace').style.display = 'block';
+					<button style="color:blue;" type="button" onclick="document.getElementById('listOfHits').style.display = 'none';document.getElementById('imageSpace').style.display = 'block';
 					document.forms.${screen.name}.__action.value = '__qtlfinderhd__regionSearch';
 					document.forms.${screen.name}.submit();">
 					<img src="generated-res/img/recordview.png" alt=""/>Search</button>
