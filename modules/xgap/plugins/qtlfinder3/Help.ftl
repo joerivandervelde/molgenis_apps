@@ -1,6 +1,6 @@
 <#macro helpScreen>
 <div id="help" align="left" style="padding-left:10px;">	
-	<nobr style="float:right;padding-right:10px;"><a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=humanDisease"><img height="70" width="140" src="clusterdemo/icons/back-button.png" /></a></nobr>
+	<nobr style="float:right;padding-right:10px;"><a href="?select=Home"><img height="70" width="140" src="clusterdemo/icons/back-button.png" /></a></nobr>
 	<h2>Help</h2>
 
 	<h3>For biologists:</h3>
