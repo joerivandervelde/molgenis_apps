@@ -75,7 +75,7 @@
 		</td>
 		<td width="290" align="left">
 			<#--<input type="submit" id="search" onclick="$(this).closest('form').find('input[name=__action]').val('search');" value="Search" /><script>$("#search").addClass('grayButton').button();</script>-->
-			 <div class="buttons"><button style="color:blue;" type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = 'search'; document.forms.${screen.name}.submit();"><img src="generated-res/img/recordview.png" alt=""/>Search</button></div>
+			 <div class="buttons"><button style="color:blue;" type="submit" id="search" onclick="document.getElementById('imageSpace').style.display = 'block';document.forms.${screen.name}.__action.value = 'search'; document.forms.${screen.name}.submit();"><img src="generated-res/img/recordview.png" alt=""/>Search</button></div>
 			 
 			 <div class="buttons"><button type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = 'reset'; document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset</button></div>
     </button>
@@ -90,7 +90,9 @@
 	</tr>
 </table>
 
-
+<br>
+	<div id="imageSpace" align="center" style="display:none;"><img src="clusterdemo/icons/spinner.gif" width="200px" height="200px"/></div>
+<br>
 
 <#if model.cartView>
 
@@ -652,8 +654,7 @@
 	
 	
 	
-	<#if model.hits??>
-	
+	<#if model.hits?? && model.hits?size gt 0>
 	<#--find out how many items have been 'shopped'-->
 	<#assign shopped = 0>
 	<#list model.hits?keys as name>
