@@ -45,7 +45,7 @@
 			 		</div>				
 			 		
 					<div class="buttons">
-			 			<button type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__reset'; 
+			 			<button type="button" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__reset'; 
 			 			document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset</button>			 	
 	    			</div>
 				</td>	

@@ -136,7 +136,7 @@
 			</td>	
 			<td>
 			<div class="buttons">
-				<button style="height:30px;width:110px;float:right;vertical-align:middle;margin-top:5px;margin-right:5px;font-size:80%;" type="submit" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__resetAll';document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset All</button>
+				<button style="height:30px;width:110px;float:right;vertical-align:middle;margin-top:5px;margin-right:5px;font-size:80%;" type="button" id="search" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__resetAll';document.forms.${screen.name}.submit();"><img src="generated-res/img/reset.png" alt=""/>Reset All</button>
 			</div>
 			</td>
 		</tr>	
@@ -165,7 +165,7 @@
 <#--- SCRIPTS --->
 	<script>
 		$(document).ready(function(){
-
+		
 			<#-- CUSTOM JQUERY SORTING FOR SCIENTIFIC ANNOTATION -->
 			jQuery.fn.dataTableExt.oSort["scientific-pre"] = function ( a ) {
         		return parseFloat(a);
