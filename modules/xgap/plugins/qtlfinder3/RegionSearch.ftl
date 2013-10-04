@@ -54,7 +54,7 @@
 		<tr>
 			<td colspan="4" height="10" align="center">
 				<br>
-				<span style="font-size:12px;">Select a region of the <i>C. elegans</i> genome by submitting a chromosome and a start and end position(bp). This can be done via the slider, by typing it manually or by entering a gene so the positions and chromosome are set automatically. Click <a href=""style="text-decoration:none;" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__loadExample';document.forms.${screen.name}.submit();return false;">here</a> to load a tested example query.
+				<span style="font-size:12px;">Select a region of the <i>C. elegans</i> genome by submitting a chromosome and a start and end position(bp). This can be done via the slider, by typing it manually or by entering a gene so the positions and chromosome are set automatically. Click <a href=""style="text-decoration:none;" onclick="document.forms.${screen.name}.__action.value = '__qtlfinderhd__loadExample';document.forms.${screen.name}.submit();return false;">here</a> to load an example query.
 				A <a target="_blank" href="WormQTLHD_toolTutorial.pdf#page=3">tutorial</a> is available on how to get results from this tool.
 				</span>
 			</td>
