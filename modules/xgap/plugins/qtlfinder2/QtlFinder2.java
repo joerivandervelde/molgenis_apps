@@ -162,7 +162,7 @@ public class QtlFinder2 extends PluginModel<Entity>
 						{
 							this.setMessages(new ScreenMessage("You are trying to plot "
 									+ this.model.getShoppingCart().size()
-									+ " probes. Please clear your cart and select a smaller number of probes.", false));
+									+ " probes. The maximum number of probes that you can plot is 500.", false));
 						}
 						else
 						{
