@@ -131,6 +131,8 @@
 			</td>	
 			<td align="center">
 				<a href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=comparePhenotypes"><img height="50" width="50"  src="clusterdemo/wormqtl/ComparePhenotypes.png" /></a>
+			</td>
+			<td width="100">
 			</td>	
 			<td>
 			<div class="buttons">
