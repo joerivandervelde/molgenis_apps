@@ -1,4 +1,8 @@
 <#macro compareResults results model>
+
+		<#-- amount of genes shown per input, results and overlap-->
+		<#assign cutoff = 100>
+
 		<div>
 		<h3 style="padding-left:25px">Overlap test for
 						<@compress single_line=true>
@@ -6,8 +10,8 @@
 												Associated genes having orthologs:
 												<#list results.sampleGenes as o>
 													${o}<#if o_has_next>, </#if>
-													<#if o_index == 24>
-														${results.sampleGenes?size-25} more...
+													<#if o_index == cutoff-1>
+														${results.sampleGenes?size-cutoff} more...
 														<#break>
 													</#if>
 												</#list>
@@ -51,7 +55,7 @@
 								<b>Overlap details </b> <br>
 								Shows which genes are associated with the selected phenotype(s) 
 								and the Vs. phenotype. It also shows which genes are overlapping. View of genes 
-								is capped at max 25.
+								is capped at max ${cutoff}.
 					</li>			
 								<br>
 					<li>		
@@ -123,45 +127,51 @@
 								    <td>${source}</td> 
 								    <td>${results.sourceToPhenoToSuccesses[source][disease]?c}</td>
 								   <td>
-										<@compress single_line=true>
-										<div onclick="alert('
-												Input genes:
+										
+										<#assign body = "<!DOCTYPE html><html><head><title>Overlap details for " + disease + "</title></head><body><b>Input genes for ">
+										<#list results.sampleInputs as sampleInput>
+											<#assign body = body + sampleInput><#if sampleInput_has_next><#assign body = body + "; "></#if>
+										</#list>
+										<#assign body = body +":</b><br>">
+										
 												<#list results.sampleGenes as o>
-													${o}<#if o_has_next>, </#if>
-													<#if o_index == 24>
-														${results.sampleGenes?size-25} more...
+													<#assign body = body + o><#if o_has_next><#assign body = body + ", "></#if>
+													<#if o_index == cutoff-1>
+														<#assign body = body + (results.sampleGenes?size-cutoff)?c + " more...">
 														<#break>
 													</#if>
 												</#list>
-												\n\n
-												${disease} genes: 
+												<#assign body = body + "<br><br>">
+												<#assign body = body + "<b>" + disease + " genes:</b><br>">
 												<#list results.sourceToPhenoToGenes[source][disease] as o>
-													${o}<#if o_has_next>, </#if>
-													<#if o_index == 24>
-														${results.sourceToPhenoToGenes[source][disease]?size-25} more...
+													<#assign body = body + o><#if o_has_next><#assign body = body + ", "></#if>
+													<#if o_index == cutoff-1>
+														<#assign body = body + (results.sourceToPhenoToGenes[source][disease]?size-cutoff)?c + " more...">
 														<#break>
 													</#if>
 												</#list>
-												\n\n
-												Overlapping genes:
+												<#assign body = body + "<br><br><b>Overlapping genes:</b><br>">
 												<#list results.sourceToPhenoToOverlappingGenes[source][disease]?keys as o>
 													<#if results.sourceToPhenoToOverlappingGenes[source][disease]?values[0]??>
-														${o} (ortholog: <#list results.sourceToPhenoToOverlappingGenes[source][disease][o] as orth>${orth}<#if orth_has_next>, </#if></#list>)<#if o_has_next>, </#if>
+														<#assign body = body + o + " (ortholog: "><#list results.sourceToPhenoToOverlappingGenes[source][disease][o] as orth><#assign body = body + orth><#if orth_has_next><#assign body = body + ", "></#if></#list><#assign body = body + ")"><#if o_has_next><#assign body = body + ", "></#if>
 													<#else>
-														${o}<#if o_has_next>, </#if>
+														<#assign body = body + o><#if o_has_next><#assign body = body + ", "></#if>
 													</#if>
-													<#if o_index == 24>
-														${results.sourceToPhenoToOverlappingGenes[source][disease]?keys?size-25} more...
+													<#if o_index == cutoff-1>
+														<#assign body = body + (results.sourceToPhenoToOverlappingGenes[source][disease]?keys?size-cutoff)?c + " more...">
 														<#break>
 													</#if>
 												</#list>		
-											')">
-											</@compress>
-											<nobr>
-											<font style="cursor: pointer;" color="blue"><u>${results.sampleSizePruned?c} vs ${results.sourceToPhenoToSuccessStatesPruned[source][disease]?c}</u></font>
-											<img src="clusterdemo/wormqtl/overlap.png" width="30%" height="30%" />
-											</nobr>
-										</div>
+										
+										<#assign body = body + "</body></html>">
+										
+											<a href="#" onclick="var generate = window.open('', '', 'width=500,height=500,resizable=yes,toolbar=no,location=no,scrollbars=yes');  generate.document.write('${body}'); generate.document.close(); return false;">
+												<nobr>
+												<font style="cursor: pointer;" color="blue"><u>${results.sampleSizePruned?c} vs ${results.sourceToPhenoToSuccessStatesPruned[source][disease]?c}</u></font>
+												<img src="clusterdemo/wormqtl/overlap.png" width="23px" height="16px" />
+												</nobr>
+											</a>
+											
 									</td>
 								    <#-- ?string(0.##E0) == scientific annotation, # sets amount of numbers behind comma-->
 									<td>${results.sourceToPhenoToPval[source][disease]?string("0.##E0")}</td>
