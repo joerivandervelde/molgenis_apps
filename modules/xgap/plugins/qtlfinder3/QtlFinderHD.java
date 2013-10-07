@@ -497,7 +497,7 @@ public class QtlFinderHD extends QtlFinder2
 							else if (this.model.getScreenType().equals("qtlLoci"))
 							{
 								res.setSampleInputs(new HashSet<String>(Arrays.asList(new String[]
-								{ "50 probes up and down stream of the selected Probe / trait: "
+								{ "50 probes up and down stream of the selected probe / trait: "
 										+ this.model.getQtlSearchInputState().getTraitInput() + ", treshold: "
 										+ this.model.getQtlSearchInputState().getLodThreshold() + " from dataset: "
 										+ this.model.getQtlSearchInputState().getSelectedDataSet() })));
