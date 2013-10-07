@@ -166,6 +166,10 @@
 	<script>
 		$(document).ready(function(){
 		
+			<#-- DROPDOWN WIDGET-->
+			$("#diseaseSelect").chosen( {enable_split_word_search:true,search_contains:true} );
+			$("#comparePheno").chosen( {enable_split_word_search:true,search_contains:true} );
+		
 			<#-- CUSTOM JQUERY SORTING FOR SCIENTIFIC ANNOTATION -->
 			jQuery.fn.dataTableExt.oSort["scientific-pre"] = function ( a ) {
         		return parseFloat(a);
@@ -185,7 +189,7 @@
 				<#-- We do not use this JQuery when this is the case -->
 			<#else>
 				<#if model.screenType != "humanDisease"> 
-					<#if model.phenoCompareResults.results?? || model.regionSearchResults.results?? || model.qtlSearchResults.results??>
+					<#if model.screenType == "comparePhenotypes" && model.phenoCompareResults.results??  || model.screenType == "genomicRegion" && model.regionSearchResults.results?? || model.screenType == "qtlLoci" && model.qtlSearchResults.results??>
 						var oTable = $( "#wormHumanTable" ).dataTable( {
 			
 							"oLanguage": {
@@ -252,16 +256,7 @@
 				            $( "#regionEnd" ).val( ui.values[ 1 ] );
 				        }
 				    });
-   	
-			<#-- DROPDOWN WIDGET-->
-			$("#diseaseSelect").chosen( {enable_split_word_search:true,search_contains:true} );
-			$("#comparePheno").chosen( {enable_split_word_search:true,search_contains:true} );
-		 	
-		 	<#-- DROPDOWN WIDGET Doesnt work, header links??
-		 	$("#diseaseSelect").select2();
-		 	$("#comparePheno").select2();
-		 	-->
-		});		
+			});		
 	</script>
 	
 	<#-- STYLES -->
