@@ -7,17 +7,16 @@
 	
 	<ul>
 		<li>
-			Download the supplementary materials for WormQTL-HD.org <a target="_blank" href="SupplementaryTutorial_S1_S2_S3.pdf">here</a>. The supplementaries
-			cover the use cases described in the manuscript. 
+			<a target="_blank" href="SupplementaryTutorial_S1_S2_S3.pdf">Use cases</a> from the WormQTL-HD.org manuscript. These describe the example use cases of McGary et al, Li et al and Rodriguez et al in detail.
 		</li>
 		<li>
-			For a description on pvalues and other statistical information, see Gene Networks <a target="_blank" href="http://www.genenetwork.org/glossary.html#Permutation">glossary of terms and features<a>.
+			<a target="_blank" href="http://www.genenetwork.org/glossary.html#Permutation">Glossary of terms and features<a> at GeneNetwork that explain P-values and other statistical information.
 		</li>
 		<li>
-			Download a pdf with a step by step explanation on all tools <a target="_blank" href="WormQTLHD_toolTutorial.pdf">here</a>. This tutorial explains every tools functionality.
+			<a target="_blank" href="WormQTLHD_toolTutorial.pdf">Step by step tutorial</a> that explains all tools functionality.
 		</li>
 		<li>
-			For information on the the QTL finder tool, please refer to <a target="_blank" href="http://www.ncbi.nlm.nih.gov/pubmed/23180786">Snoek et al. (2012)</a>, or its original site: <a target="_blank" href="http://www.wormqtl.org">www.wormqtl.org</a>
+			<a target="_blank" href="http://www.ncbi.nlm.nih.gov/pubmed/23180786">Snoek et al. (2012)</a> or <a target="_blank" href="http://www.wormqtl.org">www.wormqtl.org</a> for information on the the QTL finder tool.
 		</li>
 	</ul>
 
