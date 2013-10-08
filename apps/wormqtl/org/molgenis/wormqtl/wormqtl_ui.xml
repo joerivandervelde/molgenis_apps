@@ -13,6 +13,7 @@
 		<plugin label="Genome browser" name="GenomeBrowser"
 			type="plugins.genomebrowser.GenomeBrowser" group="biologist" />	
 		<include file="apps/wormqtl/org/molgenis/wormqtl/browsedata.xml" />
+		<include label="Help" name="Help" type="org.molgenis.wormqtl.help" />
 		<include file="apps/xqtl/org/molgenis/xqtl/gui/importdata.xml" />
 		<plugin label="Run QTL mapping" name="Cluster"
 			type="plugins.cluster.ClusterPlugin" group="biologist" />

@@ -133,7 +133,7 @@
 							</a>
 						</td>
 						<td align="center">
-							<a class="tip" href="molgenis.do?__target=QtlFinderHD&select=QtlFinderHD&screen=showHelp"><img height="100" width="100" src="res/img/designgg/helpicon.gif" /><h3>Help</h3>
+							<a class="tip" href="?select=Help"><img height="100" width="100" src="res/img/designgg/helpicon.gif" /><h3>Help</h3>
 							<span>Go here for a more indepth explanation on all the different functions provided by WormQTL<sup>HD</sup></span>
 							</a>
 						</td>
