@@ -59,37 +59,29 @@
 			<#import "../qtlfinder3/MultiPlot.ftl" as mp>
 			<#import "../qtlfinder3/CompareResults.ftl" as cr>
 			<#import "../qtlfinder3/ReportScreen.ftl" as report>
-			<#import "../qtlfinder3/Help.ftl" as help>
 			
 			<#-- macro's-->	
 			<@styleAndScript model = model />
 			
-			<#if model.screenType == "showHelp">
-				<@help.helpScreen />
-			<#else>
+			<@browseBar model = model screen = screen/>
 			
-				<@browseBar model = model screen = screen/>
-				
-				<#if model.screenType == "humanDisease">
-					<@hd.humanDisease model = model screen = screen />
-				</#if>
-				
-				<#if model.screenType == "genomicRegion">
-					<@rs.regionSearch model = model screen = screen />
-				</#if>
-				
-				<#if model.screenType == "qtlLoci">
-					<@ql.qtlLoci model = model screen = screen />
-				</#if>
+			<#if model.screenType == "humanDisease">
+				<@hd.humanDisease model = model screen = screen />
+			</#if>
 			
-				<#if model.screenType == "comparePhenotypes">
-					<@cp.comparePhenotypes model = model screen = screen /> 				
-				</#if>
-				
-				<@report.reportScreen model = model screen = screen />
+			<#if model.screenType == "genomicRegion">
+				<@rs.regionSearch model = model screen = screen />
+			</#if>
 			
-			</#if>	
-				
+			<#if model.screenType == "qtlLoci">
+				<@ql.qtlLoci model = model screen = screen />
+			</#if>
+		
+			<#if model.screenType == "comparePhenotypes">
+				<@cp.comparePhenotypes model = model screen = screen /> 				
+			</#if>
+			
+			<@report.reportScreen model = model screen = screen />	
 			
 		</div>
 	</form>
