@@ -37,51 +37,48 @@
 								<b>Vs. phenotype</b> <br>
 								
 								This is the phenotype for which this row is reporting.<br> 
-								Your selected phenotype(s) showed overlap (in any degree) with this Vs. phenotype
+								Your selected phenotype(s) showed overlap (in any degree) with this <i>Vs. phenotype</i>.
 					</li>			
 								<br>
 					<li>			
-								<b>From source </b> <br>
-								The source from which the Vs. phenotype is from. 
+								<b>From source</b> <br>
+								The data source where this <i>Vs. phenotype</i> is from. 
 					</li>			
 								<br>
 					<li>		
 								<b>Genes overlap </b> <br>
-								x Vs. y -> x is the number of genes with an ortholog for your selected phenotype(s).
-								y is the number of genes with an ortholog for this Vs. phenotype
+								The amount of overlapping genes between the selected phenotype(s) and this <i>Vs. phenotype</i>.
 					</li>			
 								<br>			
 					<li>		
 								<b>Overlap details </b> <br>
-								Shows which genes are associated with the selected phenotype(s) 
-								and the Vs. phenotype. It also shows which genes are overlapping. View of genes 
-								is capped at max ${cutoff}.
+								The genes that are associated with the selected phenotype(s) 
+								and the <i>Vs. phenotype</i>. When clicked, it also shows exactly which genes are overlapping. Groups of genes shown are limited to ${cutoff} gene names.
 					</li>			
 								<br>
 					<li>		
 								<b>P-value </b> <br>
-								This value indicates whether the gene overlap is significant or not based on a 
-								hypergeometric test.
+								The gene overlap is significance based on a hypergeometric test.
 					</li>			
 								<br>
 					<li>		
 								<b>Single test threshold </b> <br>
-								The p-value threshold for when only one test would be performed
+								The p-value threshold for individually performed tests.
 					</li>			
 								<br>
 					<li>		
 								<b>Bonferroni threshold </b> <br>
-								The p-value threshold after multiple testing correction. 
+								The p-value threshold with strict multiple testing correction. 
 					</li>			
 								<br>
 					<li>		
 								<b>Single test significant </b> <br>
-								Says if the p-value is significant for single test threshold
+								Is the p-value significant for single test threshold?
 					</li>			
 								<br>
 					<li>		
 								<b>Bonferroni significant </b> <br>
-								Says if the p-value is significant after multiple testing correction
+								Is the p-value significant after multiple testing correction?
 					</li>
 				</ul>
 						
