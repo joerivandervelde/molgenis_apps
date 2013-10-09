@@ -30,7 +30,7 @@
 	
 			<hr style="border-color:#13507A;border-width:thin;" />
 			<div id="hiddenTableColumnExplanation" style="display:none">
-				<a onclick="document.getElementById('notHiddenTableColumnExplanation').style.display='inline';document.getElementById('hiddenTableColumnExplanation').style.display='none';" style="float:right;padding-right:12px;cursor:pointer;"><img style="cursor:pointer;" height="40" width="40" src="res/img/designgg/helpicon.gif" /></a>
+				<a onclick="document.getElementById('notHiddenTableColumnExplanation').style.display='inline';document.getElementById('hiddenTableColumnExplanation').style.display='none';" style="float:right;padding-right:12px;cursor:pointer;"><img style="cursor:pointer;" height="40" width="40" src="res/img/designgg/helpicon_pressed.gif" /></a>
 				
 				<ul>
 					<li>
