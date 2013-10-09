@@ -73,13 +73,16 @@ public class InitQtlFinderHDModel
 		newModel.getQtlSearchInputState().setProbesForSelectedDataset(probesPerDataset);
 
 		//
+		newModel.getQtlSearchInputState().setSelectedDataSet(newModel.getQtlSearchInputState().getDataSets().get(0));
+		
+		//
+		newModel.getQtlSearchInputState().setTraitInput("WSU931");
+		
+		//
 		newModel.setHumanToWorm(h2w);
 
 		//
 		newModel.setDiseaseMapping("All Human Sources");
-
-		//
-		newModel.getQtlSearchInputState().setSelectedDataSet(newModel.getQtlSearchInputState().getDataSets().get(0));
 
 		//
 		newModel.setShoppingCart(new HashMap<String, Entity>());
