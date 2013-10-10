@@ -1,7 +1,7 @@
 How to install WormQTL:
 
 * Download the data:
-	wget http://molgenis26.target.rug.nl/downloads/wormqtl_jan2012.tar.gz
+	wget http://molgenis26.target.rug.nl/downloads/wormqtl_hd_4oct2013.tar.gz
 
 * Extract into your data folder.
 	For example: /Users/jvelde/data/[extracted content of tar.gz]
@@ -24,8 +24,6 @@ How to install WormQTL:
 	
 * You should get the message WormQTL 'specific annotation import and data relink succeeded'
 	At this point you are technically done, but:
-	- Go to 'Browse data' and change the investigation name 'Panacea' to 'Public',
-	the origin name is not correct. (there is more data then Panacea in the database!)
 	- Change the admin password, use the autohideloginswitch URL to get to the
 	login/logout screen. Do the same for the 'bio-user' and 'bioinfo-user'. Their
 	default passwords are 'bio' and 'bioinfo'.
@@ -33,7 +31,7 @@ How to install WormQTL:
 	
 * Make sure a recent R version is installed so your plots are working
 
-* Make sure the server is running with a proper external IP so the Genome Browser works
+* Make sure the server is running with an accessible external IP so the Genome Browser works
 
 
 	

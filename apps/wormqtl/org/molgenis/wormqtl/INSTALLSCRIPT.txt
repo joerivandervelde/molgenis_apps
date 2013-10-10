@@ -9,8 +9,8 @@ git clone git://github.com/joerivandervelde/molgenis_apps.git
 # download and extract data
 mkdir data
 cd data
-wget http://molgenis26.target.rug.nl/downloads/wormqtl_jan2012.tar.gz
-tar xzfv wormqtl_jan2012.tar.gz
+wget http://molgenis26.target.rug.nl/downloads/wormqtl_hd_4oct2013.tar.gz
+tar xzfv wormqtl_hd_4oct2013.tar.gz
 
 # your storage path (important)
 pwd
@@ -24,7 +24,7 @@ ant -f build_wormqtl.xml runOn -Dport=8080
 # 1. go to the web address you see in your terminal, it should say 'Database setup success!'
 # 2. go to the address http://localhost:8080/xqtl_panacea/autohideloginswitch and login with admin/admin
 # 3. fill in your storage path (see above) and click 'Load', the message 'WormQTL specific annotation import and data relink succeeded' should appear
-# 4. you're now basically done, but: please change the investigation name from 'Panacea' into 'Public' (go to Browse Data), and change the user passwords (login as bio-user/bio and bioinfo-user/bioinfo)
+# 4. you're now basically done, but do change the user passwords (admin/admin, but also the demo users bio-user/bio and bioinfo-user/bioinfo)
 
 # recommended: start/stop scripts
 # -> start.sh
