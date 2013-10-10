@@ -355,11 +355,17 @@ public class QtlFinderHD extends QtlFinder2
 							Integer start = request.getInt("regionStart");
 							Integer end = request.getInt("regionEnd");
 							
+							
+							
 							if(start > end)
 							{
-								this.setMessages(new ScreenMessage("Make sure your start position is lower then your end position", false));
-								
-							}else{
+								this.setMessages(new ScreenMessage("Your start position may not be larger than your end position", false));
+							}else if(end - start > 4000000)
+							{
+								this.setMessages(new ScreenMessage("You cannot select regions larger than 4 Mb", false));
+							}
+							else
+							{
 								Integer chromosomeOrderNr = this.model.getRegionSearchInputState().getChromosomes()
 										.get(request.getString("regionChr")).getOrderNr();
 	
