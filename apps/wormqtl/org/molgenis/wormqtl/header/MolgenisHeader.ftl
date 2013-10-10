@@ -18,7 +18,7 @@
 				<#--a target="_blank" href="http://www.molgenis.org/wiki/xQTL">Help</a> | <a href="generated-doc/fileformat.html">Exchange format</a> | <a href="api/R/">R api</a> | <a href="api/find/">Find api</a> | ${screen.userLogin}-->
 				<a href="molgenis.do?select=Home">Home</a> | 
 				<a href="wormqtl_contact.html">Contact</a> | 
-				About
+				<a href="wormqtl_about.html">About</a>
 			</font>
 		</td>
 		<#-- disabled shopping cart button until further notice -->
