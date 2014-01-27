@@ -497,6 +497,42 @@
 	        <a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=53">53</a>
 	    </td>
 	</tr>
+	<tr>
+		<td>
+			Gene expression
+		</td>
+		<td>
+			4 x 44K Agilent AGIWUR
+		</td>
+		<td>
+			N2, CB4856 and 6 Wild-isolates
+		</td>
+		<td>
+			N2; CB4856; JU1581; JU1921; JU1930; JU1932; JU1944; and JU1949
+		</td>
+		<td>
+			<b> Snoek et al. 2014;</b> A rapid and massive gene expression shift marking adolescent transition in C. elegans.
+		</td>
+		<td>
+			<a target="_blank" href="DOI: 10.1038/srep03912">DOI</a>
+		</td>
+		<td>
+			20oC
+		</td>
+		<td>
+			(48h) L4
+		</td>
+		<td>
+			OP50 and E. rhapontici
+		</td>
+		<td>
+			NGM Plate
+		</td>
+		<td>
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=54">54</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=55">55</a>
+		</td>
+	</tr>
 </table>
 <br>
 
