@@ -514,7 +514,7 @@
 			<b> Snoek et al. 2014;</b> A rapid and massive gene expression shift marking adolescent transition in C. elegans.
 		</td>
 		<td>
-			<a target="_blank" href="DOI: 10.1038/srep03912">DOI</a>
+			<a target="_blank" href="http://www.ncbi.nlm.nih.gov/pubmed/24468752">24468752</a>
 		</td>
 		<td>
 			20oC
@@ -531,6 +531,41 @@
 		<td>
 			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=54">54</a>,
 			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=55">55</a>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Gene expression, Speed of development.
+		</td>
+		<td>
+			4 x 44K Agilent AGIWUR
+		</td>
+		<td>
+			N2, Bar-1(ga80) Mutant
+		</td>
+		<td>
+			N2; EW15
+		</td>
+		<td>
+			<b>vd Bent & Sterken & Volkers et al. 2014;</b> Loss-of-function of	beta-catenin bar-1 slows development and activates the	Wnt pathway in Caenorhabditis elegans.
+		</td>
+		<td>
+			Available soon
+		</td>
+		<td>
+			20oC
+		</td>
+		<td>
+			L4
+		</td>
+		<td>
+			OP50
+		</td>
+		<td>
+			NGM Plate
+		</td>
+		<td>
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=56">56</a>
 		</td>
 	</tr>
 </table>
