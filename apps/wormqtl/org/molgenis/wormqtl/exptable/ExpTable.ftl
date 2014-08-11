@@ -550,7 +550,7 @@
 			<b>vd Bent & Sterken & Volkers et al. 2014;</b> Loss-of-function of	beta-catenin bar-1 slows development and activates the	Wnt pathway in Caenorhabditis elegans.
 		</td>
 		<td>
-			Available soon
+			<a target="_blank" href="http://www.ncbi.nlm.nih.gov/pubmed/24819947">24819947</a>
 		</td>
 		<td>
 			20oC
