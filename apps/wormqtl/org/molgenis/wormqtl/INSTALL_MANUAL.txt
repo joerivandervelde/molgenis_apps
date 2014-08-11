@@ -1,4 +1,4 @@
-# Installing WormQTL, the (mostly) automated way, for Linux:
+### Installing WormQTL-HD, the (mostly) automated way, for Linux-based systems ###
 
 # git checkouts in new dir
 mkdir wormqtl
@@ -6,13 +6,14 @@ cd wormqtl
 git clone git://github.com/joerivandervelde/molgenis-legacy.git
 git clone git://github.com/joerivandervelde/molgenis_apps.git
 
-# download and extract data
+# download and extract data (check http://molgenis26.target.rug.nl/downloads/wormqtlhd/ for the latest release)
 mkdir data
 cd data
-wget http://molgenis26.target.rug.nl/downloads/wormqtl_hd_4oct2013.tar.gz
-tar xzfv wormqtl_hd_4oct2013.tar.gz
+wget http://molgenis26.target.rug.nl/downloads/wormqtlhd/wormqtlhd_11aug2014.tar.gz
+tar xzfv wormqtlhd_11aug2014.tar.gz
+rm wormqtlhd_11aug2014.tar.gz
 
-# your storage path (important)
+# your storage path, copy this to clipboard (important!)
 pwd
 
 # build and start app
@@ -22,13 +23,27 @@ ant -f build_wormqtl.xml runOn -Dport=8080
 
 # from this point on it's point & click..
 # 1. go to the web address you see in your terminal, it should say 'Database setup success!'
-# 2. go to the address http://localhost:8080/xqtl_panacea/autohideloginswitch and login with admin/admin
-# 3. fill in your storage path (see above) and click 'Load', the message 'WormQTL specific annotation import and data relink succeeded' should appear
-# 4. you're now basically done, but do change the user passwords (admin/admin, but also the demo users bio-user/bio and bioinfo-user/bioinfo)
+# 2. go to the address http://localhost:8080/xqtl_panacea/autohideloginswitch (or wherever how you deploy it) and login with admin/admin
+# 3. now enter/paste your storage path (see above!) in the box and click 'Load', the message 'WormQTL specific annotation import and data relink succeeded' should appear after a few minutes
+# 4. you're now basically done, but do change the user passwords (admin/admin, but also the default demo users bio-user/bio and bioinfo-user/bioinfo)
 
-# recommended: start/stop scripts
-# -> start.sh
+
+### Notes and troubleshoot ###
+
+* After installing and setup, logout to check as 'anonymous' user if everything works
+* Restart the app (kill process, start using Ant) after installing, note that initializing takes a few minutes and should result in 'Preloading human2worm SUCCESFUL!' message in terminal
+* Make sure a recent R version is installed so your plots are working
+* Make sure the server is running with an accessible external IP so the Genome Browser works
+* If Tomcat is running, kill it with sudo service tomcat6 stop / sudo chkconfig tomcat6 off
+* If data loading fails, stop the app and delete the contents of molgenis_apps/hsqldb/
+* If you get 'Proxy Error' on loading the data, just let the loading finish (see terminal for progress) but add "connectiontimeout=900 timeout=900" to Apache config for a longer timeout (e.g. 15 mins)
+
+
+### Recommended: start/stop scripts ###
+
+# start.sh
 cd molgenis_apps
 nohup ant -f build_wormqtl.xml runOn -Dport=8080 &
-# -> stop.sh
+
+# stop.sh
 kill -9 `lsof -i :8080 -t`
