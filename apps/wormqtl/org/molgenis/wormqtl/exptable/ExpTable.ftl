@@ -568,6 +568,50 @@
 			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=56">56</a>
 		</td>
 	</tr>
+	<tr>
+		<td>
+			Egg/embryo stage, lifespan, fecundity, size and bagging
+		</td>
+		<td>
+			n/a
+		</td>
+		<td>
+			101 RILs, 87 Nils and 12 Wild-Isolates
+		</td>
+		<td>
+			CB4856; N2; JU393; JU1401; JU1411; MY2; JU345; PX174; MY1; JU1494; CB4853; JU262
+		</td>
+		<td>
+			<b>Snoek & Orbidans <i>et al</i>. 2014; </b>Widespread genomic incompatibilities in <i>Caenorhobditis elegans</i>.
+		</td>
+		<td>
+			Available soon
+		</td>
+		<td>
+			20oC
+		</td>
+		<td>
+			L4
+		</td>
+		<td>
+			OP50
+		</td>
+		<td>
+			NGM Plate
+		</td>
+		<td>
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=57">57</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=58">58</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=59">59</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=60">60</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=61">61</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=62">62</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=63">63</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=64">64</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=65">65</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=66">66</a>
+		</td>
+	</tr>
 </table>
 <br>
 
