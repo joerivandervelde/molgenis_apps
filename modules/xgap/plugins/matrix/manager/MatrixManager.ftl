@@ -227,7 +227,7 @@ targ2	val4	val5	val6</textarea>
 			</td>
 			<#if browser.colMax gt 1000 || browser.rowMax gt 1000>
 				<td class="submenuitem">
-					<img width="${icon_size}" height="${icon_size}" src="clusterdemo/icons/txt_icon.png" align="left" />&nbsp;&nbsp;N/A, matrix too large
+					<img width="${icon_size}" height="${icon_size}" src="clusterdemo/icons/txt_icon.png" align="left" />&nbsp;&nbsp;<a href="https://molgenis26.target.rug.nl/downloads/wormqtlhd/">download data bundle</a>
 				</td>
 			<#else>
 				<td class="submenuitem" onclick="location.href='downloadmatrixascsv?id=${model.selectedData.getId()?c}&download=all&stream=false'">
@@ -241,7 +241,7 @@ targ2	val4	val5	val6</textarea>
 			</td>
 			<#if browser.colMax gt 1000 || browser.rowMax gt 1000>
 				<td class="submenuitem">
-					<img width="${icon_size}" height="${icon_size}" src="clusterdemo/icons/excel_icon.png" align="left" />&nbsp;&nbsp;N/A, matrix too large
+					<img width="${icon_size}" height="${icon_size}" src="clusterdemo/icons/excel_icon.png" align="left" />&nbsp;&nbsp;<a href="https://molgenis26.target.rug.nl/downloads/wormqtlhd/">download data bundle</a>
 				</td>
 			<#else>
 				<td class="submenuitem" onclick="location.href='downloadmatrixasexcel?id=${model.selectedData.getId()?c}&download=all'">
@@ -255,7 +255,7 @@ targ2	val4	val5	val6</textarea>
 			</td>
 			<#if browser.colMax gt 1000 || browser.rowMax gt 1000>
 				<td class="submenuitem">
-					<img width="${icon_size}" height="${icon_size}" src="clusterdemo/icons/spss_icon.png" align="left" />&nbsp;&nbsp;N/A, matrix too large
+					<img width="${icon_size}" height="${icon_size}" src="clusterdemo/icons/spss_icon.png" align="left" />&nbsp;&nbsp;<a href="https://molgenis26.target.rug.nl/downloads/wormqtlhd/">download data bundle</a>
 				</td>
 			<#else>
 				<td class="submenuitem" onclick="location.href='downloadmatrixasspss?id=${model.selectedData.getId()?c}&download=all'">
@@ -269,7 +269,7 @@ targ2	val4	val5	val6</textarea>
 			</td>
 			<#if browser.colMax gt 1000 || browser.rowMax gt 1000>
 				<td class="submenuitem">
-					<img width="${icon_size}" height="${icon_size}" src="clusterdemo/icons/r_icon.gif" align="left" />&nbsp;&nbsp;N/A, matrix too large
+					<img width="${icon_size}" height="${icon_size}" src="clusterdemo/icons/r_icon.gif" align="left" />&nbsp;&nbsp;<a href="https://molgenis26.target.rug.nl/downloads/wormqtlhd/">download data bundle</a>
 				</td>
 			<#else>
 				<td class="submenuitem" onclick="location.href='downloadmatrixasrobject?id=${model.selectedData.getId()?c}&download=all'">
