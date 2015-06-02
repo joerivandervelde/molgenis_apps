@@ -612,6 +612,81 @@
 			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=66">66</a>
 		</td>
 	</tr>
+	
+	
+	<tr>
+		<td>
+			Gene expression
+		</td>
+		<td>
+			Agilent 4x44k microarrays
+		</td>
+		<td>
+			CB4856 and N2
+		</td>
+		<td>
+			CB4856; N2
+		</td>
+		<td>
+			<b>Kamkina & Snoek et al. 2015;</b> NATURAL GENETIC VARIATION ON PROTEOME AND TRANSCRIPTOME LEVEL IN C. ELEGANS 
+		</td>
+		<td>
+			Submitted
+		</td>
+		<td>
+			20oC
+		</td>
+		<td>
+			L4
+		</td>
+		<td>
+			OP50
+		</td>
+		<td>
+			NGM Plate
+		</td>
+		<td>
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=67">67</a>
+		</td>
+	</tr> 
+	
+	<tr>
+		<td>
+			Vulval Induction
+		</td>
+		<td>
+			n/a
+		</td>
+		<td>
+			178 Let-60 miRILs and N2
+ 		</td>
+		<td>
+			CB4856; MT2124(let-60(n1046)) 
+		</td>
+		<td>
+			<b>Schmid et al. 2015;</b> Systemic regulation of RAS/MAPK signaling by the Serotonin metabolite 5-HIAA 
+		</td>
+		<td>
+			<a target="_blank" href="http://www.ncbi.nlm.nih.gov/pubmed/25978500">25978500</a>
+		</td>
+		<td>
+			20oC
+		</td>
+		<td>
+			L4
+		</td>
+		<td>
+			OP50
+		</td>
+		<td>
+			NGM Plate
+		</td>
+		<td>
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=68">68</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=69">69</a>
+		</td>
+	</tr> 
+
 </table>
 <br>
 
