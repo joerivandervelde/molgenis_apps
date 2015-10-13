@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import loaders.XgapLoadPanelTypes;
 import matrix.implementations.binary.BinaryDataMatrixInstance;
 import matrix.implementations.memory.MemoryDataMatrixInstance;
 
@@ -31,7 +30,6 @@ import org.molgenis.organization.Investigation;
 import org.molgenis.pheno.Individual;
 import org.molgenis.pheno.Panel;
 import org.molgenis.util.Entity;
-import org.molgenis.util.TarGz;
 import org.molgenis.xgap.DerivedTrait;
 import org.molgenis.xgap.Marker;
 
