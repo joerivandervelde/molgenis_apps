@@ -686,7 +686,46 @@
 			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=69">69</a>
 		</td>
 	</tr> 
-
+	<tr>
+		<td>
+			Protein abundance & apoptosis
+		</td>
+		<td>
+			NA
+		</td>
+		<td>
+			48 RILs
+		</td>
+		<td>
+			CB4856; N2
+		</td>
+		<td>
+			<b>Dev Singh et al.</b> Natural genetic variation influences protein abundances in C. elegans developmental signalling pathways
+		</td>
+		<td>
+			<a> Submitted</a>
+		</td>
+		<td>
+			20oC
+		</td>
+		<td>
+			(20oC); L4
+		</td>
+		<td>
+			OP50
+		</td>
+		<td>
+			NGM Plate
+		</td>
+		<td>
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=70">70</a>, 
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=71">71</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=72">72</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=73">73</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=74">74</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=75">75</a>
+		</td>
+	</tr>
 </table>
 <br>
 
