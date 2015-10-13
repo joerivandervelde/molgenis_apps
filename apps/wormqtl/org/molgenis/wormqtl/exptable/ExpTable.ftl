@@ -585,7 +585,7 @@
 			<b>Snoek & Orbidans <i>et al</i>. 2014; </b>Widespread genomic incompatibilities in <i>Caenorhobditis elegans</i>.
 		</td>
 		<td>
-			Available soon
+			<a target="_blank" href="http://www.ncbi.nlm.nih.gov/pubmed/25128438">25128438</a>
 		</td>
 		<td>
 			20oC
@@ -700,7 +700,7 @@
 			CB4856; N2
 		</td>
 		<td>
-			<b>Dev Singh et al.</b> Natural genetic variation influences protein abundances in C. elegans developmental signalling pathways
+			<b>Singh et al.</b> Natural genetic variation influences protein abundances in C. elegans developmental signalling pathways
 		</td>
 		<td>
 			<a> Submitted</a>
@@ -724,6 +724,44 @@
 			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=73">73</a>,
 			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=74">74</a>,
 			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=75">75</a>
+		</td>
+	</tr> 
+	<tr>
+		<td>
+			Lifespan & bagging
+		</td>
+		<td>
+			NA
+		</td>
+		<td>
+			78 RILs, 5 ILs, 24 Wild isolates
+		</td>
+		<td>
+			CB4856; N2; CB4853; JU1410; JU1494; JU1511; JU1516; JU1581; JU1926; JU1927; JU1931; JU1932; JU1933; JU1936; JU1937; JU1938; JU1941; JU1946; JU1949; JU345; JU362; JU393; PX179; WN2002; WN2003
+		</td>
+		<td>
+			<b>Stastna et al. 2015</b> Genotype-dependent effects of dietary restriction on lifespan in Caenorhabditis elegans
+		</td>
+		<td>
+			<a> Accepted </a>
+		</td>
+		<td>
+			20oC
+		</td>
+		<td>
+			(20oC); L4
+		</td>
+		<td>
+			OP50
+		</td>	
+		<td>	
+			NGM Plate, DR Plate
+		</td>
+		<td>
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=76">76</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=77">77</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=78">78</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=79">79</a>
 		</td>
 	</tr>
 </table>
