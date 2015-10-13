@@ -9,9 +9,9 @@ git clone git://github.com/joerivandervelde/molgenis_apps.git
 # download and extract data (check http://molgenis26.target.rug.nl/downloads/wormqtlhd/ for the latest release)
 mkdir data
 cd data
-wget http://molgenis26.target.rug.nl/downloads/wormqtlhd/wormqtlhd_11aug2014.tar.gz
-tar xzfv wormqtlhd_11aug2014.tar.gz
-rm wormqtlhd_11aug2014.tar.gz
+wget https://molgenis26.target.rug.nl/downloads/wormqtlhd/wormqtl_hd_13oct2015.tar.gz
+tar xzfv wormqtl_hd_13oct2015.tar.gz
+rm wormqtl_hd_13oct2015.tar.gz
 
 # your storage path, copy this to clipboard (important!)
 pwd
