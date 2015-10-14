@@ -8,6 +8,7 @@
 package org.molgenis.wormqtl.header;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import matrix.general.DataMatrixHandler;
 
@@ -184,10 +185,10 @@ public class HomePage extends plugins.cluster.demo.ClusterDemo
 				relinkDatasets(db, dmh);
 
 				// remove clusterdemo example investigation
-				Settings.deleteExampleInvestigation("ClusterDemo", db);
+				ArrayList<String> report = Settings.deleteExampleInvestigation("ClusterDemo", db);
 
 				// all done
-				this.setMessages(new ScreenMessage("WormQTL specific annotation import and data relink succeeded", true));
+				this.setMessages(new ScreenMessage("WormQTL specific annotation import and data relink succeeded, report: " + report.toString(), true));
 			}
 			else
 			{
