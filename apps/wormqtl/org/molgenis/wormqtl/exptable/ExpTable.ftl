@@ -628,7 +628,7 @@
 			CB4856; N2
 		</td>
 		<td>
-			<b>Kamkina & Snoek et al. 2015;</b> NATURAL GENETIC VARIATION ON PROTEOME AND TRANSCRIPTOME LEVEL IN C. ELEGANS 
+			<b>Kamkina & Snoek et al. 2016;</b> NATURAL GENETIC VARIATION ON PROTEOME AND TRANSCRIPTOME LEVEL IN C. ELEGANS 
 		</td>
 		<td>
 			Submitted
@@ -723,7 +723,8 @@
 			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=72">72</a>,
 			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=73">73</a>,
 			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=74">74</a>,
-			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=75">75</a>
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=75">75</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=80">80</a>
 		</td>
 	</tr> 
 	<tr>
@@ -743,7 +744,7 @@
 			<b>Stastna et al. 2015</b> Genotype-dependent effects of dietary restriction on lifespan in Caenorhabditis elegans
 		</td>
 		<td>
-			<a> Accepted </a>
+			<a target="_blank" href="http://www.ncbi.nlm.nih.gov/pubmed/26539794">26539794</a>
 		</td>
 		<td>
 			20oC
@@ -764,6 +765,49 @@
 			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=79">79</a>
 		</td>
 	</tr>
+	<tr>
+		<td>
+			Lawn Leaving (OP50, 3 BT strains)
+		</td>
+		<td>
+			NA
+		</td>
+		<td>
+			4x200 RILs + 4x90 ILs
+		</td>
+		<td>
+			CB4856; N2
+		</td>
+		<td>
+			<b>Nakad et al. 2016</b> Contrasting invertebrate immune defence behaviours caused by a single gene, the Caenorhabditis elegans neuropeptide receptor gene npr-1
+		</td>
+		<td>
+			Submitted
+		</td>
+		<td>
+			20oC
+		</td>
+		<td>
+			(14h and 24h treatment); started at L4
+		</td>
+		<td>
+			OP50 and 3 B. thuringiensis strains
+		</td>
+		<td>
+			peptone free NGM Plate
+		</td>
+		<td>
+		<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=81">81</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=82">82</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=83">83</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=84">84</a>,
+			<a href="?select=Datas&__target=Datas&__action=filter_set&__filter_attribute=Data_id&__filter_operator=EQUALS&__filter_value=85">85</a>
+		</td>
+	
+	</tr>
+	
+	
+	
 </table>
 <br>
 
